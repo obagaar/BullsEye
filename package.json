@@ -1,0 +1,31 @@
+{
+  "name": "bullseye",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/obagaar/BullsEye.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/obagaar/BullsEye/issues"
+  },
+  "homepage": "https://github.com/obagaar/BullsEye#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "bootstrap": "^4.2.1",
+    "dateformat": "^3.0.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-partials": "^0.3.0",
+    "jquery": "^3.3.1",
+    "mysql": "^2.16.0",
+    "nodemon": "^1.18.9",
+    "tether": "^1.4.5"
+  }
+}
