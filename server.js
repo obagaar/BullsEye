@@ -11,10 +11,10 @@ var now = new Date();
 
 app.set('view engine', 'ejs');
 
-app.use('/js', express.static( './nodemodules/bootstrap/dist/js'));
-app.use('/js', express.static('./nodemodules/tether/dist/js'));
-app.use('/js', express.static( './nodemodules/jquery/dist'));
-app.use('/css', express.static('./nodemodules/bootstrap/dist/css'));
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
+app.use('/js', express.static(__dirname + '/node_modules/tether/dist/js'));
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist'));
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 
 const pool = mysql.createPool({
     connectionLimit: 10,
@@ -31,13 +31,77 @@ function getConnection () {
 
 const siteTitle = "BullsEye";
 const baseURL = "http://localhost:4000"
+const conn = getConnection();
 
 app.get('/', function (req, res) {
 
-    res.render('pages/Index', {
+    conn.query("SELECT * FROM CATEGORY", function(err, result) {
+        res.render('pages/Index', {
+            siteTitle: siteTitle,
+            pageTitle: "Categories",
+            items: result
+            
+        });
+    });
+
+
+});
+
+app.get('/event/add', function (req, res) {
+
+    res.render('pages/add-event.ejs', {
         siteTitle: siteTitle,
-        pageTitle: "Employees",
-        items: 'result'
+        pageTitle: "Add Category",
+        items: ''
+        
+    });
+
+});
+
+app.post('/event/add', function (req, res) {
+
+    var insertQuery = "INSERT INTO category (categoryName) VALUES (";
+    insertQuery += '"' + req.body.categoryName + '");'
+
+    conn.query(insertQuery, function(err, result) {
+
+        res.redirect("/");
+    });
+
+});
+
+app.get('event/edit/:categoryName', function (req, res) {
+
+    console.log(req);
+
+    var updateQuery = "SELECT * FROM category WHERE categoryName = '" + req.params.categoryName + "';";
+
+    conn.query(updateQuery, function(err, result) {
+        res.render('pages/edit-event.ejs', {
+            siteTitle: siteTitle,
+            pageTitle: "Edit Category: " + result[0].categoryName,
+            item: result
+            
+        });
+    })
+
+});
+
+app.get('/event/delete/:categoryName', function (req, res) {
+
+    var deleteQuery = "DELETE FROM category WHERE categoryName = '";
+    deleteQuery += req.params.categoryName + "'";
+
+    conn.query(deleteQuery, function(err, result) {
+
+        if(result) {
+            res.redirect("/");
+        }
+        
+        if(err) {
+            console.log(err);
+        } 
+        
     });
 
 });

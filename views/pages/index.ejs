@@ -1,3 +1,39 @@
 <% include ../partials/header %>
-<h1>This is a default page</h1>
+
+<div class="">
+    <div class="col s12">
+        <a href="/event/add" class="btn btn-success btn-lg">Add a new Category</a>
+    </div>
+</div>
+<br>
+
+<div class="">
+    <div class="col s12">
+        <% if (items.length > 0) { %>
+            <table class="table">
+                <thread>
+                    <tr>
+                        <th style="width: 5%; text-align: center;">Name</th>
+                        <th solspan="2" style="width: 20%; text-align: center;">Actions</th>
+                    </tr>
+                </thread>
+                <tbody>
+                    <% for(var i = 0; i < items.length; i++) { %>
+                    <tr>
+                        <td style="width: 1%; text-align: center;"><%= items[i].categoryName %></td>
+                        <td solspan="2" style="width: 20%; text-align: center;">
+                        <a href="/event/edit/<%= items[i].categoryName %>" class="btn btn-success">Edit</a>
+                        <a href="/event/delete/<%= items[i].categoryName %>" class="btn btn-danger">Delete</a>
+                    </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+
+            <%} else { %>
+            <p><strong>There are no records available.</strong></p>
+            <% } %>
+    </div>
+</div>
+
 <% include ../partials/footer %>
