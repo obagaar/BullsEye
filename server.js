@@ -33,6 +33,10 @@ const siteTitle = "BullsEye";
 const baseURL = "http://localhost:4000"
 const conn = getConnection();
 
+const categoryRoutes = require('./routes/categories');
+app.use('/', categoryRoutes);
+
+/*
 app.get('/', function (req, res) {
 
     conn.query("SELECT * FROM CATEGORY", function(err, result) {
@@ -120,6 +124,7 @@ app.get('/event/delete/:categoryName', function (req, res) {
     });
 
 });
+*/
 
 const server = app.listen(4000, () => {
     console.log("Server is up and listening on 4000...")
