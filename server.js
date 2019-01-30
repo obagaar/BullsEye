@@ -70,22 +70,37 @@ app.post('/event/add', function (req, res) {
 
 });
 
-app.get('event/edit/:categoryName', function (req, res) {
+app.get('/event/edit/:categoryName', function (req, res) {
 
-    console.log(req);
+    var searchQuery = "SELECT * FROM category WHERE categoryName = '" + req.params.categoryName + "';";
 
-    var updateQuery = "SELECT * FROM category WHERE categoryName = '" + req.params.categoryName + "';";
-
-    conn.query(updateQuery, function(err, result) {
+    conn.query(searchQuery, function(err, result) {
         res.render('pages/edit-event.ejs', {
             siteTitle: siteTitle,
             pageTitle: "Edit Category: " + result[0].categoryName,
             item: result
             
         });
-    })
+    });
 
 });
+
+app.post('/event/edit/:categoryName', function(req, res) {
+
+    var updateQuery = "UPDATE category SET categoryName = '" + req.body.categoryName + "' WHERE categoryName = '" + req.params.categoryName + "'";
+conn.query(updateQuery, function (err, result) {
+
+    if(result) {
+        res.redirect("/");
+    }
+
+    if(err) {
+        console.log("This category cannot be edited due to being in use.");
+        res.redirect("/");
+    } 
+})
+
+})
 
 app.get('/event/delete/:categoryName', function (req, res) {
 
