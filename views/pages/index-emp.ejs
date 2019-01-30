@@ -1,0 +1,53 @@
+<% include ../partials/header %>
+
+<div class="">
+    <div class="col s12">
+        <a href="/admin/crud/emp/add" class="btn btn-success btn-lg">Add a new Employee</a>
+    </div>
+</div>
+<br>
+
+<div class="">
+    <div class="col s12">
+        <% if (items.length > 0) { %>
+            <table class="table">
+                <thread>
+                    <tr>
+                        <th style="text-align: center;">Employee ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Position ID</th>
+                        <th>Site ID</th>
+                        <th>Password</th>
+                        <th>Active</th>
+                        <th solspan="2" style="width: 20%; text-align: center;">Actions</th>
+                    </tr>
+                </thread>
+                <tbody>
+                    <% for(var i = 0; i < items.length; i++) { %>
+                    <tr>
+                        <td style="width: 1%; text-align: center;"><%= items[i].employeeID %></td>
+                        <td><%= items[i].FirstName %></td>
+                        <td><%= items[i].LastName %></td>
+                        <td><%= items[i].Email %></td>
+                        <td><%= items[i].PositionID %></td>
+                        <td><%= items[i].siteID %></td>
+                        <td><%= items[i].Password %></td>
+                        <td><%= items[i].active %></td>
+                        <td solspan="2" style="width: 20%; text-align: center;">
+                        <a href="/admin/crud/emp/update/<%= items[i].employeeID %>" class="btn btn-success">Edit</a>
+                        <a href="/admin/crud/emp/delete/<%= items[i].employeeID %>" class="btn btn-danger">Delete</a>
+                    </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+
+            <%} else { %>
+            <p><strong>There are no records available.</strong></p>
+            <% } %>
+    </div>
+</div>
+
+<% include ../partials/footer %>

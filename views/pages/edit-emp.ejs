@@ -1,0 +1,51 @@
+<% include ../partials/header %>
+
+<div class="container mt-5">
+        <div class="row">
+          <div class="col-md-5 offset-md-3 card">
+            <div class="card-body">
+              <form action="/admin/crud/emp/update/<%= item[0].employeeID %>" method="POST" class= "col s12">
+                
+                <div class="form-group row">
+                    <input type="hidden" name="employeeID" value="<%= item[0].employeeID %>">
+                        <div class="col-10">
+                            <label for="FirstName" class="col-10 col-form-label">First Name</label>
+                            <input type="text" name="FirstName" value="<%= item[0].FirstName %>"  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                                <label for="LastName" class="col-10 col-form-label">Last Name</label>
+                                <input type="text" name="LastName" value="<%= item[0].LastName %>"  class="form-control" autofocus>
+                            </div>
+                        <div class="col-10">
+                            <label for="Email" class="col-10 col-form-label">Email</label>
+                            <input type="text" name="Email" value="<%= item[0].Email %>"  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                            <label for="PositionID" class="col-10 col-form-label">Position</label>
+                            <input type="text" name="PositionID" value="<%= item[0].PositionID %>"  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                                <label for="siteID" class="col-10 col-form-label">Site</label>
+                                <input type="text" name="siteID" value="<%= item[0].siteID %>"  class="form-control" autofocus>
+                            </div>
+                        <div class="col-10">
+                            <label for="Password" class="col-10 col-form-label">Password</label>
+                            <input type="text" name="Password" value="<%= item[0].Password %>"  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                            <label for="active" class="col-10 col-form-label">Active</label>
+                            <input type="text" name="active" value="<%= item[0].active %>"  class="form-control" autofocus>
+                        </div>
+                </div>
+
+      
+                <button type="submit" class="btn btn-primary">
+                  Submit Site
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<% include ../partials/footer %>
