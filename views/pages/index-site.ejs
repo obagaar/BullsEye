@@ -1,0 +1,61 @@
+<% include ../partials/header %>
+
+<div class="">
+    <div class="col s12">
+        <a href="/admin/crud/site/add" class="btn btn-success btn-lg">Add a new Site</a>
+    </div>
+</div>
+<br>
+
+<div class="">
+    <div class="col s12">
+        <% if (items.length > 0) { %>
+            <table class="table">
+                <thread>
+                    <tr>
+                        <th style="text-align: center;">ID</th>
+                        <th>Name</th>
+                        <th>Province/State</th>
+                        <th>Address</th>
+                        <th></th>
+                        <th>City</th>
+                        <th>Country</th>
+                        <th>Postal Code/Zip Code</th>
+                        <th>Phone</th>
+                        <th>Delivery Day of the Week</th>
+                        <th>Distance from Warehouse</th>
+                        <th>Notes</th>
+                        <th solspan="2" style="width: 20%; text-align: center;">Actions</th>
+                    </tr>
+                </thread>
+                <tbody>
+                    <% for(var i = 0; i < items.length; i++) { %>
+                    <tr>
+                        <td style="width: 1%; text-align: center;"><%= items[i].siteID %></td>
+                        <td><%= items[i].name %></td>
+                        <td><%= items[i].provinceID %></td>
+                        <td><%= items[i].address %></td>
+                        <td><%= items[i].address2 %></td>
+                        <td><%= items[i].city %></td>
+                        <td><%= items[i].country %></td>
+                        <td><%= items[i].postalCode %></td>
+                        <td><%= items[i].phoneD %></td>
+                        <td><%= items[i].dayOfWeek %></td>
+                        <td><%= items[i].distanceFromWH %></td>
+                        <td><%= items[i].notes %></td>
+                        <td solspan="2" style="width: 20%; text-align: center;">
+                        <a href="/admin/crud/site/update/<%= items[i].siteID %>" class="btn btn-success">Edit</a>
+                        <a href="/admin/crud/site/delete/<%= items[i].siteID %>" class="btn btn-danger">Delete</a>
+                    </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+
+            <%} else { %>
+            <p><strong>There are no records available.</strong></p>
+            <% } %>
+    </div>
+</div>
+
+<% include ../partials/footer %>

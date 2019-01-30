@@ -1,0 +1,57 @@
+<% include ../partials/header %>
+
+<div class="">
+    <div class="col s12">
+        <a href="/admin/crud/supp/add" class="btn btn-success btn-lg">Add a new Site</a>
+    </div>
+</div>
+<br>
+
+<div class="">
+    <div class="col s12">
+        <% if (items.length > 0) { %>
+            <table class="table">
+                <thread>
+                    <tr>
+                        <th style="text-align: center;">ID</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th></th>
+                        <th>City</th>
+                        <th>Country</th>
+                        <th>Province/State</th>
+                        <th>Postal Code/Zip Code</th>
+                        <th>Phone</th>
+                        <th>Contact</th>
+                        <th solspan="2" style="width: 20%; text-align: center;">Actions</th>
+                    </tr>
+                </thread>
+                <tbody>
+                    <% for(var i = 0; i < items.length; i++) { %>
+                    <tr>
+                        <td style="width: 1%; text-align: center;"><%= items[i].supplierID %></td>
+                        <td><%= items[i].name %></td>
+                        <td><%= items[i].address1 %></td>
+                        <td><%= items[i].address2 %></td>
+                        <td><%= items[i].city %></td>
+                        <td><%= items[i].country %></td>
+                        <td><%= items[i].province %></td>
+                        <td><%= items[i].postalcode %></td>
+                        <td><%= items[i].phone %></td>
+                        <td><%= items[i].contact %></td>
+                        <td solspan="2" style="width: 20%; text-align: center;">
+                        <a href="/admin/crud/supp/update/<%= items[i].supplierID %>" class="btn btn-success">Edit</a>
+                        <a href="/admin/crud/supp/delete/<%= items[i].supplierID %>" class="btn btn-danger">Delete</a>
+                    </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+
+            <%} else { %>
+            <p><strong>There are no records available.</strong></p>
+            <% } %>
+    </div>
+</div>
+
+<% include ../partials/footer %>

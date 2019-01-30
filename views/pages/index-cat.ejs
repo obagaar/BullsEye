@@ -2,7 +2,7 @@
 
 <div class="">
     <div class="col s12">
-        <a href="/admin/crud/category/add" class="btn btn-success btn-lg">Add a new Category</a>
+        <a href="/admin/crud/cat/add" class="btn btn-success btn-lg">Add a new Category</a>
     </div>
 </div>
 <br>
@@ -22,8 +22,8 @@
                     <tr>
                         <td style="width: 1%; text-align: center;"><%= items[i].categoryName %></td>
                         <td solspan="2" style="width: 20%; text-align: center;">
-                        <a href="/admin/crud/category/update/<%= items[i].categoryName %>" class="btn btn-success">Edit</a>
-                        <a href="/admin/crud/category/delete/<%= items[i].categoryName %>" class="btn btn-danger">Delete</a>
+                        <a href="/admin/crud/cat/update/<%= items[i].categoryName %>" class="btn btn-success">Edit</a>
+                        <a href="/admin/crud/cat/delete/<%= items[i].categoryName %>" class="btn btn-danger">Delete</a>
                     </td>
                     </tr>
                     <% } %>

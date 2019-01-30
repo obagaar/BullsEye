@@ -5,6 +5,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const dateFormat = require('dateformat');
 
+
 const pool = mysql.createPool({
   connectionLimit: 10,
   host: 'localhost',
@@ -19,7 +20,6 @@ function getConnection () {
 }
 
 const siteTitle = "BullsEye";
-const baseURL = "http://localhost:4000"
 const conn = getConnection();
 const controller = {};
 
@@ -53,7 +53,7 @@ controller.add = (req, res) => {
 
   conn.query(insertQuery, function(err, result) {
 
-      res.redirect("/admin/crud/category");
+      res.redirect("/admin/crud/cat");
   });
 };
 
@@ -78,12 +78,12 @@ controller.update = (req, res) => {
   conn.query(updateQuery, function (err, result) {
   
       if(result) {
-          res.redirect("/admin/crud/category");
+          res.redirect("/admin/crud/cat");
       }
   
       if(err) {
           console.log("This category cannot be edited due to being in use.");
-          res.redirect("/admin/crud/category");
+          res.redirect("/admin/crud/cat");
       } 
   })
 
@@ -97,7 +97,7 @@ controller.delete = (req, res) => {
   conn.query(deleteQuery, function(err, result) {
 
       if(result) {
-          res.redirect("/admin/crud/category");
+          res.redirect("/admin/crud/cat");
       }
       
       if(err) {

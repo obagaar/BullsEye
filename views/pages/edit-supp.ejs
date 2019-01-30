@@ -1,0 +1,62 @@
+<% include ../partials/header %>
+
+<div class="container mt-5">
+        <div class="row">
+          <div class="col-md-5 offset-md-3 card">
+            <div class="card-body">
+              <form action="/admin/crud/supp/update/<%= item[0].supplierID %>" method="POST" class= "col s12">
+                
+                <div class="form-group row">
+                    <input type="hidden" name="supplierID" value="<%= item[0].supplierID %>">
+                        <div class="col-10">
+                            <label for="name" class="col-10 col-form-label">Site Name</label>
+                            <input type="text" name="name" value="<%= item[0].name %>"  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                            <label for="address1" class="col-10 col-form-label">Address Line 1</label>
+                            <input type="text" name="address1" value="<%= item[0].address1 %>"  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                            <label for="name" class="col-10 col-form-label">Address Line 2</label>
+                            <input type="text" name="address2" value="<%= item[0].address2 %>"  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                            <label for="name" class="col-10 col-form-label">City</label>
+                            <input type="text" name="city" value="<%= item[0].city %>"  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                            <label for="name" class="col-10 col-form-label">Country</label>
+                            <input type="text" name="country" value="<%= item[0].country %>"  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                                <label for="province" class="col-10 col-form-label">Province/State</label>
+                                <select name="province" class="col-10 form-control">
+                                        <option value="NB">NB</option>
+                                  </select>
+                            </div>
+                        <div class="col-10">
+                            <label for="name" class="col-10 col-form-label">Postal Code/Zip Code</label>
+                            <input type="text" name="postalcode" value="<%= item[0].postalcode %>"  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                            <label for="name" class="col-10 col-form-label">Phone</label>
+                            <input type="text" name="phone" value="<%= item[0].phone %>"  class="form-control" autofocus>
+                        </div>
+                        <br>
+                        <div class="col-10">
+                            <label for="contact" class="col-10 col-form-label">Contact</label>
+                            <input type="text" name="contact" value="<%= item[0].contact %>"  class="form-control" autofocus>
+                        </div>
+                </div>
+
+      
+                <button type="submit" class="btn btn-primary">
+                  Submit Site
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<% include ../partials/footer %>
