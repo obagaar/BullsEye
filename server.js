@@ -20,6 +20,7 @@ const categoryRoutes = require('./routes/categories');
 const siteRoutes = require('./routes/sites');
 const supplierRoutes = require('./routes/supplier');
 const employeeRoutes = require('./routes/employees');
+const itemRoutes = require('./routes/items');
 
 
 app.use('/', pageRoutes);
@@ -27,6 +28,7 @@ app.use('/admin/crud/cat', categoryRoutes);
 app.use('/admin/crud/site', siteRoutes);
 app.use('/admin/crud/supp', supplierRoutes);
 app.use('/admin/crud/emp', employeeRoutes);
+app.use('/admin/crud/item', itemRoutes);
 
 
 

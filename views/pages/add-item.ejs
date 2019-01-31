@@ -1,0 +1,70 @@
+<% include ../partials/header %>
+
+<div class="container mt-5">
+        <div class="row">
+          <div class="col-md-5 offset-md-3 card">
+            <div class="card-body">
+              <form action="/admin/crud/item/add" method="POST" class= "col s12">
+                
+                <div class="form-group row">
+                        <div class="col-10">
+                            <label for="name" class="col-10 col-form-label">Name</label>
+                            <input type="text" name="name" value=""  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                                <label for="sku" class="col-10 col-form-label">SKU</label>
+                                <input type="text" name="sku" value=""  class="form-control" autofocus>
+                            </div>
+                        <div class="col-10">
+                            <label for="description" class="col-10 col-form-label">Description</label>
+                            <input type="text" name="description" value=""  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                            <label for="category" class="col-10 col-form-label">Category</label>
+                            <input type="text" name="category" value=""  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                                <label for="weight" class="col-10 col-form-label">Weight</label>
+                                <input type="text" name="weight" value=""  class="form-control" autofocus>
+                            </div>
+                        <div class="col-10">
+                            <label for="costprice" class="col-10 col-form-label">Cost Price</label>
+                            <input type="text" name="costPrice" value=""  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                            <label for="retailPrice" class="col-10 col-form-label">Retail Price</label>
+                            <input type="text" name="retailPrice" value=""  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                            <label for="supplier" class="col-10 col-form-label">Supplier</label>
+                            <select name="supplier" class="col-10 form-control">
+                                <% for(var i = 0; i < items.length; i++) { %>
+                                <option value="<%= items[i].supplierID %>"><%= items[i].supplierID %></option>
+                                <% } %>
+                              </select>
+                        </div>
+                        <div class="col-10">
+                            <label for="active" class="col-10 col-form-label">Active</label>
+                            <input type="text" name="active" value=""  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                            <label for="caseSize" class="col-10 col-form-label">Case Size</label>
+                            <input type="caseSize" name="active" value=""  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                            <label for="notes" class="col-10 col-form-label">Notes</label>
+                            <input type="text" name="notes" value=""  class="form-control" autofocus>
+                        </div>
+                </div>
+
+      
+                <button type="submit" class="btn btn-primary">
+                  Submit Site
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<% include ../partials/footer %>
