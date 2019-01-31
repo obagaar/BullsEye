@@ -2,7 +2,7 @@
 
 <div class="">
     <div class="col s12">
-        <a href="/admin/crud/supp/add" class="btn btn-success btn-lg">Add a new Site</a>
+        <a href="/admin/supp/add" class="btn btn-success btn-lg">Add a new Site</a>
     </div>
 </div>
 <br>
@@ -40,8 +40,8 @@
                         <td><%= items[i].phone %></td>
                         <td><%= items[i].contact %></td>
                         <td solspan="2" style="width: 20%; text-align: center;">
-                        <a href="/admin/crud/supp/update/<%= items[i].supplierID %>" class="btn btn-success">Edit</a>
-                        <a href="/admin/crud/supp/delete/<%= items[i].supplierID %>" class="btn btn-danger">Delete</a>
+                        <a href="/admin/supp/update/<%= items[i].supplierID %>" class="btn btn-success">Edit</a>
+                        <a href="/admin/supp/delete/<%= items[i].supplierID %>" class="btn btn-danger">Delete</a>
                     </td>
                     </tr>
                     <% } %>

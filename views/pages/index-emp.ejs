@@ -2,7 +2,7 @@
 
 <div class="">
     <div class="col s12">
-        <a href="/admin/crud/emp/add" class="btn btn-success btn-lg">Add a new Employee</a>
+        <a href="/admin/emp/add" class="btn btn-success btn-lg">Add a new Employee</a>
     </div>
 </div>
 <br>
@@ -36,8 +36,8 @@
                         <td><%= items[i].Password %></td>
                         <td><%= items[i].active %></td>
                         <td solspan="2" style="width: 20%; text-align: center;">
-                        <a href="/admin/crud/emp/update/<%= items[i].employeeID %>" class="btn btn-success">Edit</a>
-                        <a href="/admin/crud/emp/delete/<%= items[i].employeeID %>" class="btn btn-danger">Delete</a>
+                        <a href="/admin/emp/update/<%= items[i].employeeID %>" class="btn btn-success">Edit</a>
+                        <a href="/admin/emp/delete/<%= items[i].employeeID %>" class="btn btn-danger">Delete</a>
                     </td>
                     </tr>
                     <% } %>

@@ -1,0 +1,43 @@
+<% include ../partials/header %>
+
+<div class="container mt-5">
+        <div class="row">
+          <div class="col-md-5 offset-md-3 card">
+            <div class="card-body">
+              <form action="/admin/invt/update/<%= item[0].itemID %>" method="POST" class= "col s12">
+                
+                <div class="form-group row">
+                        <input type="hidden" name="itemID" value="<%= item[0].itemID %>">
+                        <div class="col-10">
+                            <label for="site" class="col-10 col-form-label">Site</label>
+                            <input type="text" name="siteID" value="<%= item[0].name %>"  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                                <label for="quantity" class="col-10 col-form-label">Quantity</label>
+                                <input type="text" name="quantity" value="<%= item[0].sku %>"  class="form-control" autofocus>
+                            </div>
+                        <div class="col-10">
+                            <label for="itemLocation" class="col-10 col-form-label">Item Location</label>
+                            <input type="text" name="itemLocation" value="<%= item[0].itemLocation %>"  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                            <label for="reorderThreshold" class="col-10 col-form-label">Reorder Threshold</label>
+                            <input type="text" name="reorderThreshold" value="<%= item[0].reorderThreshold %>"  class="form-control" autofocus>
+                        </div>
+                        <div class="col-10">
+                                <label for="maxReorderWarning" class="col-10 col-form-label">Max Reorder Warning</label>
+                                <input type="text" name="maxReorderWarning" value="<%= item[0].maxReorderWarning %>"  class="form-control" autofocus>
+                            </div>
+                </div>
+
+      
+                <button type="submit" class="btn btn-primary">
+                  Submit Inventory Entry
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<% include ../partials/footer %>

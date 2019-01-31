@@ -2,7 +2,7 @@
 
 <div class="">
     <div class="col s12">
-        <a href="/admin/crud/item/add" class="btn btn-success btn-lg">Add a new Item</a>
+        <a href="/admin/item/add" class="btn btn-success btn-lg">Add a new Item</a>
     </div>
 </div>
 <br>
@@ -44,8 +44,8 @@
                         <td><%= items[i].caseSize %></td>
                         <td><%= items[i].notes %></td>
                         <td solspan="2" style="width: 20%; text-align: center;">
-                        <a href="/admin/crud/item/update/<%= items[i].itemID %>" class="btn btn-success">Edit</a>
-                        <a href="/admin/crud/item/delete/<%= items[i].itemID %>" class="btn btn-danger">Delete</a>
+                        <a href="/admin/item/update/<%= items[i].itemID %>" class="btn btn-success">Edit</a>
+                        <a href="/admin/item/delete/<%= items[i].itemID %>" class="btn btn-danger">Delete</a>
                     </td>
                     </tr>
                     <% } %>

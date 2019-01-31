@@ -2,7 +2,7 @@
 
 <div class="">
     <div class="col s12">
-        <a href="/admin/crud/site/add" class="btn btn-success btn-lg">Add a new Site</a>
+        <a href="/admin/site/add" class="btn btn-success btn-lg">Add a new Site</a>
     </div>
 </div>
 <br>
@@ -44,8 +44,8 @@
                         <td><%= items[i].distanceFromWH %></td>
                         <td><%= items[i].notes %></td>
                         <td solspan="2" style="width: 20%; text-align: center;">
-                        <a href="/admin/crud/site/update/<%= items[i].siteID %>" class="btn btn-success">Edit</a>
-                        <a href="/admin/crud/site/delete/<%= items[i].siteID %>" class="btn btn-danger">Delete</a>
+                        <a href="/admin/site/update/<%= items[i].siteID %>" class="btn btn-success">Edit</a>
+                        <a href="/admin/site/delete/<%= items[i].siteID %>" class="btn btn-danger">Delete</a>
                     </td>
                     </tr>
                     <% } %>

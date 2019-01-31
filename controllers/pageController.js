@@ -1,19 +1,23 @@
 const controller = {};
 
+const siteTitle = "BullsEye";
 
 controller.index = (req, res) => {
 
-    res.send("Go away. Not done yet.");
+    res.render('pages/mainDash.ejs', {
+        siteTitle: siteTitle,
+        pageTitle: "BullsEye Inventory Control System",
+        item: ''
+    });
 };
 
 controller.admin = (req, res) => {
 
-    res.send("Admin page");
-}
-
-controller.crud = (req, res) => {
-
-    res.send("crud page");
+    res.render('pages/adminIndex.ejs', {
+        siteTitle: siteTitle,
+        pageTitle: "Admin Access",
+        item: ''
+    });
 }
 
 module.exports = controller;
