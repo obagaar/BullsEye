@@ -10,50 +10,50 @@
                     <input type="hidden" name="supplierID" value="">
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Supplier Name</label>
-                            <input type="text" name="name" value=""  class="form-control" autofocus>
+                            <input type="text" name="name" value=""  class="form-control" maxlength="50" required autofocus>
                         </div>
                         <div class="col-10">
                             <label for="address1" class="col-10 col-form-label">Address Line 1</label>
-                            <input type="text" name="address1" value=""  class="form-control" autofocus>
+                            <input type="text" name="address1" value=""  class="form-control" maxlength="50" required>
                         </div>
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Address Line 2</label>
-                            <input type="text" name="address2" value=""  class="form-control" autofocus>
+                            <input type="text" name="address2" value=""  class="form-control" maxlength="50">
                         </div>
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">City</label>
-                            <input type="text" name="city" value=""  class="form-control" autofocus>
+                            <input type="text" name="city" value=""  class="form-control" maxlength="50" required>
                         </div>
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Country</label>
-                            <input type="text" name="country" value=""  class="form-control" autofocus>
+                            <input type="text" name="country" value=""  class="form-control" maxlength="50" required>
                         </div>
                         <div class="col-10">
                                 <label for="province" class="col-10 col-form-label">Province/State</label>
-                                <select name="province" class="col-10 form-control">
+                                <select name="province" class="col-10 form-control" required>
                                         <% for(var i = 0; i < items.length; i++) { %>
-                                            <option value="<%= items[i].provinceID %>"><%= items[i].provinceID %></option>
+                                            <option value="<%= items[i].provinceID %>"><%= items[i].provinceName %></option>
                                             <% } %>
                                   </select>
                             </div>
                         <div class="col-10">
-                            <label for="name" class="col-10 col-form-label">Postal Code/Zip Code</label>
-                            <input type="text" name="postalcode" value=""  class="form-control" autofocus>
+                            <label for="name" class="col-10 col-form-label">Postal Code</label>
+                            <input type="text" name="postalcode" value=""  class="form-control" maxlength="11" pattern="[A-Za-z][0-9][A-Za-z][0-9][A-Za-z][0-9]" title="Please enter a valid Postal Code" required>
                         </div>
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Phone</label>
-                            <input type="text" name="phone" value=""  class="form-control" autofocus>
+                            <input type="phone" name="phone" value=""  class="form-control" pattern="\d{4}\d{3}\d{4}" maxlength="14" required>
                         </div>
                         <br>
                         <div class="col-10">
                             <label for="contact" class="col-10 col-form-label">Contact</label>
-                            <input type="text" name="contact" value=""  class="form-control" autofocus>
+                            <input type="text" name="contact" value=""  class="form-control" maxlength="100">
                         </div>
                 </div>
 
       
                 <button type="submit" class="btn btn-primary">
-                  Submit Site
+                  Submit Supplier
                 </button>
               </form>
             </div>

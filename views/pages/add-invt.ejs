@@ -7,29 +7,37 @@
               <form action="/admin/invt/add" method="POST" class= "col s12">
                 
                 <div class="form-group row">
+                    <div class="col-10">
+                        <label for="itemID" class="col-10 col-form-label">Item</label>
+                        <select name="itemID" class="col-10 form-control" required autofocus>
+                                <% for(var i = 0; i < item.length; i++) { %>
+                                <option value="<%= item[i].itemID %>"><%= item[i].name %></option>
+                                <% } %>
+                              </select>
+                    </div>
                         <div class="col-10">
-                            <label for="site" class="col-10 col-form-label">Site</label>
-                            <select name="supplier" class="col-10 form-control">
-                                    <% for(var i = 0; i < items.length; i++) { %>
-                                    <option value="<%= items[i].supplierID %>"><%= items[i].supplierID %></option>
+                            <label for="siteID" class="col-10 col-form-label">Site</label>
+                            <select name="siteID" class="col-10 form-control" required>
+                                    <% for(var i = 1; i < item2.length; i++) { %>
+                                    <option value="<%= item2[i].siteID %>"><%= item2[i].name %></option>
                                     <% } %>
                                   </select>
                         </div>
                         <div class="col-10">
                                 <label for="quantity" class="col-10 col-form-label">Quantity</label>
-                                <input type="text" name="quantity" value=""  class="form-control" autofocus>
+                                <input type="number" name="quantity" value=""  class="form-control" min="0" max="99999999999" required>
                             </div>
                         <div class="col-10">
                             <label for="itemLocation" class="col-10 col-form-label">Item Location</label>
-                            <input type="text" name="itemLocation" value=""  class="form-control" autofocus>
+                            <input type="text" name="itemLocation" value=""  class="form-control" pattern="[0-9]{1,9}" maxlength="9" required>
                         </div>
                         <div class="col-10">
                             <label for="reorderThreshold" class="col-10 col-form-label">Reorder Threshold</label>
-                            <input type="text" name="reorderThreshold" value=""  class="form-control" autofocus>
+                            <input type="number" name="reorderThreshold" value=""  class="form-control" min="0" max="99999999999" required>
                         </div>
                         <div class="col-10">
                                 <label for="maxReorderWarning" class="col-10 col-form-label">Max Reorder Warning</label>
-                                <input type="text" name="maxReorderWarning" value=""  class="form-control" autofocus>
+                                <input type="number" name="maxReorderWarning" value=""  class="form-control" min="0" max="99999999999" required>
                             </div>
                 </div>
 

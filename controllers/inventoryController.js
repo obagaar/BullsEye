@@ -4,6 +4,8 @@ const mysql = require('mysql');
 const app = express();
 const bodyParser = require('body-parser');
 const dateFormat = require('dateformat');
+const q = require('q');
+const SqlString = require('sql-escape-string');
 
 const pool = mysql.createPool({
     connectionLimit: 10,
@@ -36,24 +38,48 @@ const pool = mysql.createPool({
 
   controller.getAdd = (req, res) => {
 
-    conn.query("SELECT * FROM SUPPLIER", function(err, result) {
+    var searchQuery = "SELECT * FROM ITEM";
+    var searchQuery2 = "SELECT * FROM SITE;";
 
-    res.render('pages/add-invt.ejs', {
-      siteTitle: siteTitle,
-      pageTitle: "Add Inventory Entry",
-      items: result
-      
-  });
-});
+
+        function doQuery1(){
+            var defered = q.defer();
+            conn.query(searchQuery,defered.makeNodeResolver());
+            return defered.promise;
+        }
+    
+        function doQuery2(){
+            var defered = q.defer();
+            conn.query(searchQuery2,defered.makeNodeResolver());
+            return defered.promise;
+        }
+    
+        q.all([doQuery1(),doQuery2()]).then(function(results){
+    
+
+           var result = JSON.parse(JSON.stringify(results[0][0]));
+            var result2 = JSON.parse(JSON.stringify(results[1][0]));
+    
+                 res.render('pages/add-invt.ejs', {
+                    siteTitle: siteTitle,
+                    pageTitle: "Add Inventory Entry",
+                    item: result,
+                    item2: result2
+                });
+        });
 
   };
   
   controller.add = (req, res) => {
 
-      
-            var insertQuery = "INSERT INTO `bullseyedb`.`employee` ( `Password`, `FirstName`, `LastName`, `Email`, `active`, `PositionID`, `siteID`)";
-            insertQuery += " VALUES ('" + req.body.Password + "', " + "'" + req.body.FirstName + "', '" + req.body.LastName + "', ";
-            insertQuery += "'" + req.body.Email + "', " + "'" + req.body.active + "', " + "'" + req.body.PositionID + "', " + "'" + req.body.siteID + "');";
+      var insertQuery = "INSERT INTO `bullseyedb`.`inventory` (`itemID`, `siteID`, `quantity`, `itemLocation`, `reorderThreshold`, `maxReorderWarning`) VALUES ('";
+      insertQuery += SqlString(req.body.itemID) + ", ";
+      insertQuery += SqlString(req.body.siteID) + ", ";
+      insertQuery += SqlString(req.body.quantity) + ", ";
+      insertQuery += SqlString(req.body.itemLocation) + ", ";
+      insertQuery += SqlString(req.body.reorderThreshold) + ", ";
+      insertQuery += SqlString(req.body.maxReorderWarning);
+      insertQuery += "');"
           
             conn.query(insertQuery, function(err, result) {
         
@@ -62,7 +88,7 @@ const pool = mysql.createPool({
                 }
           
                 if(result) {
-                    res.redirect("/admin/crud/invt");
+                    res.redirect("/admin/invt");
                 }
                 
             });
@@ -74,24 +100,35 @@ const pool = mysql.createPool({
   controller.updateInfo = (req, res) => {
 
 
-    var searchQuery = "SELECT * FROM INVENTORY WHERE itemID = '" + req.params.itemID + "';";
-  
-    conn.query(searchQuery, function(err, result) {
+    var searchQuery = "SELECT * FROM INVENTORY WHERE itemID = " + SqlString(req.params.itemID) + ";";
+    var searchQuery2 = "SELECT * FROM SUPPLIER;";
 
 
-        if(result) {
-            res.render('pages/edit-invt.ejs', {
-                siteTitle: siteTitle,
-                pageTitle: "Edit Inventory Entry",
-                item: result
-            });
-
+        function doQuery1(){
+            var defered = q.defer();
+            conn.query(searchQuery,defered.makeNodeResolver());
+            return defered.promise;
         }
-        if(err) {
-            console.log(err);
+    
+        function doQuery2(){
+            var defered = q.defer();
+            conn.query(searchQuery2,defered.makeNodeResolver());
+            return defered.promise;
         }
+    
+        q.all([doQuery1(),doQuery2()]).then(function(results){
+    
 
-    });
+           var result = JSON.parse(JSON.stringify(results[0][0]));
+            var result2 = JSON.parse(JSON.stringify(results[1][0]));
+    
+                 res.render('pages/edit-invt.ejs', {
+                    siteTitle: siteTitle,
+                    pageTitle: "Edit Inventory Entry",
+                    item: result,
+                    item2: result2
+                });
+        });
   
   };
   
@@ -99,14 +136,12 @@ const pool = mysql.createPool({
 
 
 
-     var updateQuery = "UPDATE Employee SET `Password` = '" + req.body.Password + "', ";
-        updateQuery += "`FirstName` = '" + req.body.FirstName + "', ";
-        updateQuery += "`LastName` = '" + req.body.LastName + "', ";
-        updateQuery += "`Email` = '" + req.body.Email + "', ";
-        updateQuery += "`active` = '" + req.body.active + "', ";
-        updateQuery += "`PositionID` = '" + req.body.PositionID + "', ";
-        updateQuery += "`siteID` = '" + req.body.siteID + "' "; 
-        updateQuery += " WHERE employeeID = '" + req.body.employeeID + "';";
+    var updateQuery = "UPDATE INVENTORY SET ";
+    updateQuery += "quantity = " + SqlString(req.body.quantity) + ", ";
+    updateQuery += "itemLocation = " + SqlString(req.body.itemLocation) + ", ";
+    updateQuery += "reorderThreshold = " + SqlString(req.body.reorderThreshold) + ", ";
+    updateQuery += "maxReorderWarning = " + SqlString(req.body.maxReorderWarning) + " ";
+        updateQuery += "WHERE itemID = " + SqlString(req.body.itemID) + " AND siteID = " + SqlString(req.body.siteID) + ";";
 
 
     
@@ -116,13 +151,13 @@ const pool = mysql.createPool({
 
     
         if(result) {
-            res.redirect("/admin/crud/item");
+            res.redirect("/admin/invt");
         }
     
         if(err) {
             console.log(err);
             console.log("This site cannot be edited due to being in use.");
-            res.redirect("/admin/crud/item");
+            res.redirect("/admin/invt");
         } 
     })
   
@@ -130,13 +165,13 @@ const pool = mysql.createPool({
   
   controller.delete = (req, res) => {
   
-    var deleteQuery = "DELETE FROM INVENTORY WHERE itemID = '";
-    deleteQuery += req.params.itemID + "'";
+    var deleteQuery = "DELETE FROM INVENTORY WHERE itemID = ";
+    deleteQuery += SqlString(req.params.itemID) + ";";
   
     conn.query(deleteQuery, function(err, result) {
   
         if(result) {
-            res.redirect("/admin/crud/invt");
+            res.redirect("/admin/invt");
         }
         
         if(err) {

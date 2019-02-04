@@ -4,7 +4,7 @@ const mysql = require('mysql');
 const app = express();
 const bodyParser = require('body-parser');
 const dateFormat = require('dateformat');
-
+const SqlString = require('sql-escape-string');
 
 const pool = mysql.createPool({
   connectionLimit: 10,
@@ -48,18 +48,22 @@ controller.getAdd = (req, res) => {
 
 controller.add = (req, res) => {
 
+    var catName = SqlString(req.body.categoryName);
+
   var insertQuery = "INSERT INTO category (categoryName) VALUES (";
-  insertQuery += '"' + req.body.categoryName + '");'
+  insertQuery +=  catName + ');'
 
   conn.query(insertQuery, function(err, result) {
 
-      res.redirect("/admin/crud/cat");
+      res.redirect("/admin/cat");
   });
 };
 
 controller.updateInfo = (req, res) => {
 
-  var searchQuery = "SELECT * FROM category WHERE categoryName = '" + req.params.categoryName + "';";
+    var catName = SqlString(req.params.categoryName);
+
+  var searchQuery = "SELECT * FROM category WHERE categoryName = " + catName + ";";
 
   conn.query(searchQuery, function(err, result) {
       res.render('pages/edit-cat.ejs', {
@@ -74,16 +78,20 @@ controller.updateInfo = (req, res) => {
 
 controller.update = (req, res) => {
 
-  var updateQuery = "UPDATE category SET categoryName = '" + req.body.categoryName + "' WHERE categoryName = '" + req.params.categoryName + "'";
+    var catName = SqlString(req.body.categoryName);
+    var catName2 = SqlString(req.params.categoryName);
+
+  var updateQuery = "UPDATE category SET categoryName = " + catName + " WHERE categoryName = " + catName2 + ";";
   conn.query(updateQuery, function (err, result) {
   
       if(result) {
-          res.redirect("/admin/crud/cat");
+          res.redirect("/admin/cat");
       }
   
       if(err) {
-          console.log("This category cannot be edited due to being in use.");
-          res.redirect("/admin/crud/cat");
+       
+     res.redirect("/admin/cat");
+
       } 
   })
 
@@ -91,17 +99,20 @@ controller.update = (req, res) => {
 
 controller.delete = (req, res) => {
 
-  var deleteQuery = "DELETE FROM category WHERE categoryName = '";
-  deleteQuery += req.params.categoryName + "'";
+    var catName = SqlString(req.params.categoryName);
+
+  var deleteQuery = "DELETE FROM category WHERE categoryName = ";
+  deleteQuery += catName;
 
   conn.query(deleteQuery, function(err, result) {
 
       if(result) {
-          res.redirect("/admin/crud/cat");
+          res.redirect("/admin/cat");
       }
       
       if(err) {
           console.log(err);
+          res.redirect("/admin/cat");
       } 
       
   });

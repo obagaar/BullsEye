@@ -4,6 +4,8 @@ const mysql = require('mysql');
 const app = express();
 const bodyParser = require('body-parser');
 const dateFormat = require('dateformat');
+const q = require('q');
+const SqlString = require('sql-escape-string');
 
 const pool = mysql.createPool({
     connectionLimit: 10,
@@ -47,6 +49,7 @@ const pool = mysql.createPool({
   });
 });
 
+
   };
   
   controller.add = (req, res) => {
@@ -59,8 +62,15 @@ const pool = mysql.createPool({
               
             numofSites = result.length+1; 
         
-            var insertQuery = "INSERT INTO `bullseyedb`.`supplier` ( `name`, `address1`, `address2`, `city`, `country`, `province`, `postalcode`, `phone`, `contact`)";insertQuery += " VALUES ('" + req.body.name + "', " + "'" + req.body.address1 + "', '" + req.body.address2 + "', ";
-            insertQuery += "'" + req.body.city + "', " + "'" + req.body.country + "', " + "'" + req.body.province + "', " + "'" + req.body.postalcode + "', " + "'" + req.body.phone + "', " + "'" + req.body.contact + "');";
+            var insertQuery = "INSERT INTO `bullseyedb`.`supplier` ( `name`, `address1`, `address2`, `city`, `country`, `province`, `postalcode`, `phone`, `contact`)";insertQuery += " VALUES (" + SqlString(req.body.name) + ", " 
+            + SqlString(req.body.address1) + ", " 
+            + SqlString(req.body.address2) + ", " ;
+            insertQuery += SqlString(req.body.city) + " , " 
+            + SqlString(req.body.country) + " , " 
+            + SqlString(req.body.province) + " , " 
+            + SqlString(req.body.postalcode) + " , " 
+            + SqlString(req.body.phone) + " , " 
+            + SqlString(req.body.contact) + ");";
           
             conn.query(insertQuery, function(err, result) {
         
@@ -69,7 +79,7 @@ const pool = mysql.createPool({
                 }
           
                 if(result) {
-                    res.redirect("/admin/crud/supp");
+                    res.redirect("/admin/supp");
                 }
                 
             });
@@ -78,50 +88,56 @@ const pool = mysql.createPool({
 
       });
     
-
-    
+     
   };
   
   controller.updateInfo = (req, res) => {
   
-    var searchQuery = "SELECT * FROM SUPPLIER WHERE supplierID = '" + req.params.supplierID + "';";
-  
-    conn.query(searchQuery, function(err, result) {
+    var searchQuery = "SELECT * FROM SUPPLIER WHERE supplierID = " + SqlString(req.params.supplierID) + ";";
+    var searchQuery2 = "SELECT * FROM PROVINCE;";
 
 
-        console.log(result);
- 
-        if(result) {
-            res.render('pages/edit-supp.ejs', {
+    function doQuery1(){
+        var defered = q.defer();
+        conn.query(searchQuery,defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    function doQuery2(){
+        var defered = q.defer();
+        conn.query(searchQuery2,defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    q.all([doQuery1(),doQuery2()]).then(function(results){
+
+
+        var result = JSON.parse(JSON.stringify(results[0][0][0]));
+        var result2 = JSON.parse(JSON.stringify(results[1][0]));
+
+             res.render('pages/edit-supp.ejs', {
                 siteTitle: siteTitle,
-                pageTitle: "Edit Site: " + result[0].name,
-                item: result
-                
+                pageTitle: "Edit Supplier: " + result.name,
+                item: result,
+                item2: result2
             });
-
-        }
-        if(err) {
-            console.log(err);
-        }
-
     });
+
   
   };
   
   controller.update = (req, res) => {
 
-    console.log(req.body);
-  
-     var updateQuery = "UPDATE supplier SET `name` = '" + req.body.name + "', ";
-        updateQuery += "`address1` = '" + req.body.address1 + "', ";
-        updateQuery += "`address2` = '" + req.body.address2 + "', ";
-        updateQuery += "`city` = '" + req.body.city + "', ";
-        updateQuery += "`country` = '" + req.body.country + "', ";
-        updateQuery += "`province` = '" + req.body.province + "', ";
-        updateQuery += "`postalcode` = '" + req.body.postalcode + "', ";
-        updateQuery += "`phone` = '" + req.body.phone + "', ";
-        updateQuery += "`contact` = '" + req.body.contact + "'" ;   
-        updateQuery += " WHERE supplierID = " + req.body.supplierID + ";";
+     var updateQuery = "UPDATE supplier SET `name` = " + SqlString(req.body.name) + ", ";
+        updateQuery += "`address1` = " + SqlString(req.body.address1) + ", ";
+        updateQuery += "`address2` = " + SqlString(req.body.address2) + ", ";
+        updateQuery += "`city` = " + SqlString(req.body.city) + ", ";
+        updateQuery += "`country` = " + SqlString(req.body.country) + ", ";
+        updateQuery += "`province` = " + SqlString(req.body.province) + ", ";
+        updateQuery += "`postalcode` = " + SqlString(req.body.postalcode) + ", ";
+        updateQuery += "`phone` = " + SqlString(req.body.phone) + ", ";
+        updateQuery += "`contact` = " + SqlString(req.body.contact);   
+        updateQuery += " WHERE supplierID = " + SqlString(req.body.supplierID) + ";";
 
 
     
@@ -131,27 +147,27 @@ const pool = mysql.createPool({
 
     
         if(result) {
-            res.redirect("/admin/crud/supp");
+            res.redirect("/admin/supp");
         }
     
         if(err) {
             console.log(err);
             console.log("This site cannot be edited due to being in use.");
-            res.redirect("/admin/crud/supp");
+            res.redirect("/admin/supp");
         } 
     })
-  
+
   };
   
   controller.delete = (req, res) => {
   
-    var deleteQuery = "DELETE FROM SUPPLIER WHERE supplierID = '";
-    deleteQuery += req.params.supplierID + "'";
+    var deleteQuery = "DELETE FROM SUPPLIER WHERE supplierID = ";
+    deleteQuery += SqlString(req.params.supplierID) + ";";
   
     conn.query(deleteQuery, function(err, result) {
   
         if(result) {
-            res.redirect("/admin/crud/supp");
+            res.redirect("/admin/supp");
         }
         
         if(err) {
@@ -159,7 +175,11 @@ const pool = mysql.createPool({
         } 
         
     });
-  
+
+   
   }
 
+
   module.exports = controller;
+
+  

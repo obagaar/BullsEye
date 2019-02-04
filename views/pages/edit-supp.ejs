@@ -4,54 +4,56 @@
         <div class="row">
           <div class="col-md-5 offset-md-3 card">
             <div class="card-body">
-              <form action="/admin/supp/update/<%= item[0].supplierID %>" method="POST" class= "col s12">
+              <form action="/admin/supp/update/<%= item.supplierID %>" method="POST" class= "col s12">
                 
                 <div class="form-group row">
-                    <input type="hidden" name="supplierID" value="<%= item[0].supplierID %>">
+                    <input type="hidden" name="supplierID" value="<%= item.supplierID %>">
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Site Name</label>
-                            <input type="text" name="name" value="<%= item[0].name %>"  class="form-control" autofocus>
+                            <input type="text" name="name" value="<%= item.name %>"  class="form-control" maxlength="50" required autofocus >
                         </div>
                         <div class="col-10">
                             <label for="address1" class="col-10 col-form-label">Address Line 1</label>
-                            <input type="text" name="address1" value="<%= item[0].address1 %>"  class="form-control" autofocus>
+                            <input type="text" name="address1" value="<%= item.address1 %>"  class="form-control" maxlength="50" required>
                         </div>
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Address Line 2</label>
-                            <input type="text" name="address2" value="<%= item[0].address2 %>"  class="form-control" autofocus>
+                            <input type="text" name="address2" value="<%= item.address2 %>"  class="form-control" maxlength="50">
                         </div>
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">City</label>
-                            <input type="text" name="city" value="<%= item[0].city %>"  class="form-control" autofocus>
+                            <input type="text" name="city" value="<%= item.city %>"  class="form-control" maxlength="50">
                         </div>
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Country</label>
-                            <input type="text" name="country" value="<%= item[0].country %>"  class="form-control" autofocus>
+                            <input type="text" name="country" value="<%= item.country %>"  class="form-control" maxlength="50">
                         </div>
                         <div class="col-10">
                                 <label for="province" class="col-10 col-form-label">Province/State</label>
-                                <select name="province" class="col-10 form-control">
-                                        <option value="NB">NB</option>
+                                <select name="province" class="col-10 form-control" required>
+                                        <% for(var i = 0; i < item2.length; i++) { %>
+                                            <option value="<%= item2[i].provinceID %>"><%= item2[i].provinceName %></option>
+                                            <% } %>
                                   </select>
                             </div>
                         <div class="col-10">
-                            <label for="name" class="col-10 col-form-label">Postal Code/Zip Code</label>
-                            <input type="text" name="postalcode" value="<%= item[0].postalcode %>"  class="form-control" autofocus>
+                            <label for="name" class="col-10 col-form-label">Postal Code</label>
+                            <input type="text" name="postalcode" value="<%= item.postalcode %>"  class="form-control" maxlength="11" pattern="[A-Za-z][0-9][A-Za-z][0-9][A-Za-z][0-9]" title="Please enter a valid Postal Code" required>
                         </div>
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Phone</label>
-                            <input type="text" name="phone" value="<%= item[0].phone %>"  class="form-control" autofocus>
+                            <input type="text" name="phone" value="<%= item.phone %>"  class="form-control" pattern="\d{4}\d{3}\d{4}" maxlength="14" required>
                         </div>
                         <br>
                         <div class="col-10">
                             <label for="contact" class="col-10 col-form-label">Contact</label>
-                            <input type="text" name="contact" value="<%= item[0].contact %>"  class="form-control" autofocus>
+                            <input type="text" name="contact" value="<%= item.contact %>"  class="form-control" maxlength="100">
                         </div>
                 </div>
 
       
                 <button type="submit" class="btn btn-primary">
-                  Submit Site
+                  Submit Supplier
                 </button>
               </form>
             </div>

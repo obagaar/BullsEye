@@ -4,6 +4,8 @@ const mysql = require('mysql');
 const app = express();
 const bodyParser = require('body-parser');
 const dateFormat = require('dateformat');
+const q = require('q');
+const SqlString = require('sql-escape-string');
 
 const pool = mysql.createPool({
     connectionLimit: 10,
@@ -36,27 +38,49 @@ const pool = mysql.createPool({
 
   controller.getAdd = (req, res) => {
 
-    conn.query("SELECT * FROM POSITION", function(err, result) {
+        var searchQuery = "SELECT * FROM POSN";
+        var searchQuery2 = "SELECT * FROM SITE;";
 
-        console.log(result);
-    res.render('pages/add-emp.ejs', {
-      siteTitle: siteTitle,
-      pageTitle: "Add Supplier",
-      items: result
-      
-  });
-});
+
+        function doQuery1(){
+            var defered = q.defer();
+            conn.query(searchQuery,defered.makeNodeResolver());
+            return defered.promise;
+        }
+    
+        function doQuery2(){
+            var defered = q.defer();
+            conn.query(searchQuery2,defered.makeNodeResolver());
+            return defered.promise;
+        }
+    
+        q.all([doQuery1(),doQuery2()]).then(function(results){
+    
+
+           var result = JSON.parse(JSON.stringify(results[0][0]));
+            var result2 = JSON.parse(JSON.stringify(results[1][0]));
+    
+                 res.render('pages/add-emp.ejs', {
+                    siteTitle: siteTitle,
+                    pageTitle: "Add Employee",
+                    item: result,
+                    item2: result2
+                });
+        });
 
   };
   
   controller.add = (req, res) => {
 
-    console.log(req);
-
         
             var insertQuery = "INSERT INTO `bullseyedb`.`employee` ( `Password`, `FirstName`, `LastName`, `Email`, `active`, `PositionID`, `siteID`)";
-            insertQuery += " VALUES ('" + req.body.Password + "', " + "'" + req.body.FirstName + "', '" + req.body.LastName + "', ";
-            insertQuery += "'" + req.body.Email + "', " + "'" + req.body.active + "', " + "'" + req.body.PositionID + "', " + "'" + req.body.siteID + "');";
+            insertQuery += " VALUES (" + SqlString(req.body.Password) + ", ";
+            insertQuery += SqlString(req.body.FirstName) + ", " 
+            insertQuery += SqlString(req.body.LastName) + ", ";
+            insertQuery += SqlString(req.body.Email) + ", " 
+            insertQuery += SqlString(req.body.active) + ", " 
+            insertQuery += SqlString(req.body.PositionID) + ", " 
+            insertQuery += SqlString(req.body.siteID) + ");";
           
             conn.query(insertQuery, function(err, result) {
         
@@ -65,7 +89,7 @@ const pool = mysql.createPool({
                 }
           
                 if(result) {
-                    res.redirect("/admin/crud/emp");
+                    res.redirect("/admin/emp");
                 }
                 
             });
@@ -76,41 +100,59 @@ const pool = mysql.createPool({
   
   controller.updateInfo = (req, res) => {
   
-    var searchQuery = "SELECT * FROM EMPLOYEE WHERE employeeID = '" + req.params.employeeID + "';";
-  
-    conn.query(searchQuery, function(err, result) {
+    var searchQuery = "SELECT * FROM EMPLOYEE WHERE employeeID = " + SqlString(req.params.employeeID) + ";";
+    var searchQuery2 = "SELECT * FROM POSN;";
+    var searchQuery3 = "SELECT * FROM SITE;";
 
 
-        if(result) {
-            res.render('pages/edit-emp.ejs', {
+    function doQuery1(){
+        var defered = q.defer();
+        conn.query(searchQuery,defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    function doQuery2(){
+        var defered = q.defer();
+        conn.query(searchQuery2,defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    function doQuery3(){
+        var defered = q.defer();
+        conn.query(searchQuery3,defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    q.all([doQuery1(),doQuery2(),doQuery3()]).then(function(results){
+
+
+        var result = JSON.parse(JSON.stringify(results[0][0]));
+        var result2 = JSON.parse(JSON.stringify(results[1][0]));
+        var result3 = JSON.parse(JSON.stringify(results[2][0]));
+
+             res.render('pages/edit-emp.ejs', {
                 siteTitle: siteTitle,
                 pageTitle: "Edit Employee",
-                item: result
-                
+                item: result,
+                item2: result2,
+                item3: result3
+
+
             });
-
-        }
-        if(err) {
-            console.log(err);
-        }
-
     });
   
   };
   
   controller.update = (req, res) => {
 
-
-    console.log(req.body);
-  
-     var updateQuery = "UPDATE Employee SET `Password` = '" + req.body.Password + "', ";
-        updateQuery += "`FirstName` = '" + req.body.FirstName + "', ";
-        updateQuery += "`LastName` = '" + req.body.LastName + "', ";
-        updateQuery += "`Email` = '" + req.body.Email + "', ";
-        updateQuery += "`active` = '" + req.body.active + "', ";
-        updateQuery += "`PositionID` = '" + req.body.PositionID + "', ";
-        updateQuery += "`siteID` = '" + req.body.siteID + "' "; 
-        updateQuery += " WHERE employeeID = '" + req.body.employeeID + "';";
+     var updateQuery = "UPDATE Employee SET `Password` = " + SqlString(req.body.Password) + ", ";
+        updateQuery += "`FirstName` = " + SqlString(req.body.FirstName) + ", ";
+        updateQuery += "`LastName` = " + SqlString(req.body.LastName) + ", ";
+        updateQuery += "`Email` = " + SqlString(req.body.Email) + ", ";
+        updateQuery += "`active` = " + SqlString(req.body.active) + ", ";
+        updateQuery += "`PositionID` = " + SqlString(req.body.PositionID) + ", ";
+        updateQuery += "`siteID` = " + SqlString(req.body.siteID) + " "; 
+        updateQuery += " WHERE employeeID = " + SqlString(req.body.employeeID) + ";";
 
 
     
@@ -120,13 +162,12 @@ const pool = mysql.createPool({
 
     
         if(result) {
-            res.redirect("/admin/crud/emp");
+            res.redirect("/admin/emp");
         }
     
         if(err) {
             console.log(err);
-            console.log("This site cannot be edited due to being in use.");
-            res.redirect("/admin/crud/emp");
+            res.redirect("/admin/emp");
         } 
     })
   
@@ -134,13 +175,13 @@ const pool = mysql.createPool({
   
   controller.delete = (req, res) => {
   
-    var deleteQuery = "DELETE FROM employee WHERE employeeID = '";
-    deleteQuery += req.params.employeeID + "'";
+    var deleteQuery = "DELETE FROM employee WHERE employeeID = ";
+    deleteQuery += SqlString(req.params.employeeID) + "";
   
     conn.query(deleteQuery, function(err, result) {
   
         if(result) {
-            res.redirect("/admin/crud/emp");
+            res.redirect("/admin/emp");
         }
         
         if(err) {

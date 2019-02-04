@@ -10,49 +10,58 @@
                         <input type="hidden" name="itemID" value="<%= item[0].itemID %>">
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Name</label>
-                            <input type="text" name="name" value="<%= item[0].name %>"  class="form-control" autofocus>
+                            <input type="text" name="name" value="<%= item[0].name %>"  class="form-control" maxlength="100" required autofocus>
                         </div>
                         <div class="col-10">
                                 <label for="sku" class="col-10 col-form-label">SKU</label>
-                                <input type="text" name="sku" value="<%= item[0].sku %>"  class="form-control" autofocus>
+                                <input type="text" name="sku" value="<%= item[0].sku %>"  class="form-control" pattern="[0-9]{1,20}" maxlength="20" required>
                             </div>
                         <div class="col-10">
                             <label for="description" class="col-10 col-form-label">Description</label>
-                            <input type="text" name="description" value="<%= item[0].description %>"  class="form-control" autofocus>
+                            <input type="text" name="description" value="<%= item[0].description %>"  class="form-control" maxlength="255">
                         </div>
                         <div class="col-10">
                             <label for="category" class="col-10 col-form-label">Category</label>
-                            <input type="text" name="category" value="<%= item[0].category %>"  class="form-control" autofocus>
+                            <select name="category" class="col-10 form-control" required>
+                                    <% for(var i = 1; i < item3.length; i++) { %>
+                                        <option value="<%= item3[i].categoryName %>"><%= item3[i].categoryName %></option>
+                                        <% } %>
+                              </select>
                         </div>
                         <div class="col-10">
                                 <label for="weight" class="col-10 col-form-label">Weight</label>
-                                <input type="text" name="weight" value="<%= item[0].weight %>"  class="form-control" autofocus>
+                                <input type="number" name="weight" value="<%= item[0].weight %>"  class="form-control" min="0" max="99999999999" required>
                             </div>
                         <div class="col-10">
                             <label for="costprice" class="col-10 col-form-label">Cost Price</label>
-                            <input type="text" name="costPrice" value="<%= item[0].costPrice %>"  class="form-control" autofocus>
+                            <input type="text" name="costPrice" value="<%= item[0].costPrice %>" pattern="\d+\.\d{1,2}" class="form-control" min="0" max="99999999999" required>
                         </div>
                         <div class="col-10">
                             <label for="retailPrice" class="col-10 col-form-label">Retail Price</label>
-                            <input type="text" name="retailPrice" value="<%= item[0].retailPrice %>"  class="form-control" autofocus>
+                            <input type="text" name="retailPrice" value="<%= item[0].retailPrice %>" pattern="\d+\.\d{1,2}"  class="form-control" min="0" max="99999999999" required>
                         </div>
                         <div class="col-10">
                             <label for="supplier" class="col-10 col-form-label">Supplier</label>
-                            <select name="supplier" class="col-10 form-control">
-                                <option value="100000">100000</option>
+                            <select name="supplier" class="col-10 form-control" required>
+                                    <% for(var i = 0; i < item2.length; i++) { %>
+                                        <option value="<%= item2[i].supplierID %>"><%= item2[i].name %></option>
+                                        <% } %>
                               </select>
                         </div>
                         <div class="col-10">
                             <label for="active" class="col-10 col-form-label">Active</label>
-                            <input type="text" name="active" value="<%= item[0].active %>"  class="form-control" autofocus>
+                            <select name="active" class="col-10 form-control" required>
+                                    <option value="1" selected>Yes</option>
+                                    <option value="0">No</option>
+                                </select>
                         </div>
                         <div class="col-10">
                             <label for="caseSize" class="col-10 col-form-label">Case Size</label>
-                            <input type="caseSize" name="active" value="<%= item[0].caseSize %>"  class="form-control" autofocus>
+                            <input type="number" name="caseSize" value="<%= item[0].caseSize %>"  class="form-control" min="0" max="99999999999" required>
                         </div>
                         <div class="col-10">
                             <label for="notes" class="col-10 col-form-label">Notes</label>
-                            <input type="text" name="notes" value="<%= item[0].notes %>"  class="form-control" autofocus>
+                            <input type="text" name="notes" value="<%= item[0].notes %>"  class="form-control" maxlength="255">
                         </div>
                 </div>
 

@@ -4,48 +4,55 @@
         <div class="row">
           <div class="col-md-5 offset-md-3 card">
             <div class="card-body">
-              <form action="/admin/crud/emp/add" method="POST" class= "col s12">
+              <form action="/admin/emp/add" method="POST" class= "col s12">
                 
                 <div class="form-group row">
                     <input type="hidden" name="employeeID" value="">
                         <div class="col-10">
                             <label for="FirstName" class="col-10 col-form-label">First Name</label>
-                            <input type="text" name="FirstName" value=""  class="form-control" autofocus>
+                            <input type="text" name="FirstName" value=""  class="form-control" maxlength="20" required autofocus>
                         </div>
                         <div class="col-10">
                                 <label for="LastName" class="col-10 col-form-label">Last Name</label>
-                                <input type="text" name="LastName" value=""  class="form-control" autofocus>
+                                <input type="text" name="LastName" value=""  class="form-control" maxlength="20" required>
                             </div>
                         <div class="col-10">
                             <label for="Email" class="col-10 col-form-label">Email</label>
-                            <input type="text" name="Email" value=""  class="form-control" autofocus>
+                            <input type="email" name="Email" value="" placeholder="@bullseye.ca" maxlength="100" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Must be a valid email such as emp@bullseye.ca">
                         </div>
                         <div class="col-10">
                             <label for="PositionID" class="col-10 col-form-label">Position</label>
-                            <input type="text" name="PositionID" value=""  class="form-control" autofocus>
+                            <select name="PositionID" class="col-10 form-control" required>
+                                    <% for(var i = 0; i < item.length; i++) { %>
+                                        <option value="<%= item[i].positionID %>"><%= item[i].permissionLevel %></option>
+                                        <% } %>
+                              </select>
                         </div>
                         <div class="col-10">
                                 <label for="siteID" class="col-10 col-form-label">Site</label>
-                                <input type="text" name="siteID" value=""  class="form-control" autofocus>
+                                <select name="siteID" class="col-10 form-control" required>
+                                        <% for(var i = 1; i < item2.length; i++) { %>
+                                            <option value="<%= item2[i].siteID %>"><%= item2[i].name %></option>
+                                            <% } %>
+                                  </select>
                             </div>
                         <div class="col-10">
                             <label for="Password" class="col-10 col-form-label">Password</label>
-                            <input type="text" name="Password" value=""  class="form-control" autofocus>
+                            <input type="text" name="Password" value=""  class="form-control" maxlength="32"" required>
                         </div>
-                        <div class="col-10">
-                            <label for="active" class="col-10 col-form-label">Active</label>
-                            <input type="text" name="active" value=""  class="form-control" autofocus>
-                        </div>
+                           
+                            <input type="hidden" name="active" value="1" class="form-control">
                 </div>
 
       
                 <button type="submit" class="btn btn-primary">
-                  Submit Site
+                  Submit Employee
                 </button>
               </form>
             </div>
           </div>
         </div>
       </div>
+
 
 <% include ../partials/footer %>

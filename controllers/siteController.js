@@ -4,6 +4,8 @@ const mysql = require('mysql');
 const app = express();
 const bodyParser = require('body-parser');
 const dateFormat = require('dateformat');
+const q = require('q');
+const SqlString = require('sql-escape-string');
 
 const pool = mysql.createPool({
     connectionLimit: 10,
@@ -57,9 +59,18 @@ const pool = mysql.createPool({
               
             numofSites = result.length+1; 
         
-            var insertQuery = "INSERT INTO `bullseyedb`.`site` (`siteID`, `name`, `provinceID`, `address`, `city`, `country`, `postalCode`, `phone`, `dayOfWeek`, `distanceFromWH`, `notes`)";insertQuery += " VALUES ('" + numofSites + "', " + "'" + req.body.name + "', " + "'" + req.body.provinceID + "', " + "'" + req.body.address + "', ";
-            insertQuery += "'" + req.body.city + "', " + "'" + req.body.country + "', " + "'" + req.body.postalCode + "', " + "'" + req.body.phone + "', " + "'" + req.body.dayOfWeek + "', ";
-            insertQuery += "'" + req.body.distanceFromWH + "', " + "'" + req.body.notes + "');";
+            var insertQuery = "INSERT INTO `bullseyedb`.`site` (`siteID`, `name`, `provinceID`, `address`, `city`, `country`, `postalCode`, `phone`, `dayOfWeek`, `distanceFromWH`, `notes`)";
+            insertQuery += " VALUES (" + numofSites + ", " 
+            + SqlString(req.body.name) + ", " 
+            + SqlString(req.body.provinceID) + ", " 
+            + SqlString(req.body.address) + ", ";
+            insertQuery += SqlString(req.body.city) + ", " 
+            + SqlString(req.body.country) + ", " 
+            + SqlString(req.body.postalCode) + ", " 
+            + SqlString(req.body.phone) + ", " 
+            + SqlString(req.body.dayOfWeek) + ", ";
+            insertQuery += SqlString(req.body.distanceFromWH) + ", " 
+            + SqlString(req.body.notes) + ");";
           
             conn.query(insertQuery, function(err, result) {
         
@@ -68,7 +79,7 @@ const pool = mysql.createPool({
                 }
           
                 if(result) {
-                    res.redirect("/admin/crud/site");
+                    res.redirect("/admin/site");
                 }
                 
             });
@@ -82,44 +93,53 @@ const pool = mysql.createPool({
   };
   
   controller.updateInfo = (req, res) => {
-  
-    var searchQuery = "SELECT * FROM site WHERE siteID = '" + req.params.siteID + "';";
-  
-    conn.query(searchQuery, function(err, result) {
 
- 
-        if(result) {
-            res.render('pages/edit-site.ejs', {
+    var searchQuery = "SELECT * FROM site WHERE siteID = " + SqlString(req.params.siteID) + ";";
+    var searchQuery2 = "SELECT * FROM PROVINCE;";
+
+
+    function doQuery1(){
+        var defered = q.defer();
+        conn.query(searchQuery,defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    function doQuery2(){
+        var defered = q.defer();
+        conn.query(searchQuery2,defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    q.all([doQuery1(),doQuery2()]).then(function(results){
+
+
+        var result = JSON.parse(JSON.stringify(results[0][0][0]));
+        var result2 = JSON.parse(JSON.stringify(results[1][0]));
+
+             res.render('pages/edit-site.ejs', {
                 siteTitle: siteTitle,
-                pageTitle: "Edit Site: " + result[0].name,
-                item: result
-                
+                pageTitle: "Edit Site: " + result.name,
+                item: result,
+                item2: result2
             });
-
-        }
-        if(err) {
-            console.log(err);
-        }
-
     });
+
   
   };
   
   controller.update = (req, res) => {
 
-    console.log(req.body);
-  
-    var updateQuery = "UPDATE site SET `name` = '" + req.body.name + "', ";
-    updateQuery += "`provinceID` = '" + req.body.provinceID + "', ";
-    updateQuery += "`address` = '" + req.body.address + "', ";
-    updateQuery += "`city` = '" + req.body.city + "', ";
-    updateQuery += "`country` = '" + req.body.country + "', ";
-    updateQuery += "`postalCode` = '" + req.body.postalCode + "', ";
-    updateQuery += "`phone` = '" + req.body.phone + "', ";
-    updateQuery += "`dayOfWeek` = '" + req.body.dayOfWeek + "', ";
-    updateQuery += "`distanceFromWH` = '" + req.body.distanceFromWH + "', "; 
-    updateQuery += "`notes` = '" + req.body.notes + "'" ;   
-    updateQuery += " WHERE siteID = " + req.body.siteID + ";";
+    var updateQuery = "UPDATE site SET `name` = " + SqlString(req.body.name) + ", ";
+    updateQuery += "`provinceID` = " + SqlString(req.body.provinceID) + ", ";
+    updateQuery += "`address` = " + SqlString(req.body.address) + ", ";
+    updateQuery += "`city` = " + SqlString(req.body.city) + ", ";
+    updateQuery += "`country` = " + SqlString(req.body.country) + ", ";
+    updateQuery += "`postalCode` = " + SqlString(req.body.postalCode) + ", ";
+    updateQuery += "`phone` = " + SqlString(req.body.phone) + ", ";
+    updateQuery += "`dayOfWeek` = " + SqlString(req.body.dayOfWeek) + ", ";
+    updateQuery += "`distanceFromWH` = " + SqlString(req.body.distanceFromWH) + ", "; 
+    updateQuery += "`notes` = " + SqlString(req.body.notes);   
+    updateQuery += " WHERE siteID = " + SqlString(req.body.siteID) + ";";
 
 
     
@@ -129,13 +149,13 @@ const pool = mysql.createPool({
 
     
         if(result) {
-            res.redirect("/admin/crud/site");
+            res.redirect("/admin/site");
         }
     
         if(err) {
             console.log(err);
             console.log("This site cannot be edited due to being in use.");
-            res.redirect("/admin/crud/site");
+            res.redirect("/admin/site");
         } 
     })
   
@@ -143,8 +163,8 @@ const pool = mysql.createPool({
   
   controller.delete = (req, res) => {
   
-    var deleteQuery = "DELETE FROM site WHERE siteID = '";
-    deleteQuery += req.params.siteID + "'";
+    var deleteQuery = "DELETE FROM site WHERE siteID = ";
+    deleteQuery += SqlString(req.params.siteID) + ";";
   
     conn.query(deleteQuery, function(err, result) {
   

@@ -4,12 +4,12 @@
         <div class="row">
           <div class="col-md-5 offset-md-3 card">
             <div class="card-body">
-              <form action="/admin/crud/cat/add" method="POST" class= "col s12">
+              <form action="/admin/cat/add" method="POST" class= "col s12">
                 
                 <div class="form-group row">
                         <div class="col-10">
                             <label for="categoryName" class="col-10 col-form-label">Category Name</label>
-                                <input type="text" name="categoryName" value=""  class="form-control" autofocus>
+                                <input type="text" name="categoryName" value=""  class="form-control" maxlength="32" autofocus required>
                               </div>
                 </div>
 

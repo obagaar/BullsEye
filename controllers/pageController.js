@@ -15,7 +15,7 @@ controller.admin = (req, res) => {
 
     res.render('pages/adminIndex.ejs', {
         siteTitle: siteTitle,
-        pageTitle: "Admin Access",
+        pageTitle: "Administrative Access",
         item: ''
     });
 }

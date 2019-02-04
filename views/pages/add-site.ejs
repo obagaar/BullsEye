@@ -10,44 +10,44 @@
                     <input type="hidden" name="siteID" value="">
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Site Name</label>
-                            <input type="text" name="name" value=""  class="form-control" autofocus>
+                            <input type="text" name="name" value=""  class="form-control" maxlength="50" required autofocus>
                         </div>
                         <div class="col-10">
                             <label for="provinceID" class="col-10 col-form-label">Province/State</label>
-                            <select name="provinceID" class="col-10 form-control">
+                            <select name="provinceID" class="col-10 form-control" required>
                                 <% for(var i = 0; i < items.length; i++) { %>
-                                <option value="<%= items[i].provinceID %>"><%= items[i].provinceID %></option>
+                                <option value="<%= items[i].provinceID %>"><%= items[i].provinceName %></option>
                                 <% } %>
                               </select>
                         </div>
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Address Line 1</label>
-                            <input type="text" name="address" value=""  class="form-control" autofocus>
+                            <input type="text" name="address" value=""  class="form-control" maxlength="50" required>
                         </div>
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Address Line 2</label>
-                            <input type="text" name="address2" value=""  class="form-control" autofocus>
+                            <input type="text" name="address2" value=""  class="form-control" maxlength="50">
                         </div>
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">City</label>
-                            <input type="text" name="city" value=""  class="form-control" autofocus>
+                            <input type="text" name="city" value=""  class="form-control" maxlength="50" required>
                         </div>
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Country</label>
-                            <input type="text" name="country" value=""  class="form-control" autofocus>
+                            <input type="text" name="country" value=""  class="form-control" maxlength="50" required
                         </div>
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Postal Code/Zip Code</label>
-                            <input type="text" name="postalCode" value=""  class="form-control" autofocus>
+                            <input type="text" name="postalCode" value=""  class="form-control" maxlength="11" pattern="[A-Za-z][0-9][A-Za-z][0-9][A-Za-z][0-9]" title="Please enter a valid Postal Code" required>
                         </div>
                         <div class="col-10">
                             <label for="name" class="col-10 col-form-label">Phone</label>
-                            <input type="text" name="phone" value=""  class="form-control" autofocus>
+                            <input type="text" name="phone" value=""  class="form-control" pattern="\d{4}\d{3}\d{4}" maxlength="14" required>
                         </div>
                         <br>
                         <div class="col-10">
                             <label for="dayOfWeek" class="col-10 col-form-label">Delivery Day of the Week</label>
-                            <select name="dayOfWeek" class="col-10 form-control">
+                            <select name="dayOfWeek" class="col-10 form-control" required>
                                 <option value="MONDAY">Monday</option>
                                 <option value="TUESDAY">Tuesday</option>
                                 <option value="WEDNESDAY">Wednesday</option>
@@ -58,11 +58,11 @@
                         <br>
                         <div class="col-10">
                             <label for="distanceFromWH" class="col-10 col-form-label">Distance from the Warehouse</label>
-                            <input type="text" name="distanceFromWH" value=""  class="form-control" autofocus>
+                            <input type="number" name="distanceFromWH" value=""  class="form-control" min="0" max="99999999999" required>
                         </div>
                         <div class="col-10">
                             <label for="notes" class="col-10 col-form-label">Notes</label>
-                            <input type="text" name="notes" value=""  class="form-control" autofocus>
+                            <input type="text" name="notes" value=""  class="form-control" maxlength="255">
                         </div>
                 </div>
 
