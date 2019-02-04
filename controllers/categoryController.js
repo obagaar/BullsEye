@@ -1,3 +1,4 @@
+//Imports of packages to be called on later for use in queries
 const express = require('express');
 const http = require('http');
 const mysql = require('mysql');
@@ -6,6 +7,7 @@ const bodyParser = require('body-parser');
 const dateFormat = require('dateformat');
 const SqlString = require('sql-escape-string');
 
+//Uses mysql package to setup a connection pool to be used in queries
 const pool = mysql.createPool({
   connectionLimit: 10,
   host: 'localhost',
@@ -14,15 +16,18 @@ const pool = mysql.createPool({
   database: 'bullseyedb'
 })
 
+//Function returns the pool so it can be used to set connection
 function getConnection () {
 
   return pool
 }
 
+//Constants for the site's tite, the connection and array for controller methods to be returned
 const siteTitle = "BullsEye";
 const conn = getConnection();
 const controller = {};
 
+//First method with query to select all then send to index page to display all rows with available actions
 controller.read = (req, res) => {
     
   conn.query("SELECT * FROM CATEGORY", function(err, result) {
@@ -31,10 +36,14 @@ controller.read = (req, res) => {
         pageTitle: "Categories",
         items: result
     });
+ if(err){
+    res.redirect("/err/cat");
+ }
+
   });
 };
 
-
+//Directs to page to add an entry
 controller.getAdd = (req, res) => {
 
   res.render('pages/add-cat.ejs', {
@@ -46,6 +55,8 @@ controller.getAdd = (req, res) => {
 
 };
 
+//Uses what was entered in the page's form to build a query then send to the database an update it
+//Errors result in a page advising to recheck entry then takes user back to index
 controller.add = (req, res) => {
 
     var catName = SqlString(req.body.categoryName);
@@ -56,9 +67,15 @@ controller.add = (req, res) => {
   conn.query(insertQuery, function(err, result) {
 
       res.redirect("/admin/cat");
+
+      if(err){
+        res.redirect("/err/cat");
+      }
   });
 };
 
+//Direcgts to page to edit entry along with sending information from queries from look up tables
+//The queries populate drop down menus used to edit
 controller.updateInfo = (req, res) => {
 
     var catName = SqlString(req.params.categoryName);
@@ -72,10 +89,16 @@ controller.updateInfo = (req, res) => {
           item: result
           
       });
+
+      if(err) {
+        res.redirect("/err/cat");
+      }
   });
 
 };
 
+//Uses the information edited and sends it to update the database
+//Also directs to a page advising of errors if there are any
 controller.update = (req, res) => {
 
     var catName = SqlString(req.body.categoryName);
@@ -90,13 +113,15 @@ controller.update = (req, res) => {
   
       if(err) {
        
-     res.redirect("/admin/cat");
+     res.redirect("/err/cat");
 
       } 
   })
 
 };
 
+//Deletes the selected entry by sending a query to the database
+//Also directs to a page advising of errors if there are any
 controller.delete = (req, res) => {
 
     var catName = SqlString(req.params.categoryName);
@@ -112,11 +137,12 @@ controller.delete = (req, res) => {
       
       if(err) {
           console.log(err);
-          res.redirect("/admin/cat");
+          res.redirect("/err/cat");
       } 
       
   });
 
 }
 
+//Exports all methods to be sued for routing
   module.exports = controller;

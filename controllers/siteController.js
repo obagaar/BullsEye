@@ -1,3 +1,4 @@
+//Imports of packages to be called on later for use in queries
 const express = require('express');
 const http = require('http');
 const mysql = require('mysql');
@@ -7,6 +8,7 @@ const dateFormat = require('dateformat');
 const q = require('q');
 const SqlString = require('sql-escape-string');
 
+//Uses mysql package to setup a connection pool to be used in queries
 const pool = mysql.createPool({
     connectionLimit: 10,
     host: 'localhost',
@@ -15,27 +17,37 @@ const pool = mysql.createPool({
     database: 'bullseyedb'
   })
   
+  //Function returns the pool so it can be used to set connection
   function getConnection () {
   
     return pool
   }
   
-  const siteTitle = "BullsEye";
+   //Constants for the site's tite, the connection and array for controller methods to be returned
+  const siteTitle = "BullsEye Sporting Goods";
   const conn = getConnection();
   const controller = {};
 
   controller.read = (req, res) => {
     
+    //First method with query to select all then send to index page to display all rows with available actions
     conn.query("SELECT * FROM SITE", function(err, result) {
       res.render('pages/index-site.ejs', {
           siteTitle: siteTitle,
           pageTitle: "Sites",
           items: result
       });
+
+      if(err) {
+
+        res.redirect("/err/site");
+     }
+
     });
 
   };
 
+  //Directs to page to add an entry along with information from look up tables after querying the database
   controller.getAdd = (req, res) => {
 
     conn.query("SELECT * FROM PROVINCE", function(err, result) {
@@ -45,10 +57,17 @@ const pool = mysql.createPool({
       items: result
       
   });
+  if(err) {
+
+    res.redirect("/err/site");
+ }
+
 });
 
   };
   
+    //Uses what was entered in the page's form to build a query then send to the database an update it
+//Errors result in a page advising to recheck entry then takes user back to index  
   controller.add = (req, res) => {
 
     var numofSites = 0;
@@ -75,8 +94,9 @@ const pool = mysql.createPool({
             conn.query(insertQuery, function(err, result) {
         
                 if(err) {
-                    console.log(err);
-                }
+
+                    res.redirect("/err/site");
+                 }
           
                 if(result) {
                     res.redirect("/admin/site");
@@ -92,6 +112,8 @@ const pool = mysql.createPool({
     
   };
   
+    //Directs to page to edit entry along with sending information from queries from look up tables
+//The queries populate drop down menus used to edit
   controller.updateInfo = (req, res) => {
 
     var searchQuery = "SELECT * FROM site WHERE siteID = " + SqlString(req.params.siteID) + ";";
@@ -127,6 +149,8 @@ const pool = mysql.createPool({
   
   };
   
+    //Uses the information edited and sends it to update the database
+//Also directs to a page advising of errors if there are any
   controller.update = (req, res) => {
 
     var updateQuery = "UPDATE site SET `name` = " + SqlString(req.body.name) + ", ";
@@ -153,14 +177,15 @@ const pool = mysql.createPool({
         }
     
         if(err) {
-            console.log(err);
-            console.log("This site cannot be edited due to being in use.");
-            res.redirect("/admin/site");
-        } 
+
+            res.redirect("/err/site");
+         }
     })
   
   };
   
+   //Deletes the selected entry by sending a query to the database
+//Also directs to a page advising of errors if there are any
   controller.delete = (req, res) => {
   
     var deleteQuery = "DELETE FROM site WHERE siteID = ";
@@ -173,11 +198,13 @@ const pool = mysql.createPool({
         }
         
         if(err) {
-            console.log(err);
-        } 
+
+            res.redirect("/err/site");
+         }
         
     });
   
   }
 
+  //Exports all methods to be used for routing
   module.exports = controller;

@@ -1,3 +1,5 @@
+<!-- Page to add sites. Uses header and footer partials -->
+
 <% include ../partials/header %>
 
 <div class="container mt-5">
@@ -64,12 +66,18 @@
                             <label for="notes" class="col-10 col-form-label">Notes</label>
                             <input type="text" name="notes" value=""  class="form-control" maxlength="255">
                         </div>
+
+                        <br><br>
                 </div>
 
-      
+                    <div class="row">
+ 
                 <button type="submit" class="btn btn-primary">
                   Submit Site
-                </button>
+                </button> 
+
+                <button class="btn btn-danger"><a href="/admin/site" class="btn btn-danger">Cancel</a></button> 
+            </div>
               </form>
             </div>
           </div>

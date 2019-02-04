@@ -1,3 +1,4 @@
+//Imports of packages to be called on later for use in queries
 const express = require('express');
 const http = require('http');
 const mysql = require('mysql');
@@ -7,6 +8,7 @@ const dateFormat = require('dateformat');
 const q = require('q');
 const SqlString = require('sql-escape-string');
 
+//Uses mysql package to setup a connection pool to be used in queries
 const pool = mysql.createPool({
     connectionLimit: 10,
     host: 'localhost',
@@ -15,15 +17,18 @@ const pool = mysql.createPool({
     database: 'bullseyedb'
   })
   
+  //Function returns the pool so it can be used to set connection
   function getConnection () {
   
     return pool
   }
   
-  const siteTitle = "BullsEye";
+   //Constants for the site's tite, the connection and array for controller methods to be returned
+  const siteTitle = "BullsEye Sporting Goods";
   const conn = getConnection();
   const controller = {};
 
+  //First method with query to select all then send to index page to display all rows with available actions
   controller.read = (req, res) => {
     
     conn.query("SELECT * FROM INVENTORY", function(err, result) {
@@ -32,10 +37,17 @@ const pool = mysql.createPool({
           pageTitle: "Inventory",
           items: result
       });
+
+      if(err) {
+
+        res.redirect("/err/invt");
+     }
+
     });
 
   };
 
+  //Directs to page to add an entry along with information from look up tables after querying the database
   controller.getAdd = (req, res) => {
 
     var searchQuery = "SELECT * FROM ITEM";
@@ -70,6 +82,8 @@ const pool = mysql.createPool({
 
   };
   
+    //Uses what was entered in the page's form to build a query then send to the database an update it
+//Errors result in a page advising to recheck entry then takes user back to index  
   controller.add = (req, res) => {
 
       var insertQuery = "INSERT INTO `bullseyedb`.`inventory` (`itemID`, `siteID`, `quantity`, `itemLocation`, `reorderThreshold`, `maxReorderWarning`) VALUES ('";
@@ -97,6 +111,8 @@ const pool = mysql.createPool({
     
   };
   
+    //Directs to page to edit entry along with sending information from queries from look up tables
+//The queries populate drop down menus used to edit
   controller.updateInfo = (req, res) => {
 
 
@@ -132,6 +148,8 @@ const pool = mysql.createPool({
   
   };
   
+    //Uses the information edited and sends it to update the database
+//Also directs to a page advising of errors if there are any
   controller.update = (req, res) => {
 
 
@@ -155,14 +173,15 @@ const pool = mysql.createPool({
         }
     
         if(err) {
-            console.log(err);
-            console.log("This site cannot be edited due to being in use.");
-            res.redirect("/admin/invt");
-        } 
+
+            res.redirect("/err/invt");
+         }
     })
   
   };
   
+   //Deletes the selected entry by sending a query to the database
+//Also directs to a page advising of errors if there are any
   controller.delete = (req, res) => {
   
     var deleteQuery = "DELETE FROM INVENTORY WHERE itemID = ";
@@ -175,12 +194,13 @@ const pool = mysql.createPool({
         }
         
         if(err) {
-            console.log(err);
-            res.redirect("/admin/crud/invt");
-        } 
+
+            res.redirect("/err/invt");
+         }
         
     });
   
   }
 
+  //Exports all methods to be used for routing
   module.exports = controller;

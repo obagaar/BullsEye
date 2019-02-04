@@ -1,3 +1,4 @@
+//Imports of packages to be called on later for use in queries
 const express = require('express');
 const http = require('http');
 const mysql = require('mysql');
@@ -7,6 +8,7 @@ const dateFormat = require('dateformat');
 const q = require('q');
 const SqlString = require('sql-escape-string');
 
+//Uses mysql package to setup a connection pool to be used in queries
 const pool = mysql.createPool({
     connectionLimit: 10,
     host: 'localhost',
@@ -15,15 +17,18 @@ const pool = mysql.createPool({
     database: 'bullseyedb'
   })
   
+  //Function returns the pool so it can be used to set connection
   function getConnection () {
   
     return pool
   }
   
-  const siteTitle = "BullsEye";
+   //Constants for the site's tite, the connection and array for controller methods to be returned
+  const siteTitle = "BullsEye Sporting Goods";
   const conn = getConnection();
   const controller = {};
 
+  //First method with query to select all then send to index page to display all rows with available actions
   controller.read = (req, res) => {
     
     conn.query("SELECT * FROM SUPPLIER", function(err, result) {
@@ -32,26 +37,39 @@ const pool = mysql.createPool({
           pageTitle: "Suppliers",
           items: result
       });
+
+
+      if(err) {
+
+        res.redirect("/err/supp");
+     }
     });
 
   };
 
+  //Directs to page to add an entry along with information from look up tables after querying the database
   controller.getAdd = (req, res) => {
 
     conn.query("SELECT * FROM PROVINCE", function(err, result) {
 
-        console.log(result);
     res.render('pages/add-supp.ejs', {
       siteTitle: siteTitle,
       pageTitle: "Add Supplier",
       items: result
       
   });
+
+  if(err) {
+
+    res.redirect("/err/supp");
+ }
 });
 
 
   };
   
+    //Uses what was entered in the page's form to build a query then send to the database an update it
+//Errors result in a page advising to recheck entry then takes user back to index  
   controller.add = (req, res) => {
 
     var numofSites = 0;
@@ -61,6 +79,8 @@ const pool = mysql.createPool({
           if(result) {
               
             numofSites = result.length+1; 
+
+            
         
             var insertQuery = "INSERT INTO `bullseyedb`.`supplier` ( `name`, `address1`, `address2`, `city`, `country`, `province`, `postalcode`, `phone`, `contact`)";insertQuery += " VALUES (" + SqlString(req.body.name) + ", " 
             + SqlString(req.body.address1) + ", " 
@@ -75,8 +95,9 @@ const pool = mysql.createPool({
             conn.query(insertQuery, function(err, result) {
         
                 if(err) {
-                    console.log(err);
-                }
+
+                    res.redirect("/err/supp");
+                 }
           
                 if(result) {
                     res.redirect("/admin/supp");
@@ -91,6 +112,8 @@ const pool = mysql.createPool({
      
   };
   
+    //Directs to page to edit entry along with sending information from queries from look up tables
+//The queries populate drop down menus used to edit
   controller.updateInfo = (req, res) => {
   
     var searchQuery = "SELECT * FROM SUPPLIER WHERE supplierID = " + SqlString(req.params.supplierID) + ";";
@@ -126,6 +149,8 @@ const pool = mysql.createPool({
   
   };
   
+    //Uses the information edited and sends it to update the database
+//Also directs to a page advising of errors if there are any
   controller.update = (req, res) => {
 
      var updateQuery = "UPDATE supplier SET `name` = " + SqlString(req.body.name) + ", ";
@@ -151,14 +176,15 @@ const pool = mysql.createPool({
         }
     
         if(err) {
-            console.log(err);
-            console.log("This site cannot be edited due to being in use.");
-            res.redirect("/admin/supp");
-        } 
+
+            res.redirect("/err/supp");
+         }
     })
 
   };
   
+   //Deletes the selected entry by sending a query to the database
+//Also directs to a page advising of errors if there are any
   controller.delete = (req, res) => {
   
     var deleteQuery = "DELETE FROM SUPPLIER WHERE supplierID = ";
@@ -171,15 +197,16 @@ const pool = mysql.createPool({
         }
         
         if(err) {
-            console.log(err);
-        } 
+
+            res.redirect("/err/supp");
+         }
         
     });
 
    
   }
 
-
+//Exports all methods to be used for routing
   module.exports = controller;
 
   

@@ -1,0 +1,28 @@
+<!-- Error page for categoriesemployees. Uses header and footer partials -->
+<% include ../partials/header %>
+
+<div class="row">
+
+        <% include ../partials/menuDashboard %>
+        <div class="col-sm-9 col-md-9">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Unable to Update</h3>
+                  </div>
+                  <br>
+                  <div class="panel-body">
+
+                    Unfortunately this entry cannot be updated due to use in another area. Please review this submission.
+
+                    <br><br>
+                <div class="row">
+                        <button class="btn btn-primary"><a href="/admin/emp" class="btn btn-primary">Return</a></button>
+                </div>
+                    
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <% include ../partials/footer %>

@@ -1,61 +1,83 @@
+<!-- Index page for items. Uses header and footer partials -->
+
 <% include ../partials/header %>
 
-<div class="">
-    <div class="col s12">
-        <a href="/admin/item/add" class="btn btn-success btn-lg">Add a new Item</a>
-    </div>
-</div>
-<br>
+<div class="row">
 
-<div class="">
-    <div class="col s12">
-        <% if (items.length > 0) { %>
-            <table class="table">
-                <thread>
-                    <tr>
-                        <th style="text-align: center;">Item ID</th>
-                        <th>Name</th>
-                        <th>SKU</th>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>Weight (kg)</th>
-                        <th>Cost Price</th>
-                        <th>Retail Price</th>
-                        <th>Supplier</th>
-                        <th>Active</th>
-                        <th>Case Size</th>
-                        <th>Notes</th>
-                        <th solspan="2" style="width: 20%; text-align: center;">Actions</th>
-                    </tr>
-                </thread>
-                <tbody>
-                    <% for(var i = 0; i < items.length; i++) { %>
-                    <tr>
-                        <td style="width: 1%; text-align: center;"><%= items[i].itemID %></td>
-                        <td><%= items[i].name %></td>
-                        <td><%= items[i].sku %></td>
-                        <td><%= items[i].description %></td>
-                        <td><%= items[i].category %></td>
-                        <td><%= items[i].weight %></td>
-                        <td><%= items[i].costPrice %></td>
-                        <td><%= items[i].retailPrice %></td>
-                        <td><%= items[i].supplierID %></td>
-                        <td><%= items[i].active %></td>
-                        <td><%= items[i].caseSize %></td>
-                        <td><%= items[i].notes %></td>
-                        <td solspan="2" style="width: 20%; text-align: center;">
-                        <a href="/admin/item/update/<%= items[i].itemID %>" class="btn btn-success">Edit</a>
-                        <a href="/admin/item/delete/<%= items[i].itemID %>" class="btn btn-danger">Delete</a>
-                    </td>
-                    </tr>
-                    <% } %>
-                </tbody>
-            </table>
+        <% include ../partials/menuDashboard %>
+        <div class="col-sm-9 col-md-9">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Items</h3>
+                  </div>
+                  <div class="panel-body">
 
-            <%} else { %>
-            <p><strong>There are no records available.</strong></p>
-            <% } %>
-    </div>
-</div>
+                        <div class="">
+                                <div class="col s12">
+                                    <a href="/admin/item/add" class="btn btn-success btn-lg">Add a new Item</a>
+                                </div>
+                            </div>
+                            <br>
+                            
+                            <div class="">
+                                <div class="col s12">
+                                    <% if (items.length > 0) { %>
+                                        <table class="table">
+                                            <thread>
+                                                <tr>
+                                                    <th style="text-align: center;">Item ID</th>
+                                                    <th>Name</th>
+                                                    <th>SKU</th>
+                                                    <th>Description</th>
+                                                    <th>Category</th>
+                                                    <th>Weight (kg)</th>
+                                                    <th>Cost Price</th>
+                                                    <th>Retail Price</th>
+                                                    <th>Supplier</th>
+                                                    <th>Active</th>
+                                                    <th>Case Size</th>
+                                                    <th>Notes</th>
+                                                    <th solspan="2" style="width: 20%; text-align: center;">Actions</th>
+                                                </tr>
+                                            </thread>
+                                            <tbody>
+                                                <% for(var i = 0; i < items.length; i++) { %>
+                                                <tr>
+                                                    <td style="width: 1%; text-align: center;"><%= items[i].itemID %></td>
+                                                    <td><%= items[i].name %></td>
+                                                    <td><%= items[i].sku %></td>
+                                                    <td><%= items[i].description %></td>
+                                                    <td><%= items[i].category %></td>
+                                                    <td><%= items[i].weight %></td>
+                                                    <td><%= items[i].costPrice %></td>
+                                                    <td><%= items[i].retailPrice %></td>
+                                                    <td><%= items[i].supplierID %></td>
+                                                    <td><%= items[i].active %></td>
+                                                    <td><%= items[i].caseSize %></td>
+                                                    <td><%= items[i].notes %></td>
+                                                    <td solspan="2" style="width: 20%; text-align: center;">
+                                                    <a href="/admin/item/update/<%= items[i].itemID %>" class="btn btn-success">Edit</a>
+                                                    <a href="/admin/item/delete/<%= items[i].itemID %>" class="btn btn-danger">Delete</a>
+                                                </td>
+                                                </tr>
+                                                <% } %>
+                                            </tbody>
+                                        </table>
+                            
+                                        <%} else { %>
+                                        <p><strong>There are no records available.</strong></p>
+                                        <% } %>
+                                </div>
+                            </div>
+
+
+                    
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
 
 <% include ../partials/footer %>
