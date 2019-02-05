@@ -31,20 +31,41 @@ const pool = mysql.createPool({
   //First method with query to select all then send to index page to display all rows with available actions
   controller.read = (req, res) => {
     
-    conn.query("SELECT * FROM ITEM", function(err, result) {
-      res.render('pages/index-item.ejs', {
-          siteTitle: siteTitle,
-          pageTitle: "Items",
-          items: result
-      });
-
-      if(err) {
-
-        res.redirect("/err/item");
-     }
+    var searchQuery ="SELECT * FROM ITEM";
+    var searchQuery2 = "SELECT * FROM SUPPLIER;";
 
 
+    function doQuery1(){
+        var defered = q.defer();
+        conn.query(searchQuery,defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    function doQuery2(){
+        var defered = q.defer();
+        conn.query(searchQuery2,defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    q.all([doQuery1(),doQuery2()]).then(function(results, err){
+
+
+       var result = JSON.parse(JSON.stringify(results[0][0]));
+        var result2 = JSON.parse(JSON.stringify(results[1][0]));
+
+             res.render('pages/add-item.ejs', {
+                siteTitle: siteTitle,
+                pageTitle: "Add Item",
+                item: result,
+                item2: result2
+            });
+
+            if(err) {
+
+                res.redirect("/err/item");
+             }
     });
+
 
   };
 

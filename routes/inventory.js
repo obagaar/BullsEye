@@ -9,9 +9,9 @@ const inventoryController = require('../controllers/inventoryController');
 router.get('/', inventoryController.read);
 router.get('/add', inventoryController.getAdd);
 router.post('/add', inventoryController.add);
-router.get('/update/:itemID', inventoryController.updateInfo);
-router.post('/update/:itemID', inventoryController.update);
-router.get('/delete/:itemID', inventoryController.delete);
+router.get('/update/:itemID/:siteID', inventoryController.updateInfo);
+router.post('/update/:itemID/:siteID', inventoryController.update);
+router.get('/delete/:itemID/:siteID', inventoryController.delete);
 
 //exports the routes to be sued in main server file
 module.exports = router;

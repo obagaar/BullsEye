@@ -44,8 +44,8 @@
                                                     <td><%= items[i].reorderThreshold %></td>
                                                     <td><%= items[i].maxReorderWarning %></td>
                                                     <td solspan="2" style="width: 20%; text-align: center;">
-                                                    <a href="/admin/invt/update/<%= items[i].itemID %>" class="btn btn-success">Edit</a>
-                                                    <a href="/admin/invt/delete/<%= items[i].itemID %>" class="btn btn-danger">Delete</a>
+                                                    <a href="/admin/invt/update/<%= items[i].itemID %>/<%= items[i].siteID %>" class="btn btn-success">Edit</a>
+                                                    <a href="/admin/invt/delete/<%= items[i].itemID %>/<%= items[i].siteID %>" class="btn btn-danger">Delete</a>
                                                 </td>
                                                 </tr>
                                                 <% } %>

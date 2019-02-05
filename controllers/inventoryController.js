@@ -92,19 +92,19 @@ const pool = mysql.createPool({
 //Errors result in a page advising to recheck entry then takes user back to index  
   controller.add = (req, res) => {
 
-      var insertQuery = "INSERT INTO `bullseyedb`.`inventory` (`itemID`, `siteID`, `quantity`, `itemLocation`, `reorderThreshold`, `maxReorderWarning`) VALUES ('";
+      var insertQuery = "INSERT INTO `bullseyedb`.`inventory` (`itemID`, `siteID`, `quantity`, `itemLocation`, `reorderThreshold`, `maxReorderWarning`) VALUES (";
       insertQuery += SqlString(req.body.itemID) + ", ";
       insertQuery += SqlString(req.body.siteID) + ", ";
       insertQuery += SqlString(req.body.quantity) + ", ";
       insertQuery += SqlString(req.body.itemLocation) + ", ";
       insertQuery += SqlString(req.body.reorderThreshold) + ", ";
       insertQuery += SqlString(req.body.maxReorderWarning);
-      insertQuery += "');"
+      insertQuery += ");"
           
             conn.query(insertQuery, function(err, result) {
         
                 if(err) {
-
+                    console.log(err);
                     res.redirect("/err/invt");
                  }
           
@@ -122,8 +122,9 @@ const pool = mysql.createPool({
 //The queries populate drop down menus used to edit
   controller.updateInfo = (req, res) => {
 
+    console.log(req.params);
 
-    var searchQuery = "SELECT * FROM INVENTORY WHERE itemID = " + SqlString(req.params.itemID) + ";";
+    var searchQuery = "SELECT * FROM INVENTORY WHERE itemID = " + SqlString(req.params.itemID) + " AND siteID = " + SqlString(req.params.siteID) + ";" ;
     var searchQuery2 = "SELECT * FROM SUPPLIER;";
 
 
@@ -185,7 +186,7 @@ const pool = mysql.createPool({
         }
     
         if(err) {
-
+            console.log(err);
             res.redirect("/err/invt");
          }
     })
@@ -197,7 +198,7 @@ const pool = mysql.createPool({
   controller.delete = (req, res) => {
   
     var deleteQuery = "DELETE FROM INVENTORY WHERE itemID = ";
-    deleteQuery += SqlString(req.params.itemID) + ";";
+    deleteQuery += SqlString(req.params.itemID) + "AND siteID = " + SqlString(req.params.siteID) +";";
   
     conn.query(deleteQuery, function(err, result) {
   
