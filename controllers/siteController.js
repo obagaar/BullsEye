@@ -194,7 +194,7 @@ const pool = mysql.createPool({
     conn.query(deleteQuery, function(err, result) {
   
         if(result) {
-            res.redirect("/admin/crud/site");
+            res.redirect("/admin/site");
         }
         
         if(err) {
