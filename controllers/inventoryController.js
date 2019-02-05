@@ -66,7 +66,7 @@ const pool = mysql.createPool({
             return defered.promise;
         }
     
-        q.all([doQuery1(),doQuery2()]).then(function(results){
+        q.all([doQuery1(),doQuery2()]).then(function(results, err){
     
 
            var result = JSON.parse(JSON.stringify(results[0][0]));
@@ -78,6 +78,12 @@ const pool = mysql.createPool({
                     item: result,
                     item2: result2
                 });
+
+                if(err) {
+
+                    res.redirect("/err/invt");
+                 }
+
         });
 
   };
