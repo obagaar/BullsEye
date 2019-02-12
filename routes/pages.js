@@ -7,6 +7,7 @@ const pageController = require('../controllers/pageController');
 //The routes being used with their pathways, then the controller methods used with them
 //Needs vaild methods used or will give errors
 router.get('/', pageController.index);
+router.get('/main', pageController.main);
 router.get('/admin', pageController.admin);
 router.get('/err/cat', pageController.errCat);
 router.get('/err/emp', pageController.errEmp);

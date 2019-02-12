@@ -33,6 +33,7 @@ const supplierRoutes = require('./routes/supplier');
 const employeeRoutes = require('./routes/employees');
 const itemRoutes = require('./routes/items');
 const inventoryRoutes = require('./routes/inventory');
+const loginRoutes = require('./routes/login');
 
 //Sets the pathways to be used for each route
 app.use('/', pageRoutes);
@@ -42,6 +43,7 @@ app.use('/admin/supp', supplierRoutes);
 app.use('/admin/emp', employeeRoutes);
 app.use('/admin/item', itemRoutes);
 app.use('/admin/invt', inventoryRoutes);
+app.use('/login', loginRoutes);
 
 
 //Sets port to be used over localhost and displays when it is listened for

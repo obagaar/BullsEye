@@ -21,7 +21,7 @@
                             
                             <div class="">
                                 <div class="col s12">
-                                    <% if (items.length > 0) { %>
+                                    <% if (item.length > 0) { %>
                                         <table class="table">
                                             <thread>
                                                 <tr>
@@ -41,23 +41,28 @@
                                                 </tr>
                                             </thread>
                                             <tbody>
-                                                <% for(var i = 0; i < items.length; i++) { %>
+                                                <% for(var i = 0; i < item.length; i++) { %>
                                                 <tr>
-                                                    <td style="width: 1%; text-align: center;"><%= items[i].itemID %></td>
-                                                    <td><%= items[i].name %></td>
-                                                    <td><%= items[i].sku %></td>
-                                                    <td><%= items[i].description %></td>
-                                                    <td><%= items[i].category %></td>
-                                                    <td><%= items[i].weight %></td>
-                                                    <td><%= items[i].costPrice %></td>
-                                                    <td><%= items[i].retailPrice %></td>
-                                                    <td><%= items[i].supplierID %></td>
-                                                    <td><%= items[i].active %></td>
-                                                    <td><%= items[i].caseSize %></td>
-                                                    <td><%= items[i].notes %></td>
+                                                    <td style="width: 1%; text-align: center;"><%= item[i].itemID %></td>
+                                                    <td><%= item[i].name %></td>
+                                                    <td><%= item[i].sku %></td>
+                                                    <td><%= item[i].description %></td>
+                                                    <td><%= item[i].category %></td>
+                                                    <td><%= item[i].weight %></td>
+                                                    <td><%= item[i].costPrice %></td>
+                                                    <td><%= item[i].retailPrice %></td>
+                                                    <td><%= item[i].supplierID %></td>
+                                                    <%= active ="" %>
+                                                    <td><% if(item[i].active == 1) {  %>
+                                                        <%= active="Yes" %>                                                  
+                                                    <% } else { %>
+                                                        <%= active="No" %>
+                                                    <% } %>
+                                                    </td>
+                                                    <td><%= item[i].caseSize %></td>
+                                                    <td><%= item[i].notes %></td>
                                                     <td solspan="2" style="width: 20%; text-align: center;">
-                                                    <a href="/admin/item/update/<%= items[i].itemID %>" class="btn btn-success">Edit</a>
-                                                    <a href="/admin/item/delete/<%= items[i].itemID %>" class="btn btn-danger">Delete</a>
+                                                    <a href="/admin/item/update/<%= item[i].itemID %>" class="btn btn-success">Edit</a>
                                                 </td>
                                                 </tr>
                                                 <% } %>

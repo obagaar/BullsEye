@@ -53,7 +53,7 @@ const pool = mysql.createPool({
        var result = JSON.parse(JSON.stringify(results[0][0]));
         var result2 = JSON.parse(JSON.stringify(results[1][0]));
 
-             res.render('pages/add-item.ejs', {
+             res.render('pages/index-item.ejs', {
                 siteTitle: siteTitle,
                 pageTitle: "Add Item",
                 item: result,

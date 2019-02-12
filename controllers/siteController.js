@@ -38,7 +38,7 @@ const pool = mysql.createPool({
           items: result
       });
 
-      if(err) {
+      if(err || result.length < 1) {
 
         res.redirect("/err/site");
      }

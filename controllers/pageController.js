@@ -6,9 +6,18 @@ const siteTitle = "BullsEye Sporting Goods";
 //Directs to main landing page
 controller.index = (req, res) => {
 
+    res.render('pages/mainIndex.ejs', {
+        siteTitle: siteTitle,
+        pageTitle: "",
+        item: ''
+    });
+};
+
+controller.main = (req, res) => {
+
     res.render('pages/mainDash.ejs', {
         siteTitle: siteTitle,
-        pageTitle: "BullsEye Inventory Control System",
+        pageTitle: "",
         item: ''
     });
 };
