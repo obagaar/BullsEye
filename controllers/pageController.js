@@ -8,8 +8,7 @@ controller.index = (req, res) => {
 
     res.render('pages/mainIndex.ejs', {
         siteTitle: siteTitle,
-        pageTitle: "",
-        item: ''
+        pageTitle: ""
     });
 };
 
@@ -17,18 +16,20 @@ controller.main = (req, res) => {
 
     res.render('pages/mainDash.ejs', {
         siteTitle: siteTitle,
-        pageTitle: "",
-        item: ''
+        pageTitle: ""
     });
 };
 
 //Directs to main admin page
 controller.admin = (req, res) => {
 
+    console.log(req);
+    console.log(res);
+
     res.render('pages/adminIndex.ejs', {
         siteTitle: siteTitle,
-        pageTitle: "Administrative Access",
-        item: ''
+        pageTitle: "Administrative Access"
+
     });
 }
 

@@ -32,8 +32,6 @@ const controller = {};
 
 controller.login = (req, res) => {
 
-console.log(req.body.inputPassword);
-
     var email = SqlString(req.body.inputUsername);
     var password = SqlString(md5(req.body.inputPassword));
 
@@ -51,8 +49,7 @@ console.log(req.body.inputPassword);
                 res.render('pages/mainDash.ejs', {
                     siteTitle: siteTitle,
                     pageTitle: "Welcome",
-                    items: result,
-                    session: "active"
+                    items: result
                 });
             }
 
