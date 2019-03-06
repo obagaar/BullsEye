@@ -5,16 +5,20 @@
 <div class="row">
 
         <% include ../partials/menuDashboard %>
+
+        <script src='/js/filterInv.js' ></script>
         <div class="col-sm-9 col-md-9">
                 <div class="panel panel-default">
                   <div class="panel-heading">
                     <h3 class="panel-title">Inventory</h3>
+                    <br>
                   </div>
                   <div class="panel-body">
 
                         <div class="">
-                                <div class="col s12">
-                                    Filter Here
+                                <div class="col s12 filter">
+                                    <p> <input type="text" class="nameInput" placeholder="Search for names.."></p>
+                                       
                                 </div>
                             </div>
                             <br>
@@ -22,7 +26,7 @@
                             <div class="">
                                 <div class="col s12">
                                     <% if (item.length > 0) { %>
-                                        <table class="table">
+                                        <table class="table inventory">
                                             <thread>
                                                 <tr>
                                                     <th style="text-align: center;">Item ID</th>

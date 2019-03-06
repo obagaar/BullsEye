@@ -14,6 +14,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator');
 const flash = require('flash');
+const favicon = require('serve-favicon');
+
+app.use(favicon(__dirname + '/favicon.ico'));
 
 
 //Authetication imports
@@ -59,6 +62,8 @@ app.use('/js', express.static(__dirname + '/node_modules/tether/dist/js'));
 app.use('/js', express.static(__dirname + '/node_modules/jquery/dist'));
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/img', express.static(__dirname + '/src/images'));
+app.use('/js', express.static(__dirname + '/src/js'));
+
 
 //Imports of the javascript files used to setup routes to the files that run SQL queries to load info
 const pageRoutes = require('./routes/pages');
