@@ -34,7 +34,8 @@ controller.read = (req, res) => {
     res.render('pages/index-cat.ejs', {
         siteTitle: siteTitle,
         pageTitle: "Categories",
-        items: result
+        items: result,
+        userInfo: req.user.userInfo
     });
  if(err){
     res.redirect("/err/cat");

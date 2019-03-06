@@ -35,7 +35,8 @@ const pool = mysql.createPool({
       res.render('pages/index-site.ejs', {
           siteTitle: siteTitle,
           pageTitle: "Sites",
-          items: result
+          items: result,
+          userInfo: req.user.userInfo
       });
 
       if(err || result.length < 1) {

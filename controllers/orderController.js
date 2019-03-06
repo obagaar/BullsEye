@@ -27,16 +27,82 @@ const pool = mysql.createPool({
   const siteTitle = "BullsEye Sporting Goods";
   const conn = getConnection();
   const controller = {};
+  
 
-  controller.main = (req, res) => {
-  
-    res.render('pages/index-order.ejs', {
-        siteTitle: siteTitle,
-        pageTitle: "",
-        item: ''
-    });
-  
+  controller.read = (req, res) => {
+
+    var siteID = Number(req.user.userInfo.siteID);
+    var positionID = req.user.userInfo.PositionID;
+
+    var searchQuery = "SELECT * FROM txn t INNER JOIN site s ON t.siteIDTo = s.siteID WHERE siteIDTo = " + siteID + ";";
+    var searchQuery2 = "SELECT * FROM site";
+
+    function doQuery1(){
+      var defered = q.defer();
+      conn.query(searchQuery,defered.makeNodeResolver());
+      return defered.promise;
   }
+
+  function doQuery2(){
+      var defered = q.defer();
+      conn.query(searchQuery2,defered.makeNodeResolver());
+      return defered.promise;
+  }
+
+  q.all([doQuery1(),doQuery2()]).then(function(results, err){
+
+
+     var result = JSON.parse(JSON.stringify(results[0][0]));
+      var result2 = JSON.parse(JSON.stringify(results[1][0]));
+
+      res.render('pages/index-order.ejs', {
+        siteTitle: siteTitle,
+        pageTitle: "Orders",
+        items: result,
+        items2: result2,
+        userInfo: req.user.userInfo
+    });
+
+    if(err) {
+
+      res.redirect("/err/site");
+   }
+  });
+
+
+
+
+
+
+  };
+
+  //Directs to page to add an entry along with information from look up tables after querying the database
+  controller.getAdd = (req, res) => {
+
+    conn.query("SELECT * FROM ITEM", function(err, result) {
+    res.render('pages/add-order.ejs', {
+      siteTitle: siteTitle,
+      pageTitle: "Add Order",
+      items: result
+      
+  });
+  if(err) {
+
+    res.redirect("/err/site");
+ }
+
+});
+
+  };
+
+  //Uses what was entered in the page's form to build a query then send to the database an update it
+//Errors result in a page advising to recheck entry then takes user back to index  
+controller.add = (req, res) => {
+
+  
+  
+};
+
 
    //Exports all methods to be used for routing
    module.exports = controller;

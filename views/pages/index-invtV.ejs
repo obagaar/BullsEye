@@ -1,0 +1,76 @@
+<!-- Index page for inventory. Uses header and footer partials -->
+
+<% include ../partials/header %>
+
+<div class="row">
+
+        <% include ../partials/menuDashboard %>
+        <div class="col-sm-9 col-md-9">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Inventory</h3>
+                  </div>
+                  <div class="panel-body">
+
+                        <div class="">
+                                <div class="col s12">
+                                    Filter Here
+                                </div>
+                            </div>
+                            <br>
+                            
+                            <div class="">
+                                <div class="col s12">
+                                    <% if (item.length > 0) { %>
+                                        <table class="table">
+                                            <thread>
+                                                <tr>
+                                                    <th style="text-align: center;">Item ID</th>
+                                                    <th>Item Name</th>
+                                                    <th>Site</th>
+                                                    <th>Quantity</th>
+                                                    <th>Item Location</th>
+                                                    <th>Reorder Threshold</th>
+                                                    <th>Max Reorder Warning</th>
+                                                </tr>
+                                            </thread>
+                                            <tbody>
+                                                <% for(var i = 0; i < item.length; i++) { %>
+                                                <tr>
+                                                    <td style="width: 1%; text-align: center;"><%= item[i].itemID %></td>
+                                                    <td><%= item[i].name %></td>
+                                                    <%= siteName ="" %>
+                                                    <td>
+                                                        <% for(var j = 0; j < item2.length; j++) { %>
+                                                            <% if(item[i].siteID == item2[j].siteID) { %>
+                                                                <%= siteName = item2[j].name %>
+                                                                <% break %>
+                                                            <% } %>
+                                                        <% } %>
+                                                    </td>
+                                                    <td><%= item[i].quantity %></td>
+                                                    <td><%= item[i].itemLocation %></td>
+                                                    <td><%= item[i].reorderThreshold %></td>
+                                                    <td><%= item[i].maxReorderWarning %></td>
+                                                </tr>
+                                                <% } %>
+                                            </tbody>
+                                        </table>
+                            
+                                        <%} else { %>
+                                        <p><strong>There are no records available.</strong></p>
+                                        <% } %>
+                                </div>
+                            </div>
+
+
+                    
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+<% include ../partials/footer %>

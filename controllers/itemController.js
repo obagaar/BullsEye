@@ -57,7 +57,8 @@ const pool = mysql.createPool({
                 siteTitle: siteTitle,
                 pageTitle: "Add Item",
                 item: result,
-                item2: result2
+                item2: result2,
+                userInfo: req.user.userInfo
             });
 
             if(err) {

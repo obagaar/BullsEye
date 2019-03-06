@@ -1,0 +1,46 @@
+<!-- Page to add items. Uses header and footer partials -->
+
+<% include ../partials/header %>
+
+<div class="container mt-5">
+        <div class="row">
+          <div class="col-md-5 offset-md-3 card">
+            <div class="card-body">
+              <form action="/orders/add" method="POST" class= "col s12">
+                
+                <div class="form-group row">
+                        <div class="col-10">
+                                <label for="siteIDFrom" class="col-10 col-form-label">Site <%= items.siteIDFrom %> Order</label>
+                            <input type="hidden" name="siteIDFrom" value="<%= items[0].siteIDFrom %>">
+                        </div>
+                        <div class="col-10">
+                            <label for="itemsToOrder" class="col-10 col-form-label">Items to Order</label>
+                            <select multiple name="itemsToOrder" class="col-10 form-control" required>
+                                    <% for(var i = 1; i < items.length; i++) { %>
+                                        <option value="<%= items[i].id %>"><%= items[i].name %></option>
+                                        <% } %>
+                              </select>
+                        </div>
+                        <div class="col-10">
+                                <label for="weight" class="col-10 col-form-label">Quantity</label>
+                                <input type="number" name="weight" value=""  class="form-control" min="0" max="99999999999" required>
+                            </div>
+                </div>
+
+      
+
+                <div class="row">
+ 
+                        <button type="submit" class="btn btn-primary">
+                          Submit Item
+                        </button> 
+        
+                        <button class="btn btn-danger"><a href="/orders" class="btn btn-danger">Cancel</a></button> 
+                    </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<% include ../partials/footer %>

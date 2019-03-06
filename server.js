@@ -1,5 +1,5 @@
 //Ashley Harper
-//02/04/2019
+//02/27/2019
 //Inventory management system
 //Currently starting with CRUD functions for areas such as sites, employees, items, etc
 
@@ -11,9 +11,44 @@ const http = require('http');
 const mysql = require('mysql');
 const app = express();
 const bodyParser = require('body-parser');
-const dateFormat = require('dateformat');
+const cookieParser = require('cookie-parser');
+const expressValidator = require('express-validator');
+const flash = require('flash');
+
+
+//Authetication imports
+const session = require('express-session');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var MySQLStore = require('express-mysql-session')(session);
 
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
+app.use(session({
+    secret: 'test',
+    resave: false,
+    store: sessionStore,
+    saveUninitialized: false,
+    //cookie: { secure: true }
+  }));
+
+app.use(cookieParser());
+
+  var options = {
+    host: 'localhost',
+    user: 'root',
+    password: 'password',
+    database: 'bullseyedb'
+  };
+  
+  var sessionStore = new MySQLStore(options);
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(flash());
 
 //sets up the view engine that later is used with partial to build pages
 app.set('view engine', 'ejs');
@@ -46,6 +81,8 @@ app.use('/admin/item', itemRoutes);
 app.use('/admin/invt', inventoryRoutes);
 app.use('/login', loginRoutes);
 app.use('/orders', orderRoutes);
+
+app.use(expressValidator());
 
 
 //Sets port to be used over localhost and displays when it is listened for

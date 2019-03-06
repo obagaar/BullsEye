@@ -59,6 +59,7 @@ const pool = mysql.createPool({
                     pageTitle: "Add Inventory Entry",
                     item: result,
                     item2: result2,
+                    userInfo: req.user.userInfo
                 });
 
                 if(err) {
