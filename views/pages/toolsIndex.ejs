@@ -9,7 +9,7 @@
                 <div class="col-sm-9 col-md-9">
                         <div class="panel panel-default">
                           <div class="panel-heading">
-                            <h3 class="panel-title">Administration Dashboard</h3>
+                            <h3 class="panel-title">Tools Dashboard</h3>
                           </div>
                           <div class="panel-body">
 
@@ -18,10 +18,19 @@
                         <div class="row">
                           
                           <center>
+
+                            <% if(userInfo.PositionID > 4 && userInfo.PositionID !== 99999999) { %>
+
+                              <button class="btn btn-primary"><a href="/orders" class="btn btn-primary">Orders</a></button> 
+
+
+                           <% } else {%>
+                            <button class="btn btn-primary"><a href="/orders" class="btn btn-primary">Orders</a></button> 
+                            <button class="btn btn-primary"><a href="/inventory" class="btn btn-primary">Inventory</a></button>
+                            <button class="btn btn-primary"><a href="/orders/backorder" class="btn btn-primary">Back Orders</a></button> 
+                            <% } %>
                           
-                          <button class="btn btn-primary"><a href="/orders" class="btn btn-primary">Ordering</a></button> 
-                          <button class="btn btn-primary"><a href="/inventory" class="btn btn-primary">Inventory</a></button>
-                          <button class="btn btn-primary"><a href="/orders/backorder" class="btn btn-primary">Back Orders</a></button> 
+
                         
                         </center>
                         

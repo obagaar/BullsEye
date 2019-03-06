@@ -31,11 +31,30 @@ const siteTitle = "BullsEye Sporting Goods";
 //Directs to main landing page
 controller.index = (req, res) => {
 
-      res.render('pages/mainIndex.ejs', {
-        siteTitle: siteTitle,
-        pageTitle: ""
-    });
+    
+
+    //console.log(res.locals.flash[0].message);
+
+    if(typeof res.locals.flash[0] !== 'undefined' && typeof res.locals.flash[0].message !== 'undefined') {
+
+        res.render('pages/mainIndex.ejs', {
+            siteTitle: siteTitle,
+            pageTitle: "",
+            error: res.locals.flash[0].message
+        });
+    } else {
+
+        res.render('pages/mainIndex.ejs', {
+            siteTitle: siteTitle,
+            pageTitle: "",
+            error: ""
+        });
+
+    }
+
+
 };
+
 
 
 controller.logout = (req, res) => {
@@ -67,8 +86,8 @@ controller.tools = (req, res) => {
 controller.inventory = (req, res) => {
 
     var siteID = Number(req.user.userInfo.siteID);
- 
-    var searchQuery = "SELECT i.itemID, it.name, i.siteID, i.quantity, i.itemLocation, i.reorderThreshold, i.maxReorderWarning";
+
+    var searchQuery = "SELECT i.itemID, it.name, it.category, i.siteID, i.quantity, i.itemLocation, i.reorderThreshold, i.maxReorderWarning";
     searchQuery += " FROM inventory i INNER JOIN item it ON i.itemID = it.itemID WHERE i.siteID = " + siteID + ";";
     var searchQuery2 = "SELECT * FROM SITE;";
 

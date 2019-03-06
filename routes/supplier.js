@@ -6,12 +6,20 @@ const supplierController = require('../controllers/supplierController');
 
 //The routes being used with their pathways, then the controller methods used with them
 //Needs vaild methods used or will give errors
-router.get('/', supplierController.read);
-router.get('/add', supplierController.getAdd);
-router.post('/add', supplierController.add);
-router.get('/update/:supplierID', supplierController.updateInfo);
-router.post('/update/:supplierID', supplierController.update);
-router.get('/delete/:supplierID', supplierController.delete);
+router.get('/', authenticationMiddleware(), supplierController.read);
+router.get('/add', authenticationMiddleware(), supplierController.getAdd);
+router.post('/add', authenticationMiddleware(), supplierController.add);
+router.get('/update/:supplierID', authenticationMiddleware(), supplierController.updateInfo);
+router.post('/update/:supplierID', authenticationMiddleware(), supplierController.update);
+router.get('/delete/:supplierID', authenticationMiddleware(), supplierController.delete);
+
+function authenticationMiddleware() {
+    return (req, res, next) => {
+        
+        if (req.isAuthenticated()) return next();
+        res.redirect('/');
+    }
+}
 
 //exports the routes to be sued in main server file
 module.exports = router;

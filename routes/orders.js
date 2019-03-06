@@ -4,10 +4,18 @@ const router = require('express').Router();
 const orderController = require('../controllers/orderController');
 const backorderController = require('../controllers/backorderController');
 
-router.get('/', orderController.read);
-router.get('/add', orderController.getAdd);
-router.post('/add', orderController.add);
-router.get('/backorder', backorderController.read);
+router.get('/', authenticationMiddleware(), orderController.read);
+router.get('/add', authenticationMiddleware(), orderController.getAdd);
+router.post('/add', authenticationMiddleware(), orderController.add);
+router.get('/backorder', authenticationMiddleware(), backorderController.read);
+
+function authenticationMiddleware() {
+    return (req, res, next) => {
+        
+        if (req.isAuthenticated()) return next();
+        res.redirect('/');
+    }
+}
 
 //exports the routes to be sued in main server file
 module.exports = router;

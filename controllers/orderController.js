@@ -34,7 +34,17 @@ const pool = mysql.createPool({
     var siteID = Number(req.user.userInfo.siteID);
     var positionID = req.user.userInfo.PositionID;
 
-    var searchQuery = "SELECT * FROM txn t INNER JOIN site s ON t.siteIDTo = s.siteID WHERE siteIDTo = " + siteID + ";";
+
+    if(positionID === 4 || positionID === 99999999 || positionID < 3) {
+
+      var searchQuery = "SELECT * FROM txn t INNER JOIN site s ON t.siteIDTo = s.siteID WHERE t.txnType = 'Store Order' OR t.txnType = 'Supplier Order';";
+
+    } else {
+
+      var searchQuery = "SELECT * FROM txn t INNER JOIN site s ON t.siteIDTo = s.siteID WHERE siteIDTo = " + siteID + " AND t.txnType = 'Store Order';";
+
+    }
+
     var searchQuery2 = "SELECT * FROM site";
 
     function doQuery1(){

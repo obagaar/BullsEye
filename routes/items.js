@@ -6,12 +6,20 @@ const itemController = require('../controllers/itemController');
 
 //The routes being used with their pathways, then the controller methods used with them
 //Needs vaild methods used or will give errors
-router.get('/', itemController.read);
-router.get('/add', itemController.getAdd);
-router.post('/add', itemController.add);
-router.get('/update/:itemID', itemController.updateInfo);
-router.post('/update/:itemID', itemController.update);
-router.get('/delete/:itemID', itemController.delete);
+router.get('/', authenticationMiddleware(), itemController.read);
+router.get('/add', authenticationMiddleware(), itemController.getAdd);
+router.post('/add', authenticationMiddleware(), itemController.add);
+router.get('/update/:itemID', authenticationMiddleware(), itemController.updateInfo);
+router.post('/update/:itemID', authenticationMiddleware(), itemController.update);
+router.get('/delete/:itemID', authenticationMiddleware(), itemController.delete);
+
+function authenticationMiddleware() {
+    return (req, res, next) => {
+        
+        if (req.isAuthenticated()) return next();
+        res.redirect('/');
+    }
+}
 
 //exports the routes to be sued in main server file
 module.exports = router;

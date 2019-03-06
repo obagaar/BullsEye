@@ -8,13 +8,15 @@
   <div class="col-sm-9 col-md-9">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Orders</h3>
+        <h3 class="panel-title">Back Orders</h3>
       </div>
       <div class="panel-body">
 
         <div class="">
           <div class="col s12">
-            <a href="/orders/add" class="btn btn-success btn-lg">Add a new Order</a>
+          <% if (userInfo.PositionID === 4 ||userInfo.PositionID === 99999999 ) { %>
+            <a href="/orders/add" class="btn btn-success btn-lg">Add a new Back Order</a>
+          <% } %>
           </div>
         </div>
         <br>
@@ -35,7 +37,9 @@
                   <th>Created Date</th>
                   <th>Delivery ID</th>
                   <th>Emergency Delivery</th>
+                  <% if (userInfo.PositionID === 4 || userInfo.PositionID === 99999999 ) { %>
                   <th solspan="2" style="width: 20%; text-align: center;">Actions</th>
+                  <% } %>
                 </tr>
               </thread>
               <tbody>
@@ -88,6 +92,7 @@
                     N/A
                     <% } %>
                   </td>
+                  <% if (userInfo.PositionID === 4 ||userInfo.PositionID === 99999999 ) { %>
                   <td solspan="2" style="width: 20%; text-align: center;">
                     <% if( items[i].status === "Submitted" || items[i].status === "In Progress") {%>
                     <a href="/orders/update/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-success">Edit</a>
@@ -97,6 +102,7 @@
                     <a href="/orders/delete/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-danger disabled">Delete</a>
                     <% } %>
                   </td>
+                  <% } %>
                 </tr>
                 <% } %>
               </tbody>

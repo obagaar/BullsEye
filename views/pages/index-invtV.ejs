@@ -27,6 +27,7 @@
                                                 <tr>
                                                     <th style="text-align: center;">Item ID</th>
                                                     <th>Item Name</th>
+                                                    <th>Category</th>
                                                     <th>Site</th>
                                                     <th>Quantity</th>
                                                     <th>Item Location</th>
@@ -39,6 +40,7 @@
                                                 <tr>
                                                     <td style="width: 1%; text-align: center;"><%= item[i].itemID %></td>
                                                     <td><%= item[i].name %></td>
+                                                    <td><%= item[i].category %></td>
                                                     <%= siteName ="" %>
                                                     <td>
                                                         <% for(var j = 0; j < item2.length; j++) { %>

@@ -9,16 +9,24 @@ const pageController = require('../controllers/pageController');
 //Needs vaild methods used or will give errors
 router.get('/', pageController.index);
 router.get('/logout', pageController.logout);
-router.get('/tools', pageController.tools);
-router.get('/inventory', pageController.inventory)
-router.get('/main', pageController.main);
-router.get('/admin', pageController.admin);
-router.get('/err/cat', pageController.errCat);
-router.get('/err/emp', pageController.errEmp);
-router.get('/err/invt', pageController.errInvt);
-router.get('/err/item', pageController.errItem);
-router.get('/err/site', pageController.errSite);
-router.get('/err/supp', pageController.errSupp);
+router.get('/tools', authenticationMiddleware(), pageController.tools);
+router.get('/inventory', authenticationMiddleware(), pageController.inventory)
+router.get('/main', authenticationMiddleware(), pageController.main);
+router.get('/admin', authenticationMiddleware(), pageController.admin);
+router.get('/err/cat', authenticationMiddleware(), pageController.errCat);
+router.get('/err/emp', authenticationMiddleware(), pageController.errEmp);
+router.get('/err/invt', authenticationMiddleware(), pageController.errInvt);
+router.get('/err/item', authenticationMiddleware(), pageController.errItem);
+router.get('/err/site', authenticationMiddleware(), pageController.errSite);
+router.get('/err/supp', authenticationMiddleware(), pageController.errSupp);
+
+function authenticationMiddleware() {
+    return (req, res, next) => {
+        
+        if (req.isAuthenticated()) return next();
+        res.redirect('/');
+    }
+}
 
 //exports the routes to be sued in main server file
 module.exports = router;
