@@ -19,7 +19,9 @@ router.get('/err/invt', authenticationMiddleware(), pageController.errInvt);
 router.get('/err/item', authenticationMiddleware(), pageController.errItem);
 router.get('/err/site', authenticationMiddleware(), pageController.errSite);
 router.get('/err/supp', authenticationMiddleware(), pageController.errSupp);
+router.get('/err/orders', authenticationMiddleware(), pageController.errOrder);
 
+//Function to check if user is authenticated and if not redirect to login
 function authenticationMiddleware() {
     return (req, res, next) => {
         

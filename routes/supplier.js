@@ -13,6 +13,7 @@ router.get('/update/:supplierID', authenticationMiddleware(), supplierController
 router.post('/update/:supplierID', authenticationMiddleware(), supplierController.update);
 router.get('/delete/:supplierID', authenticationMiddleware(), supplierController.delete);
 
+//Function to check if user is authenticated and if not redirect to login
 function authenticationMiddleware() {
     return (req, res, next) => {
         

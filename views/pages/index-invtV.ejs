@@ -17,7 +17,24 @@
 
                         <div class="">
                                 <div class="col s12 filter">
-                                    <p> <input type="text" class="nameInput" placeholder="Search for names.."></p>
+ 
+                                        <h4>Search by ID</h4>
+                                        <p> <input type="text" class="form-control idInput" maxlength=11 pattern="/d" placeholder="Search by ID"></p>
+
+                                    <h4>Search by Name</h4>
+                                    <p> <input type="text" class="form-control nameInput" placeholder="Search by Name"></p>
+
+                                    <h4>Search by Category</h4>
+                                    <p><select name="categoryInput" class="form-control categoryInput" placeholder="Search by Category">
+                                        <option value="all">All Categories</option>
+                                            <% for(var i = 0; i < item3.length; i++) { %>
+                                                <option value="<%= item3[i].categoryName %>"><%= item3[i].categoryName %></option>
+                                                <% } %>
+                                      </select>
+                                    </p>
+
+                                    <h4>Search by Quantity</h4>
+                                    <p> <input type="number" class="form-control quantityInput" placeholder="Search by Quantity" min=0></p>
                                        
                                 </div>
                             </div>

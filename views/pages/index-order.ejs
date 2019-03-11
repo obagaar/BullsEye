@@ -95,17 +95,27 @@
                     N/A
                     <% } %>
                   </td>
-                  <% if(userInfo.PositionID <= 4 || userInfo.PositionID === 99999999) { %>
+                  <% if(userInfo.PositionID === 4 || userInfo.PositionID === 3 || userInfo.PositionID === 99999999) { %>
                   <td solspan="2" style="width: 20%; text-align: center;">
-                    <% if( items[i].status === "Submitted" || items[i].status === "In Progress") {%>
-                    <a href="/orders/update/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-success">Edit</a>
-                    <a href="/orders/delete/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-danger">Cancel</a>
+                    <% if( items[i].status === "In progress") {%>
+                    <a href="/orders/update/<%= items[i].txnID %>" class="btn btn-success">Edit</a>
+                    <a href="/orders/delete/<%= items[i].txnID %>" class="btn btn-danger">Cancel</a>
+                    <% } else if (items[i].status === "Submitted" && userInfo.PositionID === 4) { %>
+
+                      <a href="/orders/editWH/<%= items[i].txnID %>" class="btn btn-success">Resubmit</a>
+                      <a href="/orders/delete/<%= items[i].txnID %>" class="btn btn-danger">Cancel</a>
+                     <% } else if (items[i].status === "Submitted" && userInfo.PositionID === 3) { %>
+
+                      <a href="/orders/update/<%= items[i].txnID %>" class="btn btn-success disabled">Edit</a>
+                      <a href="/orders/delete/<%= items[i].txnID %>" class="btn btn-danger">Cancel</a>
+                     
                     <% } else {%>
-                    <a href="/orders/update/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-success disabled">Edit</a>
-                    <a href="/orders/delete/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-danger disabled">Cancel</a>
+                    <a href="/orders/update/<%= items[i].txnID %>" class="btn btn-success disabled">Edit</a>
+                    <a href="/orders/delete/<%= items[i].txnID %>" class="btn btn-danger disabled">Cancel</a>
                     <% } %>
                   </td>
                   <% } %>
+
                 </tr>
                 <% } %>
               </tbody>

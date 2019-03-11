@@ -6,33 +6,86 @@
         <div class="row">
           <div class="col-md-5 offset-md-3 card">
             <div class="card-body">
-              <form action="/orders/add" method="POST" class= "col s12">
+              <form action="/orders/nextadd" method="POST" class= "col s12">
                 
                 <div class="form-group row">
                         <div class="col-10">
-                                <label for="siteIDFrom" class="col-10 col-form-label">Site <%= items.siteIDFrom %> Order</label>
-                            <input type="hidden" name="siteIDFrom" value="<%= items[0].siteIDFrom %>">
-                        </div>
-                        <div class="col-10">
-                            <label for="itemsToOrder" class="col-10 col-form-label">Items to Order</label>
-                            <select multiple name="itemsToOrder" class="col-10 form-control" required>
-                                    <% for(var i = 1; i < items.length; i++) { %>
-                                        <option value="<%= items[i].id %>"><%= items[i].name %></option>
-                                        <% } %>
-                              </select>
-                        </div>
-                        <div class="col-10">
-                                <label for="weight" class="col-10 col-form-label">Quantity</label>
-                                <input type="number" name="weight" value=""  class="form-control" min="0" max="99999999999" required>
-                            </div>
+                          <h3>New Order</h3>
                 </div>
 
-      
+                <div class="col-10">
+                    <label for="submittedBy" class="col-10 col-form-label">Submitted By</label>
+                    <p><input type="text" class="col-10 form-control" name="submittedBy" value="<%= userInfo.FirstName %> <%= userInfo.LastName %>" readonly></p>
+                </div>
+
+                <div class="col-10">
+                    <label for="siteIDFromDisplay" class="col-10 col-form-label">Current Store</label>
+                    <p><% for(var j =0; j < items2.length; j++) { %>
+                    
+                      <% if(items2[j].siteID === userInfo.siteID) { %>
+
+                        <input type="hidden" name="siteIDFrom" value="<%= items2[j].siteID %>">
+                        <input type="text" class="col-10 form-control" name="siteIDFromDisplay" value="<%= items2[j].name %>" readonly>
+
+                      <% } %>
+
+                      <% } %>
+                    
+                    </p>
+                </div>
+
+                <div class="col-10">
+                    <label for="siteIDToDisplay" class="col-10 col-form-label">Ordering From</label>
+                    <input type="hidden" name="siteIDTo" value="<%= items2[1].siteID %>">
+                    <p><input type="text" class="col-10 form-control" name="siteIDToDisplay" value="<%= items2[1].name%>"readonly>                  
+                    </p>
+                </div>
+              
+                <div class="col-10">
+                    <label for="itemsToOrder" class="col-10 col-form-label">Items Ready to Reorder</label>
+                    <% console.log(items) %>
+                  <% if (items.itemID !== null || items.itemID !== undefined || items !== "No items to reorder") { %>
+                    <ul class="list-group" name="itemsToReerder">
+                      <% for(var i = 0; i < items.length; i++) { %>
+                        <input type="hidden"  name="itemtoReorderID<%= i %>" value="<%= items[i].itemID %>"></input>
+                        <input type="hidden"  name="itemtoReorderName<%= i %>" value="<%= items[i].itemname %>"></input>
+                        <input type="hidden"  name="itemtoReorderMax<%= i %>" value="<%= items[i].maxReorderWarning %>"></input>
+                        <input type="hidden"  name="itemtoReorderQuantity<%= i %>" value="<%= items[i].quantity %>"></input>
+                        <li class="list-group-item"><%= items[i].itemname %></li>
+                        <% } %>
+
+                    </ul>
+                  
+                  <% } else {%>
+
+                    <p><input type="text" class="col-10 form-control" name="itemsToReOrder" value="No items to reorder" readonly></p>
+
+                    <% } %>
+
+                </div>
+
+                <div class="col-10">
+                    <label for="orderType" class="col-10 col-form-label">Order Type</label>
+                    
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="emergencyOrder" value="false" checked>
+                        <label class="form-check-label" for="emergencyOrder">
+                          Standard Order
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="emergencyOrder" value="true">
+                        <label class="form-check-label" for="emergencyOrder">
+                          Emergency Order
+                        </label>
+                      </div>
+                      <br>
+                </div>
 
                 <div class="row">
  
                         <button type="submit" class="btn btn-primary">
-                          Submit Item
+                          Next
                         </button> 
         
                         <button class="btn btn-danger"><a href="/orders" class="btn btn-danger">Cancel</a></button> 

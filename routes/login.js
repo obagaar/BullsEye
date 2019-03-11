@@ -11,6 +11,7 @@ const loginController = require('../controllers/loginController');
 
 //The routes being used with their pathways, then the controller methods used with them
 //Needs vaild methods used or will give errors
+//First route is used to authenticate user and then let them login or not based on the local strategy
 router.post('/', passport.authenticate('local', 
 { successRedirect: '/main',
 failureRedirect: '/', failureFlash: 'Invalid username or password'}), function(req, res) {
@@ -36,6 +37,7 @@ if(errors) {
 
 const db = require('../db');
 
+//Local strategy to compare username and password then let the user login. If incorrect the suer is redirectect to login and notified
 passport.use(new LocalStrategy(
     function (username, password, done) {
 
@@ -67,14 +69,7 @@ passport.use(new LocalStrategy(
     }));
 
 
-passport.serializeUser(function (user_id, done) {
-    done(null, user_id);
-});
-
-passport.deserializeUser(function (user_id, done) {
-    done(null, user_id);
-});
-
+//Function to check if user is authenticated and if not redirect to login
  function authenticationMiddleware() {
     return (req, res, next) => {
         

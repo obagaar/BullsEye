@@ -1,0 +1,88 @@
+<!-- Page to add items. Uses header and footer partials -->
+
+<% include ../partials/header %>
+
+<script src="/js/itemList.js"></script>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-10 offset-md-0 card">
+      <div class="card-body">
+        <form action="/orders/additems" method="POST" class="col-12">
+
+          <div class="form-group row">
+            <div class="col-10">
+              <h3>New Order - Add Items</h3>
+            </div>
+
+            <input type="hidden" name="txnID" value="<%= items.insertId %>">
+
+            <div class="col-10">
+                <div class="reorderitemsList col-10">
+                  <label for="itemreorderList" class="col-10 col-form-label">Items ready to Reorder</label>
+                  <p> 
+                      <% for(var i = 0; i < reorderItemIds.length; i++) { %>
+
+                        <input type="hidden" name="itemReorderID<%= i %>" value="<%= reorderItemIds[i] %>">
+  
+                        <input type="text" class="col-8 form-control" name="itemReorderName<%= i %>" value="<%= reorderItemNames[i] %>" readonly></input>
+
+                        <input type=number class="col-2 form-control" name="itemReorderQuantity<%= i %>" placeholder='<%= reorderItemQuantity[i] %>' min=0 max="<%= reorderItemMax[i] %>"></input>
+  
+                      <% } %>
+  
+  
+                 </p>
+                </div>
+
+
+            <div class="col-10">
+              <div class="itemsList">
+                <label for="itemsToPick[]" class="col-10 col-form-label">Items to Pick from inventory</label>
+                <p><select class="col-12 form-control custom-select js-example-basic-multiple itemstoPick" name="itemsToPick[]"
+                    multiple="multiple">
+
+                    <% for(var i = 0; i < items2.length; i++) { %>
+
+                    <option value="<%= items2[i].itemID %>">
+                      <%= items2[i].name %>
+                    </option>
+
+                    <% } %>
+
+
+                  </select>
+                </p>
+              </div>
+
+            <div class="col-10">
+              <div class="itemsForReorder"></div>
+              <div class="itemsForOrder"></div>
+              <br>
+            </div>
+
+
+            <div class="addItem">
+                <p><button class="btn btn-success addItemButton" >Add</button></p>
+              </div>
+            </div>
+
+
+              <div class="col-12">
+                <div class="row">
+                    <button class="btn btn-primary" name="submitButton"><a href="/orders/submit/<%= items.insertId %>" class="btn btn-primary">Next</a></button>
+
+                    <button class="btn btn-danger"name="cancelButton"><a href="/orders" class="btn btn-danger">Cancel</a></button>
+                </div>
+                
+              </div>
+
+
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% include ../partials/footer %>

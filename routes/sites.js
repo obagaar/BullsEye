@@ -13,6 +13,7 @@ router.get('/update/:siteID', authenticationMiddleware(), siteController.updateI
 router.post('/update/:siteID', authenticationMiddleware(), siteController.update);
 router.get('/delete/:siteID', authenticationMiddleware(), siteController.delete);
 
+//Function to check if user is authenticated and if not redirect to login
 function authenticationMiddleware() {
     return (req, res, next) => {
         

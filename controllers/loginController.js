@@ -29,6 +29,7 @@ passport.deserializeUser(function (user_id, done) {
     done(null, user_id);
 });
 
+//Function to check if user is authenticated and if not redirect to login
  function authenticationMiddleware() {
     return (req, res, next) => {
         console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);

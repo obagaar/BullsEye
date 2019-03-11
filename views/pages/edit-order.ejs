@@ -1,0 +1,134 @@
+<!-- Page to add items. Uses header and footer partials -->
+
+<% include ../partials/header %>
+
+<script src="/js/itemList.js"></script>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-10 offset-md-0 card">
+      <div class="card-body">
+        <form action="/orders/update/<%= txnID %>" method="POST" class="col-12">
+
+          <div class="form-group row">
+            <div class="col-10">
+              <h3>Edit Order # <%= txnID %></h3>
+            </div>
+
+            <div class="col-10">
+                <label for="siteIDFromDisplay" class="col-10 col-form-label">Submitting Store</label>
+                <p><% for(var j =0; j < items2.length; j++) { %>
+                
+                  <% if(items2[j].siteID === items[0].siteIDTo) { %>
+
+                    <input type="hidden" name="siteIDFrom" value="<%= items2[j].siteID %>">
+                    <input type="text" class="col-10 form-control" name="siteIDFromDisplay" value="<%= items2[j].name %>" readonly>
+
+                  <% } %>
+
+                  <% } %>
+                
+                </p>
+            </div>
+
+            <div class="col-10">
+                    <label for="siteIDToDisplay" class="col-10 col-form-label">Order Sent To</label>
+                    <p><% for(var j =0; j < items2.length; j++) { %>
+                    
+                      <% if(items2[j].siteID === items[0].siteIDFrom) { %>
+    
+                        <input type="hidden" name="siteIDTo" value="<%= items2[j].siteID %>">
+                        <input type="text" class="col-10 form-control" name="siteIDToDisplay" value="<%= items2[j].name %>" readonly>
+    
+                      <% } %>
+    
+                      <% } %>
+                    
+                    </p>
+                </div>
+
+                <div class="col-10">
+                  <label for="itemsinOrder" class="col-10 col-form-label">Items in Order</label>
+                <% if (items.itemID !== null) { %>
+
+
+                  <% for(var i = 0; i < items.length; i++) { %>
+  
+                      <input type="hidden" name="edititemID<%= i %>" value="<%= items[i].itemID %>">
+
+                      <input type="text" class="col-8 form-control" name="edititemName<%= i %>" value="<%= items[i].name %>" readonly></input>
+
+                      <input type=number class="col-2 form-control" name="edititemQuantity[]" value="<%= items[i].quantity %>"placeholder='<%= items[i].quantity %>' min=0 "></input>
+
+                    <% } %>      
+
+                
+                <% } %>
+  
+                <br>
+  
+              </div>
+
+
+
+                    <div class="col-10">
+                            <div class="itemsList">
+                              <label for="itemsToPick[]" class="col-10 col-form-label">Items to Pick from inventory</label>
+                              <p><select class="col-12 form-control custom-select js-example-basic-multiple itemstoPick" name="itemsToPick[]"
+                                  multiple="multiple">
+              
+                                  <% for(var i = 0; i < items3.length; i++) { %>
+              
+                                  <option value="<%= items3[i].itemID %>">
+                                    <%= items3[i].name %>
+                                  </option>
+              
+                                  <% } %>
+              
+              
+                                </select>
+                              </p>
+                            </div>
+
+
+      
+                    <div class="col-10">
+                      <div class="itemsForReorder"></div>
+                      <div class="itemsForOrder"></div>
+                      <br>
+                    </div>
+         
+
+            <div class="col-10">
+                <label for="orderType" class="col-10 col-form-label">Order Type</label>
+                 <% if(items[0].emergencyDelivery === 0) { %>
+
+                  <p>
+                        <select name="emergencyDelivery" class="col-10 custom-select">
+                                <option value="0"selected>Standard Order</option>
+                                <option value="1">Emergency Order</option>
+                              </select>                  
+                  </p>
+                
+                <% } else { %>
+                  <p>
+                        <select name="emergencyDelivery" class="col-10 custom-select">
+                                <option value="0">Standard Order</option>
+                                <option value="1" selected>Emergency Order</option>
+                              </select> 
+                  </p>
+                  <% } %>
+            </div>
+
+            <div class="addItem">
+              <p><button type="submit" class="btn btn-primary addItemButton" >Add</button></p>
+            </div>
+          </div>
+
+
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

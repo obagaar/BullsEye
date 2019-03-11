@@ -90,6 +90,7 @@ controller.inventory = (req, res) => {
     var searchQuery = "SELECT i.itemID, it.name, it.category, i.siteID, i.quantity, i.itemLocation, i.reorderThreshold, i.maxReorderWarning";
     searchQuery += " FROM inventory i INNER JOIN item it ON i.itemID = it.itemID WHERE i.siteID = " + siteID + ";";
     var searchQuery2 = "SELECT * FROM SITE;";
+    var searchQuery3 = 'SELECT * FROM CATEGORY;';
 
         function doQuery1(){
             var defered = q.defer();
@@ -103,24 +104,31 @@ controller.inventory = (req, res) => {
             return defered.promise;
         }
 
+        function doQuery3(){
+            var defered = q.defer();
+            conn.query(searchQuery3,defered.makeNodeResolver());
+            return defered.promise;
+        }
     
-        q.all([doQuery1(),doQuery2()]).then(function(results, err){
+        q.all([doQuery1(),doQuery2(),doQuery3()]).then(function(results, err){
     
-
+    
            var result = JSON.parse(JSON.stringify(results[0][0]));
             var result2 = JSON.parse(JSON.stringify(results[1][0]));
+            var result3 = JSON.parse(JSON.stringify(results[2][0]));
     
                  res.render('pages/index-invtV.ejs', {
                     siteTitle: siteTitle,
                     pageTitle: "View Inventory",
                     item: result,
                     item2: result2,
+                    item3: result3,
                     userInfo: req.user.userInfo
                 });
 
                 if(err) {
 
-                    res.redirect("/err/invt");
+                    res.redirect("/tools");
                  }
 
         });
@@ -149,7 +157,8 @@ controller.errCat = (req, res) => {
     res.render('pages/err-cat.ejs', {
         siteTitle: siteTitle,
         pageTitle: "Categories - Error",
-        item: ''
+        item: '',
+        userInfo: req.user.userInfo
     });
 }
 
@@ -159,7 +168,8 @@ controller.errEmp = (req, res) => {
     res.render('pages/err-emp.ejs', {
         siteTitle: siteTitle,
         pageTitle: "Employees - Error",
-        item: ''
+        item: '',
+        userInfo: req.user.userInfo
     });
 }
 
@@ -169,7 +179,8 @@ controller.errInvt = (req, res) => {
     res.render('pages/err-invt.ejs', {
         siteTitle: siteTitle,
         pageTitle: "Inventory - Error",
-        item: ''
+        item: '',
+        userInfo: req.user.userInfo
     });
 }
 
@@ -179,7 +190,8 @@ controller.errItem = (req, res) => {
     res.render('pages/err-item.ejs', {
         siteTitle: siteTitle,
         pageTitle: "Itemss - Error",
-        item: ''
+        item: '',
+        userInfo: req.user.userInfo
     });
 }
 
@@ -189,7 +201,8 @@ controller.errSite = (req, res) => {
     res.render('pages/err-site.ejs', {
         siteTitle: siteTitle,
         pageTitle: "Sites - Error",
-        item: ''
+        item: '',
+        userInfo: req.user.userInfo
     });
 }
 
@@ -199,7 +212,19 @@ controller.errSupp = (req, res) => {
     res.render('pages/err-supp.ejs', {
         siteTitle: siteTitle,
         pageTitle: "Suppliers - Error",
-        item: ''
+        item: '',
+        userInfo: req.user.userInfo
+    });
+}
+
+//Directs to error page for orders
+controller.errOrder = (req, res) => {
+
+    res.render('pages/err-order.ejs', {
+        siteTitle: siteTitle,
+        pageTitle: "Orders - Error",
+        item: '',
+        userInfo: req.user.userInfo
     });
 }
 

@@ -28,7 +28,7 @@ const pool = mysql.createPool({
   const conn = getConnection();
   const controller = {};
   
-
+//Reads all backorders then displays them with actions available base don permission levels
   controller.read = (req, res) => {
 
     var siteID = Number(req.user.userInfo.siteID);
@@ -85,7 +85,7 @@ const pool = mysql.createPool({
 
   };
 
-  //Directs to page to add an entry along with information from look up tables after querying the database
+  //Directs to page to add a backorder along with information from look up tables after querying the database
   controller.getAdd = (req, res) => {
 
     conn.query("SELECT * FROM ITEM", function(err, result) {
