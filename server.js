@@ -74,7 +74,8 @@ const employeeRoutes = require('./routes/employees');
 const itemRoutes = require('./routes/items');
 const inventoryRoutes = require('./routes/inventory');
 const loginRoutes = require('./routes/login');
-const orderRoutes = require('./routes/orders')
+const orderRoutes = require('./routes/orders');
+const deliveryRoutes = require('./routes/delivery');
 
 //Sets the pathways to be used for each route
 app.use('/', pageRoutes);
@@ -86,6 +87,7 @@ app.use('/admin/item', itemRoutes);
 app.use('/admin/invt', inventoryRoutes);
 app.use('/login', loginRoutes);
 app.use('/orders', orderRoutes);
+app.use('/delivery', deliveryRoutes);
 
 app.use(expressValidator());
 

@@ -4,6 +4,7 @@ var expressValidator = require('express-validator');
 
 //Imports the javascript controller file where MySQL queries are run
 const pageController = require('../controllers/pageController');
+const backorderController = require('../controllers/backorderController');
 
 //The routes being used with their pathways, then the controller methods used with them
 //Needs vaild methods used or will give errors
@@ -18,7 +19,7 @@ router.get('/err/emp', authenticationMiddleware(), pageController.errEmp);
 router.get('/err/invt', authenticationMiddleware(), pageController.errInvt);
 router.get('/err/item', authenticationMiddleware(), pageController.errItem);
 router.get('/err/site', authenticationMiddleware(), pageController.errSite);
-router.get('/err/supp', authenticationMiddleware(), pageController.errSupp);
+//router.get('/err/supp', authenticationMiddleware(), pageController.errSupp);
 router.get('/err/orders', authenticationMiddleware(), pageController.errOrder);
 
 //Function to check if user is authenticated and if not redirect to login

@@ -14,9 +14,6 @@
 
         <div class="">
           <div class="col s12">
-          <% if (userInfo.PositionID === 4 ||userInfo.PositionID === 99999999 ) { %>
-            <a href="/orders/add" class="btn btn-success btn-lg">Add a new Back Order</a>
-          <% } %>
           </div>
         </div>
         <br>
@@ -24,90 +21,216 @@
         <div class="">
           <div class="col s12">
             <% if (items.length > 0) { %>
-            <table class="table">
-              <thread>
-                <tr>
-                  <th style="text-align: center;">ID</th>
-                  <th>Site To</th>
-                  <th>Site From</th>
-                  <th>Status</th>
-                  <th>Ship Date</th>
-                  <th>Type</th>
-                  <th>Bar Code</th>
-                  <th>Created Date</th>
-                  <th>Delivery ID</th>
-                  <th>Emergency Delivery</th>
-                  <% if (userInfo.PositionID === 4 || userInfo.PositionID === 99999999 ) { %>
-                  <th solspan="2" style="width: 20%; text-align: center;">Actions</th>
-                  <% } %>
-                </tr>
-              </thread>
-              <tbody>
-                <% for(var i = 0; i < items.length; i++) { %>
-                <tr>
-                  <td style="width: 1%; text-align: center;">
-                    <%= items[i].txnID %>
-                  </td>
-                  <td>
-                    <%= items[i].name %>
-                  </td>
-                  
-                  <td>
-                      <%= siteName ="" %>
-                    <% for (var j = 0; j < items2.length; j++) { %>
-                    
-                      <% if( items[i].siteIDFrom === items2[j].siteID) { %>
-                      
-                        <%= siteName = items2[j].name %>
-                        <% break %>
-                      <%} %>
 
-                    <%}%>
-                  </td>
-                  <td>
-                    <%= items[i].status %>
-                  </td>
-                  <td>
-                    <%= items[i].shipDate %>
-                  </td>
-                  <td>
-                    <%= items[i].txnType %>
-                  </td>
-                  <td>
-                    <%= items[i].barCode %>
-                  </td>
-                  <td>
-                    <%= items[i].createdDate %>
-                  </td>
-                  <td>
-                    <%= items[i].deliveryID %>
-                  </td>
-                  <td>
+              <% if(userInfo.PositionID <= 3) { %>
 
-                    <%if (items[i].emergencyDelivery === 1) { %>
-                    Yes
-                    <% } else if (items[i].emergencyDelivery === 0) { %>
-                    No
-                    <% } else {%>
-                    N/A
-                    <% } %>
-                  </td>
-                  <% if (userInfo.PositionID === 4 ||userInfo.PositionID === 99999999 ) { %>
-                  <td solspan="2" style="width: 20%; text-align: center;">
-                    <% if( items[i].status === "Submitted" || items[i].status === "In Progress") {%>
-                    <a href="/orders/update/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-success">Edit</a>
-                    <a href="/orders/delete/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-danger">Delete</a>
-                    <% } else {%>
-                    <a href="/orders/update/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-success disabled">Edit</a>
-                    <a href="/orders/delete/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-danger disabled">Delete</a>
-                    <% } %>
-                  </td>
-                  <% } %>
-                </tr>
-                <% } %>
-              </tbody>
-            </table>
+                <table class="table">
+                    <thread>
+                      <tr>
+                        <th style="text-align: center;">ID</th>
+                        <th>Site To</th>
+                        <th>Site From</th>
+                        <th>Status</th>
+                        <th>Ship Date</th>
+                        <th>Type</th>
+                        <th>Bar Code</th>
+                        <th>Created Date</th>
+                        <th>Delivery ID</th>
+                        <th>Emergency Delivery</th>
+                        <% if (userInfo.PositionID === 4 || userInfo.PositionID === 99999999 || userInfo.PositionID === 6) { %>
+                        <th solspan="2" style="width: 20%; text-align: center;">Actions</th>
+                        <% } %>
+                      </tr>
+                    </thread>
+                    <tbody>
+                      <% for(var i = 0; i < items.length; i++) { %>
+              
+            
+                      <tr>
+                        <td style="width: 1%; text-align: center;">
+                          <%= items[i].txnID %>
+                        </td>
+                        <td>
+                          <%= items[i].name %>
+                        </td>
+                        
+                        <td>
+                            <%= siteName ="" %>
+                          <% for (var j = 0; j < items2.length; j++) { %>
+                          
+                            <% if( items[i].siteIDTo === items2[j].siteID) { %>
+                            
+                              <%= siteName = items2[j].name %>
+                              <% break %>
+                            <%} %>
+      
+                          <%}%>
+                        </td>
+                        <td>
+                          <%= items[i].status %>
+                        </td>
+                        <td>
+                          <%= items[i].shipDate %>
+                        </td>
+                        <td>
+                          <%= items[i].txnType %>
+                        </td>
+                        <td>
+                          <%= items[i].barCode %>
+                        </td>
+                        <td>
+                          <%= items[i].createdDate %>
+                        </td>
+                        <td>
+                          <%= items[i].deliveryID %>
+                        </td>
+                        <td>
+      
+                          <%if (items[i].emergencyDelivery === 1) { %>
+                          Yes
+                          <% } else if (items[i].emergencyDelivery === 0) { %>
+                          No
+                          <% } else {%>
+                          N/A
+                          <% } %>
+                        </td>
+                        <% if (userInfo.PositionID === 4 ||userInfo.PositionID === 99999999 || userInfo.PositionID === 6) { %>
+                        <td solspan="2" style="width: 20%; text-align: center;">
+                          <% if( items[i].status === "Submitted" || items[i].status === "In Progress") {%>
+                          <a href="/orders/update/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-success">Edit</a>
+                          <a href="/orders/delete/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-danger">Delete</a>
+                          <% } else {%>
+                          <a href="/orders/update/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-success disabled">Edit</a>
+                          <a href="/orders/delete/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-danger disabled">Delete</a>
+                          <% } %>
+                        </td>
+                        <% } %>
+                      </tr>
+              <% } %>
 
+ 
+                    </tbody>
+                  </table>
+
+
+              <% }  else { %>
+
+              <div class="accordion" id="accordionSite">
+              <% for(var s = 0; s < items2.length; s++) { %>
+
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                      <h2 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse<%=s%>" aria-expanded="true" aria-controls="collapse<%=s%>">
+                         <%= items2[s].name %>
+                        </button>
+                      </h2>
+                    </div>
+                
+                    <div id="collapse<%=s%>" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSite">
+                      <div class="card-body">
+                          <table class="table">
+                              <thread>
+                                <tr>
+                                  <th style="text-align: center;">ID</th>
+                                  <th>Site To</th>
+                                  <th>Site From</th>
+                                  <th>Status</th>
+                                  <th>Ship Date</th>
+                                  <th>Type</th>
+                                  <th>Bar Code</th>
+                                  <th>Created Date</th>
+                                  <th>Delivery ID</th>
+                                  <th>Emergency Delivery</th>
+                                  <% if (userInfo.PositionID === 4 || userInfo.PositionID === 99999999 || userInfo.PositionID === 6) { %>
+                                  <th solspan="2" style="width: 20%; text-align: center;">Actions</th>
+                                  <% } %>
+                                </tr>
+                              </thread>
+                              <tbody>
+                                <% for(var i = 0; i < items.length; i++) { %>
+                        
+                      <% if( items[i].siteIDTo === items2[s].siteID) { %>
+                        
+                                <tr>
+                                  <td style="width: 1%; text-align: center;">
+                                    <%= items[i].txnID %>
+                                  </td>
+                                  <td>
+                                    <%= items[i].name %>
+                                  </td>
+                                  
+                                  <td>
+                                      <%= siteName ="" %>
+                                    <% for (var j = 0; j < items2.length; j++) { %>
+                                    
+                                      <% if( items[i].siteIDTo === items2[j].siteID) { %>
+                                      
+                                        <%= siteName = items2[j].name %>
+                                        <% break %>
+                                      <%} %>
+                
+                                    <%}%>
+                                  </td>
+                                  <td>
+                                    <%= items[i].status %>
+                                  </td>
+                                  <td>
+                                    <%= items[i].shipDate %>
+                                  </td>
+                                  <td>
+                                    <%= items[i].txnType %>
+                                  </td>
+                                  <td>
+                                    <%= items[i].barCode %>
+                                  </td>
+                                  <td>
+                                    <%= items[i].createdDate %>
+                                  </td>
+                                  <td>
+                                    <%= items[i].deliveryID %>
+                                  </td>
+                                  <td>
+                
+                                    <%if (items[i].emergencyDelivery === 1) { %>
+                                    Yes
+                                    <% } else if (items[i].emergencyDelivery === 0) { %>
+                                    No
+                                    <% } else {%>
+                                    N/A
+                                    <% } %>
+                                  </td>
+                                  <% if (userInfo.PositionID === 4 ||userInfo.PositionID === 99999999 || userInfo.PositionID === 6) { %>
+                                  <td solspan="2" style="width: 20%; text-align: center;">
+                                    <% if( items[i].status === "Submitted" || items[i].status === "In Progress" && userInfo.PositionID === 4) {%>
+                                    <a href="/orders/update/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-success">Edit</a>
+                                    <a href="/orders/delete/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-danger">Delete</a>
+                                      <% } else if(items[i].status === "Assembling") { %>
+
+                                        <a href="/orders/backorders/fulfill/<%= items[i].txnID %>" class="btn btn-success">Fulfill</a>
+
+                                    <% } else {%>
+                                    <a href="/orders/update/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-success disabled">Edit</a>
+                                    <a href="/orders/delete/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-danger disabled">Delete</a>
+                                    <% } %>
+                                  </td>
+                                  <% } %>
+                                </tr>
+                        <% } %>
+
+                                <% } %>
+                              </tbody>
+                            </table>
+
+
+                      </div>
+                    </div>
+                  </div>
+
+
+             <% } %>
+            </div>
+            <% } %>
             <%} else { %>
             <p><strong>There are no records available.</strong></p>
             <% } %>

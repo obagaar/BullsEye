@@ -1,0 +1,91 @@
+<!-- Page to add items. Uses header and footer partials -->
+
+<% include ../partials/header %>
+
+<script src="/js/itemList.js"></script>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-10 offset-md-0 card">
+      <div class="card-body">
+        <form action="/orders/submit" method="POST" class="col-12">
+
+          <div class="form-group row">
+              <div class="col-10">
+                  <h3>Submitted Order # <%= txnID %></h3>
+                </div>
+    
+                <div class="col-10">
+                    <label for="submittedBy" class="col-10 col-form-label">Submitted By</label>
+                    <p><input type="text" class="col-10 form-control" name="submittedBy" value="<%= userInfo.FirstName %> <%= userInfo.LastName %>" readonly></p>
+                </div>
+    
+                <div class="col-10">
+                    <label for="siteIDFromDisplay" class="col-10 col-form-label">Current Store</label>
+                    <p><% for(var j =0; j < items2.length; j++) { %>
+                    
+                      <% if(items2[j].siteID === userInfo.siteID) { %>
+    
+                        <input type="hidden" name="siteIDFrom" value="<%= items2[j].siteID %>">
+                        <input type="text" class="col-10 form-control" name="siteIDFromDisplay" value="<%= items2[j].name %>" readonly>
+    
+                      <% } %>
+    
+                      <% } %>
+                    
+                    </p>
+                </div>
+    
+                <div class="col-10">
+                    <label for="siteIDToDisplay" class="col-10 col-form-label">Ordering From</label>
+                    <input type="hidden" name="siteIDTo" value="<%= items2[1].siteID %>">
+                    <p><input type="text" class="col-10 form-control" name="siteIDToDisplay" value="<%= items[0].supplierName%>"readonly>                  
+                    </p>
+                </div>
+              
+                <div class="col-10">
+                    <label for="itemsToOrder" class="col-10 col-form-label">Items in Order</label>
+                  <% if (items.itemID !== null) { %>
+                    <ul class="col-10 list-group" name="itemsToReerder">
+                      <% for(var i = 0; i < items.length; i++) { %>
+                        <li class="list-group-item"><%= items[i].name %> </li>
+                        <div class="alert alert-dark">Quantity: <%= items[i].quantity %></div>
+                        <% } %>
+    
+                    </ul>
+                  
+                  <% } %>
+    
+                  <br>
+    
+                </div>
+    
+                <div class="col-10">
+                    <label for="orderType" class="col-10 col-form-label">Order Type</label>
+                     <% if(items[0].emergencyDelivery === 0) { %>
+    
+                      <p><input type="text" class="col-10 form-control" name="siteIDToDisplay" value="<%= orderType = 'Standard Delivery' %>"readonly>                  
+                      </p>
+                    
+                    <% } else { %>
+                      <p><input type="text" class="col-10 form-control" name="siteIDToDisplay" value="<%= orderType = 'Emergency Order' %>"readonly></p>
+                      <% } %>
+                </div>
+    
+    
+                  <div class="col-12">
+                    <div class="row">
+                        <button class="btn btn-success"><a href="/orders" class="btn btn-success">Done</a></button>
+                    </div>
+                    
+                  </div>
+    
+    
+                </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% include ../partials/footer %>

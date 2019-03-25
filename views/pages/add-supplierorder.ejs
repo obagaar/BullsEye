@@ -1,0 +1,123 @@
+<!-- Page to add items. Uses header and footer partials -->
+
+<% include ../partials/header %>
+
+<div class="container mt-5">
+        <div class="row">
+          <div class="col-md-8 offset-md-3 card">
+            <div class="card-body">
+              <form action="/orders/nextAdd/supp" method="POST" class= "col 12">
+                
+                <div class="form-group row">
+                        <div class="col-10">
+                          <h3>New Supplier Order</h3>
+                </div>
+
+                <div class="col-10">
+                    <label for="submittedBy" class="col-10 col-form-label">Submitted By</label>
+                    <p><input type="text" class="col-10 form-control" name="submittedBy" value="<%= userInfo.FirstName %> <%= userInfo.LastName %>" readonly></p>
+                </div>
+
+                <div class="col-10">
+                    <label for="siteIDFromDisplay" class="col-10 col-form-label">From</label>
+                    <p><% for(var j =0; j < items2.length; j++) { %>
+                    
+                      <% if(items2[j].siteID === userInfo.siteID) { %>
+
+                        <input type="hidden" name="siteIDFrom" value="<%= items2[j].siteID %>">
+                        <input type="text" class="col-10 form-control" name="siteIDFromDisplay" value="<%= items2[j].name %>" readonly>
+
+                      <% } %>
+
+                      <% } %>
+                    
+                    </p>
+                </div>
+
+             
+                <div class="col-10">
+                    <label for="itemsToOrder" class="col-10 col-form-label">Items available to Reorder</label>
+
+                  <% if (items3.itemID !== null || items3.itemID !== undefined || items3 !== "No items to reorder") { %>
+                    <ul class="col-10 list-group" name="itemsToReerder">
+                      <% for(var i = 0; i < items3.length; i++) { %>
+                        <input type="hidden"  name="itemtoReorderID[]" value="<%= items3[i].itemID %>"></input>
+                        <input type="hidden"  name="itemtoReorderName[]" value="<%= items3[i].itemName %>"></input>
+                        <input type="hidden"  name="itemtoReorderMax[]" value="<%= items3[i].maxReorderWarning %>"></input>
+                        <input type="hidden"  name="itemtoReorderQuantity[]" value="<%= items3[i].quantity %>"></input>
+                        <input type="hidden"  name="itemtoReorderThreshold[]" value="<%= items3[i].reorderThreshold %>"></input>
+                        <input type="hidden"  name="itemtoReorderSupplier[]" value="<%= items3[i].supplierName %>"></input>
+                        <li class="list-group-item"><%= items3[i].itemName %></li><span class="alert alert-primary" >Supplier: <%= items3[i].supplierName %></span>
+                        <span class="alert alert-dark">Current Quantity: <%= items3[i].quantity %></span> <br>
+                        <% } %>
+
+                    </ul>
+                  
+                  <% } else {%>
+
+                    <p><input type="text" class="col-10 form-control" name="itemsToReOrder" value="No items to reorder" readonly></p>
+
+                    <% } %>
+
+                </div>
+
+                <div class="col-10">
+                    <label for="itemsBackOrder" class="col-10 col-form-label">Items on Backorder</label>
+
+                  <% if (items.itemID !== null || items.itemID !== undefined || items !== "No items to reorder") { %>
+                    <ul class="col-10 list-group" name="itemsToReerder">
+                      <% for(var i = 0; i < items.length; i++) { %>
+                        <input type="hidden"  name="itemBackorderID[]" value="<%= items[i].itemID %>"></input>
+                        <input type="hidden"  name="itemBackorderName[]" value="<%= items[i].itemName %>"></input>
+                        <input type="hidden"  name="itemBackorderMax[]" value="<%= items[i].maxReorderWarning %>"></input>
+                        <input type="hidden"  name="itemBackorderQuantity[]" value="<%= items[i].quantity %>"></input>
+                        <input type="hidden"  name="itemBackorderThreshold[]" value="<%= items[i].reorderThreshold %>"></input>
+                        <input type="hidden"  name="itemBackorderSupplier[]" value="<%= items[i].supplierName %>"></input>
+                        <li class="list-group-item"><%= items[i].itemName %></li><span class="alert alert-primary" >Supplier: <%= items[i].supplierName %></span>
+                        <span class="alert alert-dark">Current Quantity: <%= items[i].quantity %></span> <br>
+                        <% } %>
+
+                    </ul>
+                  
+                  <% } else {%>
+
+                    <p><input type="text" class="col-10 form-control" name="itemsToReOrder" value="No items to reorder" readonly></p>
+
+                    <% } %>
+
+                </div>
+
+                <div class="col-10">
+                  <label for="orderType" class="col-10 col-form-label">Order Type</label>
+                  
+                  <div class="form-check">
+                      <input class="form-check-input" type="radio" name="emergencyOrder" value="false" checked>
+                      <label class="form-check-label" for="emergencyOrder">
+                        Standard Order
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="emergencyOrder" value="true">
+                      <label class="form-check-label" for="emergencyOrder">
+                        Emergency Order
+                      </label>
+                    </div>
+                    <br>
+              </div>
+
+
+                <div class="row">
+ 
+                        <button type="submit" class="btn btn-primary">
+                          Next
+                        </button> 
+        
+                        <button class="btn btn-danger"><a href="/orders" class="btn btn-danger">Cancel</a></button> 
+                    </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<% include ../partials/footer %>

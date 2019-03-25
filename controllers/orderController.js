@@ -35,11 +35,15 @@ controller.read = (req, res) => {
 
   if (positionID === 4 || positionID === 99999999 || positionID < 3) {
 
-    var searchQuery = "SELECT * FROM txn t INNER JOIN site s ON t.siteIDTo = s.siteID WHERE t.txnType = 'Store Order' OR t.txnType = 'Supplier Order';";
+    var searchQuery = "SELECT * FROM txn WHERE txnType = 'Store Order' OR txnType = 'Supplier Order';";
+
+  } else if (positionID === 6) {
+
+    var searchQuery = "SELECT * FROM txn t INNER JOIN site s ON t.siteIDTo = s.siteID WHERE siteIDFrom = 2 OR siteIDFrom = 1 AND t.txnType = 'Store Order' OR t.txnType = 'Supplier Order';";
 
   } else {
 
-    var searchQuery = "SELECT * FROM txn t INNER JOIN site s ON t.siteIDTo = s.siteID WHERE siteIDTo = " + siteID + " AND t.txnType = 'Store Order';";
+    var searchQuery = "SELECT * FROM txn t INNER JOIN site s ON t.siteIDTo = s.siteID WHERE siteIDTo = " + siteID + " OR siteIDFrom = "+ siteID + " AND t.txnType = 'Store Order';";
 
   }
 
@@ -187,8 +191,8 @@ controller.nextAdd = (req, res) => {
   }
 
   var insertQuery = "INSERT INTO txn (`siteIDTo`, `siteIDFrom`, `status`, `shipDate`, `txnType`, `barCode`, `createdDate`, `emergencyDelivery`) VALUES (";
-  insertQuery += SqlString(req.body.siteIDFrom) + ", ";
   insertQuery += SqlString(req.body.siteIDTo) + ", ";
+  insertQuery += SqlString(req.body.siteIDFrom) + ", ";
   insertQuery += "'In progress', ";
   insertQuery += SqlString(dateFormat(shipDate, "yyyy-mm-dd")) + ", ";
   insertQuery += "'Store Order', ";
@@ -398,10 +402,11 @@ controller.getSubmit = (req, res) => {
 
 controller.delete = (req, res) => {
 
-  var deleteQuery = "DELETE FROM txn WHERE txnID = ";
-  deleteQuery += SqlString(req.params.txnID) + ";";
+  var txnID = req.params.txnID;
 
-  conn.query(deleteQuery, function (err, result) {
+  var statusQuery = "UPDATE txn SET `status` = 'Cancelled' WHERE (`txnID` = "+ txnID + ");";
+
+  conn.query(statusQuery, function (err, result) {
 
     if (result) {
       res.redirect("/orders");
@@ -609,9 +614,11 @@ controller.updateItems = (req, res) => {
 
  };
 
-controller.updateSubmit = (req, res) => {
+controller.receive = (req, res) => {
 
-  var statusQuery = "UPDATE txn SET `status` = 'Submitted' WHERE (`txnID` = "+ txnID + ");";
+  var txnID = req.params.txnID;
+
+  var statusQuery = "UPDATE txn SET `status` = 'Assembling' WHERE (`txnID` = "+ txnID + ");";
 
   conn.query(statusQuery, function(err, results) {
 
@@ -628,7 +635,144 @@ controller.updateSubmit = (req, res) => {
 
   })
 
+
 };
+
+controller.fulfill = (req, res) => {
+
+  var txnID = req.params.txnID;
+  var orderQuery = "SELECT * FROM txnitems ti INNER JOIN item i ON ti.itemID = i.itemID where txnID = " + txnID + ";";
+
+  conn.query(orderQuery, function(err, results) {
+
+    if(err) {
+
+      console.log(err);
+      res.redirect("/err/orders");
+
+    } else {
+
+      res.render('pages/fulfill-order.ejs', {
+        siteTitle: siteTitle,
+        pageTitle: "Fulfill Order",
+        items: results,
+        txnID: txnID,
+        userInfo: req.user.userInfo
+      });
+
+    }
+
+  })
+
+
+
+};
+
+controller.fulfillAdd = (req,res) => {
+
+  console.log(req.params.txnID);
+
+  var txnID = req.params.txnID;
+
+  var statusQuery = "UPDATE txn SET `status` = 'Assembled' WHERE (`txnID` = "+ txnID + ");";
+
+  conn.query(statusQuery, function(err, results) {
+
+    if(err) {
+     
+      console.log(err);
+
+      res.redirect("/err/orders");
+    } else {
+
+      res.redirect('/orders');
+
+    }
+
+  })
+
+
+}
+
+controller.receiveStore = (req, res) => {
+
+  var siteID = Number(req.user.userInfo.siteID);
+  var txnID = req.params.txnID;
+  var orderQuery = "SELECT *, i.name as name, s.name as supplierName FROM txnitems ti INNER JOIN item i ON ti.ItemID = i.itemID INNER JOIN supplier s ON i.supplierID = s.supplierID INNER jOIN txn t ON ti.txnID = t.txnID WHERE ti.txnID = " + txnID + ";";
+
+  conn.query(orderQuery, function(err, results) {
+
+    if(err) {
+
+      console.log(err);
+      res.redirect("/err/orders");
+
+    } else {
+
+      res.render('pages/receive-order.ejs', {
+        siteTitle: siteTitle,
+        pageTitle: "Receive Store Order",
+        items: results,
+        txnID: txnID,
+        userInfo: req.user.userInfo
+      });
+
+    }
+
+  })
+
+};
+
+controller.scan = (req, res) => {
+  
+  var siteID = Number(req.user.userInfo.siteID);
+  var itemID = req.params.itemID;
+  var quantity = req.params.quantity;
+  var txnID = req.params.txnID;
+
+  var updateQuery = "UPDATE inventory SET quantity = '" + quantity +"' WHERE (itemID = '" + itemID + "') AND (siteID = '" + siteID + "');";
+
+  conn.query(updateQuery, function(err, result) {
+
+if(err) {
+
+  console.log(err);
+  res.redirect("/err/orders");
+} else {
+
+res.redirect("/orders/receive/supplier/" + txnID);
+
+}
+
+
+  })
+
+};
+
+controller.complete = (req,res) => {
+
+  var txnID = req.params.txnID;
+
+  var orderQuery = "UPDATE txn SET `status` = 'Complete' WHERE (`txnID` = "+ txnID + ");";
+
+
+  conn.query(orderQuery, function(err, result){
+
+if(err){
+
+  console.log(err);
+  res.redirect("/err/orders");
+} else {
+
+  res.redirect("/orders");
+}
+
+
+
+  })
+
+
+}
 
 //Exports all methods to be used for routing
 module.exports = controller;

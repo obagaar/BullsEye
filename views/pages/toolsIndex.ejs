@@ -19,15 +19,33 @@
                           
                           <center>
 
-                            <% if(userInfo.PositionID > 4 && userInfo.PositionID !== 99999999) { %>
+                            <% if(userInfo.PositionID === 5 && userInfo.PositionID !== 99999999) { %>
 
                               <button class="btn btn-primary"><a href="/orders" class="btn btn-primary">Orders</a></button> 
+                              <button class="btn btn-primary"><a href="/delivery" class="btn btn-primary">Deliveries</a></button> 
 
+                          <% } else if (userInfo.PositionID === 6 && userInfo.PositionID !== 99999999) { %>
+
+                            <button class="btn btn-primary"><a href="/orders" class="btn btn-primary">Orders</a></button> 
+                            <button class="btn btn-primary"><a href="/orders/backorder" class="btn btn-primary">Back Orders</a></button> 
 
                            <% } else {%>
-                            <button class="btn btn-primary"><a href="/orders" class="btn btn-primary">Orders</a></button> 
-                            <button class="btn btn-primary"><a href="/inventory" class="btn btn-primary">Inventory</a></button>
-                            <button class="btn btn-primary"><a href="/orders/backorder" class="btn btn-primary">Back Orders</a></button> 
+
+                            <% if(userInfo.PositionID === 4 || userInfo.PositionID === 99999999) { %>
+
+                              <button class="btn btn-primary"><a href="/orders" class="btn btn-primary">Orders</a></button> 
+                              <button class="btn btn-primary"><a href="/delivery" class="btn btn-primary">Deliveries</a></button> 
+                              <button class="btn btn-primary"><a href="/inventory" class="btn btn-primary">Inventory</a></button>
+                              <button class="btn btn-primary"><a href="/orders/backorder" class="btn btn-primary">Back Orders</a></button>
+
+                            <% } else { %>
+
+                              <button class="btn btn-primary"><a href="/orders" class="btn btn-primary">Orders</a></button> 
+                              <button class="btn btn-primary"><a href="/inventory" class="btn btn-primary">Inventory</a></button>
+                              <button class="btn btn-primary"><a href="/orders/backorder" class="btn btn-primary">Back Orders</a></button>
+                              
+                              <% } %>
+ 
                             <% } %>
                           
 

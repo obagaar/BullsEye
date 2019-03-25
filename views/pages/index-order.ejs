@@ -2,6 +2,8 @@
 
 <% include ../partials/header %>
 
+<script src='/js/filterOrders.js' ></script>
+
 <div class="row">
 
   <% include ../partials/menuDashboard %>
@@ -12,22 +14,34 @@
       </div>
       <div class="panel-body">
 
-        <div class="">
+        <div class="filter">
           <div class="col s12">
             <% if(userInfo.PositionID <= 3 || userInfo.PositionID === 99999999) { %>
               <a href="/orders/add" class="btn btn-success btn-lg">Add a new Order</a>
             <% } else if ( userInfo.PositionID === 4) { %>
-              <a href="/tools" class="btn btn-success btn-lg">Add a new Supplier Order</a>
+              <a href="/orders/add/supp" class="btn btn-success btn-lg">Add a new Supplier Order</a>
               <% } %>
+
+              <br><br>
+              <h5>Show Orders: </h5>
+
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input inlineCheckboxComplete" type="checkbox" id="inlineCheckboxComplete" value="Complete">
+                  <label class="form-check-label" for="inlineCheckboxComplete">Complete</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" id="inlineCheckboxCancelled" value="Cancelled">
+                  <label class="form-check-label" for="inlineCheckboxCancelled">Cancelled</label>
+                </div>
 
           </div>
         </div>
         <br>
 
-        <div class="">
+        <div class="orderInfo">
           <div class="col s12">
             <% if (items.length > 0) { %>
-            <table class="table">
+            <table class="table orderInfoTable">
               <thread>
                 <tr>
                   <th style="text-align: center;">ID</th>
@@ -40,7 +54,7 @@
                   <th>Created Date</th>
                   <th>Delivery ID</th>
                   <th>Emergency Delivery</th>
-                  <% if(userInfo.PositionID <= 4 || userInfo.PositionID === 99999999) { %>
+                  <% if(userInfo.PositionID !== 5) { %>
                   <th solspan="2" style="width: 20%; text-align: center;">Actions</th>
                   <% } %>
                 </tr>
@@ -95,19 +109,41 @@
                     N/A
                     <% } %>
                   </td>
-                  <% if(userInfo.PositionID === 4 || userInfo.PositionID === 3 || userInfo.PositionID === 99999999) { %>
+                  <% if(userInfo.PositionID !== 5) { %>
                   <td solspan="2" style="width: 20%; text-align: center;">
-                    <% if( items[i].status === "In progress") {%>
+                    <% if( items[i].status === "In progress" && userInfo.PositionID <= 4 && items[i].txnType === "Store Order") {%>
                     <a href="/orders/update/<%= items[i].txnID %>" class="btn btn-success">Edit</a>
                     <a href="/orders/delete/<%= items[i].txnID %>" class="btn btn-danger">Cancel</a>
-                    <% } else if (items[i].status === "Submitted" && userInfo.PositionID === 4) { %>
+                    <% } else if( items[i].status === "In progress" && userInfo.PositionID <= 4 && items[i].txnType === "Supplier Order") {%>
+                     <a href="/orders/delete/<%= items[i].txnID %>" class="btn btn-danger">Cancel</a>
+                    <% } else if (items[i].status === "Submitted" && userInfo.PositionID === 4 && items[i].txnType === "Store Order") { %>
 
                       <a href="/orders/editWH/<%= items[i].txnID %>" class="btn btn-success">Resubmit</a>
+                      <a href="/orders/add/backorder/<%= items[i].txnID %>" class="btn btn-info">View</a>
+                      
+                     <% if(items[i].txnType === "Store Order") { %>
+
+                      <a href="/orders/receive/<%= items[i].txnID %>" class="btn btn-success">Receive</a>
+
+                      <% } %>
+
                       <a href="/orders/delete/<%= items[i].txnID %>" class="btn btn-danger">Cancel</a>
                      <% } else if (items[i].status === "Submitted" && userInfo.PositionID === 3) { %>
 
                       <a href="/orders/update/<%= items[i].txnID %>" class="btn btn-success disabled">Edit</a>
                       <a href="/orders/delete/<%= items[i].txnID %>" class="btn btn-danger">Cancel</a>
+
+                      <% } else if (items[i].status === "In Transit" && userInfo.PositionID === 3) { %>
+
+                        <a href="/orders/receiveStore/<%= items[i].txnID %>" class="btn btn-success">Receive</a>
+
+                      <% } else if (items[i].status === "Assembling" && userInfo.PositionID === 6) { %>
+
+                        <a href="/orders/fulfill/<%= items[i].txnID %>" class="btn btn-success">Fulfill</a>
+
+                        <% } else if (items[i].status === "Submitted" && items[i].txnType === "Supplier Order") { %>
+
+                          <a href="/orders/receive/supplier/<%= items[i].txnID %>" class="btn btn-success">Receive</a>
                      
                     <% } else {%>
                     <a href="/orders/update/<%= items[i].txnID %>" class="btn btn-success disabled">Edit</a>

@@ -1,0 +1,69 @@
+<!-- Index page for sites. Uses header and footer partials -->
+
+<% include ../partials/header %>
+
+<script src='/js/scanItem.js'></script>
+
+<div class="row">
+
+    <% include ../partials/menuDashboard %>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-10 offset-md-0 card">
+                <div class="card-body">
+                    
+                        <div class="form-group row">
+                            <div class="col-10">
+                                <h3>Receive Supplier Order</h3>
+                            </div>
+
+                            <div class="col-10">
+                                <label for="txnID" class="col-10 col-form-label">Order Number</label>
+                                <input type="text" class="col-8 form-control" name="txnID" value="<%= txnID %>"
+                                    readonly>
+
+                                    <br><br>
+                            </div>
+
+                            <div class="col-10">
+                                <label for="itemsToOrder" class="col-10 col-form-label">Items in Order</label>
+                                <% if (items.itemID !== null) { %>
+                                <ul class="col-10 list-group" name="itemsToReerder">
+                                    <% for(var i = 0; i < items.length; i++) { %>
+                                    <li class="list-group-item">
+                                        <%= items[i].name %> 
+                                  </li>
+                                  <span class="alert alert-dark">Quantity: <%= items[i].quantity %></span>
+                                  <span class="alert alert-info">Supplier: <%= items[i].supplierName %></span>
+                                    
+                                  <button class="btn btn-primary scanButton" name="submitButton"><a href="/orders/scan/supplier/<%= txnID %>/<%= items[i].itemID %>/<%= items[i].quantity %>" class="btn btn-primary">Scan</a></button>
+                                  <br>
+
+                                    <% } %>
+
+                                </ul>
+
+                                <% } %>
+
+                                <br>
+
+                            </div>
+
+
+
+                            <div class="col-12">
+                                <div class="row">
+
+                                    <button class="btn btn-primary" name="cancelButton"><a href="/orders/complete/supplier/<%= txnID %>" class="btn btn-primary">Complete</a></button>
+                                    <button class="btn btn-danger" name="cancelButton"><a href="/orders" class="btn btn-danger">Cancel</a></button>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% include ../partials/footer %>

@@ -1,0 +1,67 @@
+<!-- Page to add items. Uses header and footer partials -->
+
+<% include ../partials/header %>
+
+<div class="container mt-5">
+        <div class="row">
+          <div class="col-md-5 offset-md-3 card">
+            <div class="card-body">
+              <form action="/orders/add/backorder/<%= txnID %>" method="POST" class= "col s12">
+                <div class="form-group row">
+                    <div class="col-10">
+                        <h3>View Order</h3>
+                    </div>
+
+                    <div class="col-10">
+                        <label for="txnID" class="col-10 col-form-label">Order Number</label>
+                        <input type="text" class="col-8 form-control" name="txnID" value="<%= txnID %>"
+                            readonly>
+
+                            <br><br>
+                    </div>
+
+                    <div class="col-10">
+                        <label for="itemsToOrder" class="col-10 col-form-label">Items in Order</label>
+                        <% if (items.itemID !== null) { %>
+                        <ul class="col-10 list-group" name="itemsToReerder">
+                            <% for(var i = 0; i < items.length; i++) { %>
+                            <li class="list-group-item">
+                                <%= items[i].name %> 
+                          </li>
+                          <span class="alert alert-dark">Quantity: <%= items[i].quantity %></span>
+                          <span class="alert alert-info">Place on Backorder: 
+                            <span class="form-check form-check-inline">
+                              Yes <br> <input class="form-check-input" type="checkbox" value="1, <%= items[i].itemID %>, <%= items[i].quantity %>" id="<%= items[i].itemID %>" name="itemInfo[]">
+                            </span></span>
+                            <% } %>
+                            <input type="hidden" name="itemInfo[]" value="Items info">
+
+
+                        </ul>
+
+                        <% } %>
+
+                        <br>
+
+                    </div>
+
+
+
+                    <div class="col-12">
+                        <div class="row">
+                            <button class="btn btn-primary" >Submit</button>
+
+                            <button class="btn btn-danger" name="cancelButton"><a href="/orders" class="btn btn-danger">Return</a></button>
+                        </div>
+
+                    </div>
+
+
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<% include ../partials/footer %>

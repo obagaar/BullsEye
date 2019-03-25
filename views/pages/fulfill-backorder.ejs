@@ -1,0 +1,78 @@
+<!-- Index page for sites. Uses header and footer partials -->
+
+<% include ../partials/header %>
+
+<script src='/js/printPDF.js'></script>
+
+<div class="row">
+
+    <% include ../partials/menuDashboard %>
+
+    <div class="container mt-5">
+
+            <button type="button" class="btn btn-info pdfButton">
+                Print PDF
+             </button>
+
+        <div class="row">
+            <div class="col-md-10 offset-md-0 card">
+                <div class="card-body">
+                    <form action="/orders/backorders/fulfill/<%= txnID %>" method="POST" id="backorder-form" class="col-12">
+
+                        <div class="form-group row">
+                            <div class="col-10">
+                                <h3>Fulfill Back Order</h3>
+                            </div>
+
+                            <div class="col-10">
+                                <label for="txnID" class="col-10 col-form-label">Order Number</label>
+                                <input type="text" class="col-8 form-control" name="txnID" value="<%= txnID %>"
+                                    readonly>
+
+                                    <br><br>
+                            </div>
+
+                            <div class="col-10">
+                                <label for="itemsToOrder" class="col-10 col-form-label">Items in Order</label>
+                                <% if (items.itemID !== null) { %>
+                                <ul class="col-10 list-group" name="itemsToReerder">
+                                    <% for(var i = 0; i < items.length; i++) { %>
+                                    <li class="list-group-item">
+                                        <%= items[i].name %> 
+                                  </li>
+                                  <span class="alert alert-dark">Quantity: <%= items[i].quantity %></span>
+                                  <span class="alert alert-info">Item Check <span class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="check<%=i%>" required></span></span>
+
+
+                                    <% } %>
+
+                                </ul>
+
+                                <% } %>
+
+                                <br>
+
+                            </div>
+
+
+
+                            <div class="col-12">
+                                <div class="row">
+                                    <button type="submit" class="btn btn-primary" name="submitButton">Complete</button>
+
+                                    <button class="btn btn-danger" name="cancelButton"><a href="/orders/backorder" class="btn btn-danger">Cancel</a></button>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </form>
+
+                    
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <% include ../partials/footer %>

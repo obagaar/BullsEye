@@ -1,0 +1,44 @@
+<!-- Page to add items. Uses header and footer partials -->
+
+<% include ../partials/header %>
+
+<script src="/js/itemList.js"></script>
+
+<div class="container mt-5">
+<div class="row">
+<div class="col-md-10 offset-md-0 card">
+<div class="card-body">
+        <form action="/orders/nextAdd3/supp" method="POST" class="col-12">
+
+          <div class="form-group row">
+            <div class="col-10">
+              <h3>New Supplier Order - Add New Items</h3>
+            </div>
+
+            <input type="hidden" name="txnID" value="<%= txnID %>">
+
+            
+
+
+            <div class="col-10">
+              <div class="row">
+                  <button type ="submit" class="btn btn-primary">Next</button>
+              
+                  <button class="btn btn-danger" name="cancelButton"><a href="/orders" class="btn btn-danger">Cancel</a></button>
+                </div>
+              </div>
+
+
+    </form>
+
+
+
+
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<% include ../partials/footer %>

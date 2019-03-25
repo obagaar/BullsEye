@@ -1,0 +1,101 @@
+<!-- Page to add items. Uses header and footer partials -->
+
+<% include ../partials/header %>
+
+<script src='/js/groupOrders.js' ></script>
+
+<div class="container">
+        <div class="row">
+          <div class="card">
+            <div class="card-body">
+              <form action="/delivery/groupNext2" method="POST" class= "col-12">
+                
+                <div class="form-group row">
+                        <div class="col-12">
+                          <h3>Group Deliveries Weight</h3>
+                </div>
+
+                  <% for(var i = 0; i < txnIDs.length; i++) { %>
+
+                  <p><input type='hidden' name="txnIDs[]" class="form-control" value='<%=txnIDs[i]%>' readonly></p> 
+
+                  <% } %>
+
+               <div class="col-12">
+
+                  <h5>Delivery Weight</h5>
+
+                  <p><input type='text' name="deliveryWeight" class="form-control" value='<%=deliveryWeight%>' readonly></p>                       
+                        
+               </div>
+
+
+               <div class="col-12">
+
+                  <h5>Viehicle type</h5>
+
+                  <table class="table orderInfoTable">
+                      <thread>
+                        <tr>
+                          <th>Vehicle Type</th>
+                          <th>Max Weight</th>
+                          <th>Hourly Cost</th>
+                          <th>Cost Per KM</th>
+                          <th>Notes</th>
+                        </tr>
+                      </thread>
+                      <tbody>
+                        <% for(var i = 0; i < items.length; i++) { %>
+                        <tr>
+                          <td>
+                            <%= items[i].vehicleType %>
+                          </td>
+                          <td>
+                            <%= items[i].maxWeight %>
+                          </td>
+                          <td>
+                            <%= items[i].HourlyTruckCost %>
+                          </td>
+                          <td>
+                            <%= items[i].costPerKem %>
+                          </td>
+                          <td>
+                            <%= items[i].notes %>
+                          </td>
+                                 
+                        </tr>
+                        <% } %>
+                      </tbody>
+                    </table>
+
+                    <label for="vehicleSelect" class="col-10 col-form-label">Select Vehicle for Delivery</label>
+                  <select name="vehicleSelect" class="custom-select menu1" size="5" style="overflow-x: scroll" multiple>
+                      <% for(var i = 0; i < items.length; i++) { %>
+                        
+                        <option value="<%= items[i].vehicleType %>">
+                          
+                           <%= items[i].vehicleType %> 
+                        </option>
+    
+                        <% } %>
+                  </select>
+                  <br><br>              
+                        
+               </div>
+                
+
+                <div class="row">
+ 
+                        <button type="submit" class="btn btn-primary">
+                          Next
+                        </button> 
+        
+                        <button class="btn btn-danger"><a href="/delivery" class="btn btn-danger">Cancel</a></button> 
+                    </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<% include ../partials/footer %>

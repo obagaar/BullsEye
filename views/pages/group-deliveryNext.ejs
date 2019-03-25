@@ -1,0 +1,47 @@
+<!-- Page to add items. Uses header and footer partials -->
+
+<% include ../partials/header %>
+
+<script src='/js/groupOrders.js' ></script>
+
+<div class="container">
+        <div class="row">
+          <div class="card">
+            <div class="card-body">
+              <form action="/delivery/groupNext" method="POST" class= "col-12">
+                
+                <div class="form-group row">
+                        <div class="col-12">
+                          <h3>Group Deliveries</h3>
+                </div>
+
+
+                <div class="col-12">
+
+                  <h5>Order #s Selected</h5>
+
+                  <% for(var i = 0; i < txnIDs.length; i++) { %>
+
+                  <p><input type='text' name="txnIDs[]" class="form-control" value='<%=txnIDs[i]%>' readonly></p> 
+
+                  <% } %>
+                        
+                        
+               </div>
+                
+
+                <div class="row">
+ 
+                        <button type="submit" class="btn btn-primary">
+                          Next
+                        </button> 
+        
+                        <button class="btn btn-danger"><a href="/delivery" class="btn btn-danger">Cancel</a></button> 
+                    </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<% include ../partials/footer %>
