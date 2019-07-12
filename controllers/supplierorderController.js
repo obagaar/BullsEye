@@ -30,9 +30,9 @@ const controller = {};
 controller.getInfo = (req, res) => {
   var siteID = Number(req.user.userInfo.siteID);
 
-  var backorderQuery = "SELECT * , i.name as itemName, s.name as supplierName FROM txnitems ti INNER JOIN txn t ON ti.txnID = t.txnID INNER JOIN item i ON ti.ItemID = i.itemID INNER JOIN inventory iy ON i.itemID = iy.itemID INNER JOIN supplier s ON i.supplierID = s.supplierID WHERE txnType ='Back Order' AND status = 'Pending Back Order'GROUP BY i.itemID;"
+  var backorderQuery = "SELECT * , i.name as itemName, s.name as supplierName, ti.quantity as borderQuantity, iy.quantity as invtQuantity FROM txnitems ti INNER JOIN txn t ON ti.txnID = t.txnID INNER JOIN item i ON ti.ItemID = i.itemID INNER JOIN inventory iy ON i.itemID = iy.itemID INNER JOIN supplier s ON i.supplierID = s.supplierID WHERE txnType ='Back Order' AND status = 'Pending Back Order'GROUP BY i.itemID"
 
-  var searchQuery = "SELECT * , i.name as itemName, s.name as supplierName FROM inventory iy INNER JOIN item i ON iy.itemID = i.itemID INNER JOIN supplier s ON i.supplierID = s.supplierID WHERE quantity < reorderThreshold";
+  var searchQuery = "SELECT * , i.name as itemName, s.name as supplierName FROM inventory iy INNER JOIN item i ON iy.itemID = i.itemID INNER JOIN supplier s ON i.supplierID = s.supplierID WHERE quantity < reorderThreshold AND iy.siteID = '2'";
 
   var sitesQuery = "SELECT * FROM site";
 
@@ -63,6 +63,8 @@ controller.getInfo = (req, res) => {
     var result2 = JSON.parse(JSON.stringify(results[1][0]));
     var result3 = JSON.parse(JSON.stringify(results[2][0]));
 
+    console.log(result3);
+
  
     res.render('pages/add-supplierorder.ejs', {
       siteTitle: siteTitle,
@@ -86,18 +88,45 @@ controller.getInfo = (req, res) => {
 
 controller.nextAdd = (req, res) => {
 
-  var itemReorderIDs = req.body.itemtoReorderID;
+  console.log(req.body)
+
+    if(req.body.itemtoReorderID != undefined) {
+
+    var itemReorderIDs = req.body.itemtoReorderID;
+   
   var itemReorderNames = req.body.itemtoReorderName;
   var itemReorderMax = req.body.itemtoReorderMax;
   var itemReorderQuantity = req.body.itemtoReorderQuantity;
   var itemReorderThreshold = req.body.itemtoReorderThreshold;
   var itemReorderSuppliers = req.body.itemtoReorderSupplier;
-  var itemBackorderIDs = req.body.itemBackorderID;
-  var itemBackorderNames = req.body.itemBackorderName;
-  var itemBackorderMax = req.body.itemBackorderMax;
-  var itemBackorderQuantity = req.body.itemBackorderQuantity;
-  var itemBackorderThreshold = req.body.itemBackorderThreshold;
-  var itemBackorderSuppliers = req.body.itemBackorderSupplier;
+
+
+  } 
+  
+  if (req.body.itemBackorderID != undefined) {
+
+
+    var itemBackorderIDs = req.body.itemBackorderID;
+    var itemBackorderNames = req.body.itemBackorderName;
+    var itemBackorderMax = req.body.itemBackorderMax;
+    var itemBackorderQuantity = req.body.itemBackorderQuantity;
+    var itemBackorderThreshold = req.body.itemBackorderThreshold;
+    var itemBackorderSuppliers = req.body.itemBackorderSupplier;
+    var itemBackorderCurInvt = req.body.itemBackorderCurInvt;
+  } 
+  
+  if (req.body.itemtoReorderID == undefined) {
+
+    var itemReorderIDs = [];
+
+  
+  }
+
+  if(req.body.itemBackorderID == undefined) {
+
+    var itemBackorderIDs = [];
+  }
+  
 
   var currentTime = new Date();
   var shipDate;
@@ -146,7 +175,7 @@ controller.nextAdd = (req, res) => {
     var result = JSON.parse(JSON.stringify(results[0][0]));
     var result2 = JSON.parse(JSON.stringify(results[1][0]));
 
-  
+    
     res.render('pages/add-supplierorderNext.ejs', {
 
       siteTitle: siteTitle,
@@ -165,6 +194,7 @@ controller.nextAdd = (req, res) => {
       backorderQuantity: itemBackorderQuantity,
       backorderThreshold: itemBackorderThreshold,
       backorderSuppliers: itemBackorderSuppliers,
+      itemBackorderCurInvt: itemBackorderCurInvt,
       txnID: req.params.txnID,
       userInfo: req.user.userInfo
     });
@@ -182,6 +212,8 @@ controller.nextAdd = (req, res) => {
 }
 
 controller.nextAdd2 = (req, res) => {
+
+  console.log(req.body)
   
   var txnID = req.body.txnID;
   var supplier = req.body.supplier;
@@ -189,9 +221,10 @@ controller.nextAdd2 = (req, res) => {
   var itemReorderNames = req.body.itemReorderName;
   var itemReorderSuppliers = req.body.itemReorderSupplier;
   var itemReorderQuantity = req.body.itemReorderQuantity;
+  var itemInvtQuantity = req.body.itemReorderInvt;
 
   
-  if(itemReorderIDs !== undefined && itemReorderIDs !== null && itemReorderIDs.length > 0) {
+  if(itemReorderIDs != undefined && itemReorderIDs != null && itemReorderIDs.length > 0) {
 
     for (var i = 0; i < itemReorderIDs.length; i++) {
   
@@ -199,7 +232,8 @@ controller.nextAdd2 = (req, res) => {
 
         if(itemReorderSuppliers[i] === supplier) {
 
-          var insertQuery = "INSERT INTO `txnitems` (`txnID`, `ItemID`, `quantity`) VALUES (" + txnID + ", " + itemReorderIDs[i] + ", " + itemReorderQuantity[i] + ");";
+          var insertQuery = "INSERT INTO `txnitems` (`txnID`, `ItemID`, `quantity`) VALUES (" + txnID + ", " + itemReorderIDs[i] + ", " ;
+          insertQuery += (Number(itemReorderQuantity[i]) + Number(itemInvtQuantity[i])) + ");";
   
            conn.query(insertQuery, function(err, result) {
   
@@ -210,7 +244,7 @@ controller.nextAdd2 = (req, res) => {
               res.redirect("/err/orders");
             }
         
-          })
+          });
 
         }
           
@@ -220,25 +254,30 @@ controller.nextAdd2 = (req, res) => {
   
   }
 
-  res.redirect('/orders//supplier/submit/' + txnID);
+  
+  res.redirect('/orders/supplier/submit/'+ txnID + '/' + supplier);
 
 }
 
 /* controller.nextAddNew = (req, res) => {
 
   var txnID = req.params.txnID;
+  var supplier = req.params.supplier;
 
-  var orderQuery = "SELECT *, s.name as supplierName FROM txnitems ti INNER JOIN item i ON ti.ItemID = i.itemID INNER JOIN supplier s ON i.supplierID = s.supplierID WHERE txnID = " + txnID + ";";
+  var supplierQuery = "SELECT *, i.name as itemName, s.name as supplierName from item i INNER JOIN supplier s ON i.supplierID = s.supplierID;";
 
 
-  conn.query(orderQuery, function(err, result) {
+  conn.query(supplierQuery, function(err, result) {
 
-          res.render('pages/add-supplierorderNext2.ejs', {
+          res.render('pages/add-supplierorderNext3.ejs', {
+
+            
 
         siteTitle: siteTitle,
         pageTitle: "New Supplier Order - Add Items",
         items: result,
-        txnID: req.params.txnID,
+        txnID: txnID,
+        supplier: supplier,
         userInfo: req.user.userInfo
       });
 
@@ -249,19 +288,49 @@ controller.nextAdd2 = (req, res) => {
 
 controller.nextAdd3 = (req, res) => {
 
+  console.log(req.body)
 
-console.log(req.body);
+  var txnId = req.body.txnID;
+  var itemsSelected = req.body.itemsToPick;
+  var quantities = req.body.itemQuantity;
 
+  if(itemsSelected !== undefined && itemsSelected !== null && itemsSelected.length > 0) {
 
+  for (var i = 0; i < itemsSelected.length; i++) {
+
+    if(quantities[i] !== null && quantities[i] > 0) {
+
+         var insertQuery = "INSERT INTO `txnitems` (`txnID`, `ItemID`, `quantity`) VALUES (" + txnId + ", " + itemsSelected[i] + ", " + quantities[i] + ");";
+
+         conn.query(insertQuery, function(err, result) {
+
+    
+          if(err) {
+      
+            console.log("new" + err);
+
+            res.redirect("/err/orders");
+          }
+      
+        })
+
+    } 
+
+   }
+
+} 
+
+res.redirect('/orders/supplier/submit/'+ txnId);
   
 } */
 
 controller.submitInfo = (req, res) => {
 
   var txnID = req.params.txnID;
+  var supplierName = req.params.supplierName
 
-  var txnQuery = "SELECT *, i.name as name, s.name as supplierName FROM txnitems ti INNER JOIN item i ON ti.ItemID = i.itemID INNER JOIN supplier s ON i.supplierID = s.supplierID INNER jOIN txn t ON ti.txnID = t.txnID WHERE ti.txnID = " + txnID + ";";
-  var orderQuery = "UPDATE txn SET `status` = 'Assembled' WHERE (`txnID` = "+ txnID + ");";
+  var txnQuery = "SELECT * FROM txn ti WHERE ti.txnID = " + txnID + ";";
+  var orderQuery = "UPDATE txn SET `status` = 'In Transit' WHERE (`txnID` = "+ txnID + ");";
   var sitesQuery = "SELECT * FROM site;";
 
   function doQuery1() {
@@ -298,6 +367,7 @@ controller.submitInfo = (req, res) => {
       items2: result2,
       items3: result3,
       txnID: req.params.txnID,
+      supplierName: supplierName,
       userInfo: req.user.userInfo
     });
 

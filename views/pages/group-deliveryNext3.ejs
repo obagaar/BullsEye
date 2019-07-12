@@ -4,6 +4,8 @@
 
 <script src='/js/groupOrders.js' ></script>
 
+<% console.log(deliveryID) %>
+
 <div class="container">
         <div class="row">
           <div class="card">
@@ -47,7 +49,7 @@
 
                <div class="col-12">
 
-                  <h5>Total Cost</h5>
+                  <h5>Total Cost by KM</h5>
 
                   <p><input type='text' name="totalCost" class="form-control" value='<%=totalCost%>' readonly></p> 
                         
@@ -56,11 +58,8 @@
 
                 <div class="row">
  
-                        <button type="submit" class="btn btn-primary">
-                          Next
-                        </button> 
         
-                        <button class="btn btn-danger"><a href="/delivery" class="btn btn-danger">Cancel</a></button> 
+                        <button class="btn btn-danger"><a href="/delivery" class="btn btn-danger">Return</a></button> 
                     </div>
               </form>
             </div>

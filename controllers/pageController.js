@@ -15,13 +15,13 @@ const pool = mysql.createPool({
     user: 'root',
     password: 'password',
     database: 'bullseyedb'
-  })
-  
-  //Function returns the pool so it can be used to set connection
-  function getConnection () {
-  
+})
+
+//Function returns the pool so it can be used to set connection
+function getConnection() {
+
     return pool
-  }
+}
 
 //Constants for the site's tite and array for controller methods to be returned
 const controller = {};
@@ -31,11 +31,11 @@ const siteTitle = "BullsEye Sporting Goods";
 //Directs to main landing page
 controller.index = (req, res) => {
 
-    
+
 
     //console.log(res.locals.flash[0].message);
 
-    if(typeof res.locals.flash[0] !== 'undefined' && typeof res.locals.flash[0].message !== 'undefined') {
+    if (typeof res.locals.flash[0] !== 'undefined' && typeof res.locals.flash[0].message !== 'undefined') {
 
         res.render('pages/mainIndex.ejs', {
             siteTitle: siteTitle,
@@ -92,52 +92,159 @@ controller.inventory = (req, res) => {
     var searchQuery2 = "SELECT * FROM SITE;";
     var searchQuery3 = 'SELECT * FROM CATEGORY;';
 
-        function doQuery1(){
-            var defered = q.defer();
-            conn.query(searchQuery,defered.makeNodeResolver());
-            return defered.promise;
-        }
-    
-        function doQuery2(){
-            var defered = q.defer();
-            conn.query(searchQuery2,defered.makeNodeResolver());
-            return defered.promise;
-        }
+    function doQuery1() {
+        var defered = q.defer();
+        conn.query(searchQuery, defered.makeNodeResolver());
+        return defered.promise;
+    }
 
-        function doQuery3(){
-            var defered = q.defer();
-            conn.query(searchQuery3,defered.makeNodeResolver());
-            return defered.promise;
-        }
-    
-        q.all([doQuery1(),doQuery2(),doQuery3()]).then(function(results, err){
-    
-    
-           var result = JSON.parse(JSON.stringify(results[0][0]));
-            var result2 = JSON.parse(JSON.stringify(results[1][0]));
-            var result3 = JSON.parse(JSON.stringify(results[2][0]));
-    
-                 res.render('pages/index-invtV.ejs', {
-                    siteTitle: siteTitle,
-                    pageTitle: "View Inventory",
-                    item: result,
-                    item2: result2,
-                    item3: result3,
-                    userInfo: req.user.userInfo
-                });
+    function doQuery2() {
+        var defered = q.defer();
+        conn.query(searchQuery2, defered.makeNodeResolver());
+        return defered.promise;
+    }
 
-                if(err) {
+    function doQuery3() {
+        var defered = q.defer();
+        conn.query(searchQuery3, defered.makeNodeResolver());
+        return defered.promise;
+    }
 
-                    res.redirect("/tools");
-                 }
+    q.all([doQuery1(), doQuery2(), doQuery3()]).then(function (results, err) {
 
+
+        var result = JSON.parse(JSON.stringify(results[0][0]));
+        var result2 = JSON.parse(JSON.stringify(results[1][0]));
+        var result3 = JSON.parse(JSON.stringify(results[2][0]));
+
+        res.render('pages/index-invtV.ejs', {
+            siteTitle: siteTitle,
+            pageTitle: "View Inventory",
+            item: result,
+            item2: result2,
+            item3: result3,
+            userInfo: req.user.userInfo
         });
 
+        if (err) {
+
+            res.redirect("/tools");
+        }
+
+    });
+};
+
+
+controller.correct = (req, res) => {
+
+    var itemID = req.params.itemID;
+    var siteID = req.params.siteID;
+
+    var searchQuery = "SELECT * FROM INVENTORY IY INNER JOIN ITEM I WHERE IY.itemID = " + SqlString(itemID) + " AND IY.siteID = " + SqlString(siteID) + ";";
+    var searchQuery2 = "SELECT * FROM SUPPLIER;";
+
+
+    function doQuery1() {
+        var defered = q.defer();
+        conn.query(searchQuery, defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    function doQuery2() {
+        var defered = q.defer();
+        conn.query(searchQuery2, defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    q.all([doQuery1(), doQuery2()]).then(function (results, err) {
+
+
+        var result = JSON.parse(JSON.stringify(results[0][0]));
+        var result2 = JSON.parse(JSON.stringify(results[1][0]));
+
+        res.render('pages/correct-invt.ejs', {
+            siteTitle: siteTitle,
+            pageTitle: "Correct Inventory Entry",
+            item: result,
+            item2: result2
+        });
+
+        if (err) {
+
+            res.redirect("/err/invt");
+        }
+    });
+
+};
+
+controller.correctAdd = (req, res) => {
+
+
+    var updateQuery = "UPDATE INVENTORY SET ";
+    updateQuery += "quantity = " + SqlString(req.body.quantity) + " ";
+    updateQuery += "WHERE itemID = " + SqlString(req.body.itemID) + " AND siteID = " + SqlString(req.body.siteID) + ";";
+
+    var correctionQuery = "INSERT INTO txn (`siteIDTo`, `siteIDFrom`, `status`, `shipDate`, `txnType`, `barCode`, `createdDate`, `emergencyDelivery`) VALUES (";
+    correctionQuery += SqlString(req.body.siteID) + ", ";
+    correctionQuery += SqlString(req.body.siteID) + ", ";
+    correctionQuery += "'Complete', ";
+    correctionQuery += "curdate(), ";
+    correctionQuery += "'Correction', ";
+    correctionQuery += "'111222333444', ";
+    correctionQuery += "curdate(), ";
+    correctionQuery += "'0'";
+    correctionQuery += ");"
+
+    console.log(correctionQuery);
+
+
+    function doQuery1() {
+        var defered = q.defer();
+        conn.query(updateQuery, defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    function doQuery2() {
+        var defered = q.defer();
+        conn.query(correctionQuery, defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    q.all([doQuery1(), doQuery2()]).then(function (results, err) {
+
+        if (err) {
+            console.log(err);
+            res.redirect("/err/invt");
+        }
+
+
+        var result = JSON.parse(JSON.stringify(results[0][0]));
+        var result2 = JSON.parse(JSON.stringify(results[1][0]));
+
+        var txnID = result2.insertId;
+
+        var insertQuery = "INSERT INTO `txnitems` (`txnID`, `ItemID`, `quantity`) VALUES (" + txnID + ", " + SqlString(req.body.itemID) + ", " + SqlString(req.body.quantity) + ");";
+
+
+        conn.query(insertQuery, function (err, result) {
 
 
 
+            if (result) {
+                res.redirect("/inventory");
+            }
 
-}
+            if (err) {
+                console.log(err);
+                res.redirect("/err/invt");
+            }
+        })
+
+    });
+
+
+
+};
 
 //Directs to main admin page
 controller.admin = (req, res) => {

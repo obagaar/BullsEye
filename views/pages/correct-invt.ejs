@@ -1,0 +1,52 @@
+<!-- Page to edit inventory. Uses header and footer partials -->
+
+
+<% include ../partials/header %>
+
+<div class="container mt-5">
+        <div class="row">
+          <div class="col-md-5 offset-md-3 card">
+            <div class="card-body">
+              <form action="/inventory/correct" method="POST" class= "col s12">
+                <div class="form-group row">
+                        <input type="hidden" name="itemID" value="<%= item[0].itemID %>">
+                        <input type="hidden" name="siteID" value="<%= item[0].siteID %>">
+                        <div class="col-10">
+                          <label for="name" class="col-10 col-form-label">Name</label>
+                          <input type="text" name="name" value="<%= item[0].name %>" class="form-control"  readonly>
+                      </div>
+                        <div class="col-10">
+                                <label for="quantity" class="col-10 col-form-label">Quantity</label>
+                                <input type="number" name="quantity" value="<%= item[0].quantity %>" class="form-control"  min="0" max="99999999999" required autofocus>
+                            </div>
+                        <div class="col-10">
+                            <label for="itemLocation" class="col-10 col-form-label">Item Location</label>
+                            <input type="text" name="itemLocation" value="<%= item[0].itemLocation %>"  class="form-control" readonly>
+                        </div>
+                        <div class="col-10">
+                            <label for="reorderThreshold" class="col-10 col-form-label">Reorder Threshold</label>
+                            <input type="number" name="reorderThreshold" value="<%= item[0].reorderThreshold %>" class="form-control"  min="0" max="99999999999" readonly>
+                        </div>
+                        <div class="col-10">
+                                <label for="maxReorderWarning" class="col-10 col-form-label">Max Reorder Warning</label>
+                                <input type="number" name="maxReorderWarning" value="<%= item[0].maxReorderWarning %>" class="form-control"  min="0" max="99999999999" readonly>
+                            </div>
+                </div>
+
+      
+
+                <div class="row">
+ 
+                    <button type="submit" class="btn btn-primary">
+                      Submit Inventory Entry Correction
+                    </button> 
+    
+                    <button class="btn btn-danger"><a href="/inventory" class="btn btn-danger">Cancel</a></button> 
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<% include ../partials/footer %>

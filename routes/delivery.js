@@ -10,6 +10,8 @@ router.post('/groupNext/', authenticationMiddleware(), deliveryController.groupN
 router.post('/groupNext2', authenticationMiddleware(), deliveryController.groupNext3);
 router.post('/groupNext3', authenticationMiddleware(), deliveryController.groupNext4);
 router.post('/groupNext4', authenticationMiddleware(), deliveryController.groupNext5);
+router.get('/process/:deliveryID', authenticationMiddleware(), deliveryController.process);
+router.post('/process/:deliveryID', authenticationMiddleware(), deliveryController.processInfo);
 
 //Function to check if user is authenticated and if not redirect to login
 function authenticationMiddleware() {

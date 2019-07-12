@@ -135,9 +135,10 @@ const pool = mysql.createPool({
 
     q.all([doQuery1(),doQuery2()]).then(function(results, err){
 
-
         var result = JSON.parse(JSON.stringify(results[0][0][0]));
         var result2 = JSON.parse(JSON.stringify(results[1][0]));
+
+        console.log('result 1' + result);
 
              res.render('pages/edit-supp.ejs', {
                 siteTitle: siteTitle,

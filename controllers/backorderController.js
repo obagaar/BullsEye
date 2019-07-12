@@ -10,72 +10,72 @@ const SqlString = require('sql-escape-string');
 
 //Uses mysql package to setup a connection pool to be used in queries
 const pool = mysql.createPool({
-    connectionLimit: 10,
-    host: 'localhost',
-    user: 'root',
-    password: 'password',
-    database: 'bullseyedb'
-  })
-  
-  //Function returns the pool so it can be used to set connection
-  function getConnection () {
-  
-    return pool
-  }
-  
-   //Constants for the site's tite, the connection and array for controller methods to be returned
-  const siteTitle = "BullsEye Sporting Goods";
-  const conn = getConnection();
-  const controller = {};
-  
+  connectionLimit: 10,
+  host: 'localhost',
+  user: 'root',
+  password: 'password',
+  database: 'bullseyedb'
+})
+
+//Function returns the pool so it can be used to set connection
+function getConnection() {
+
+  return pool
+}
+
+//Constants for the site's tite, the connection and array for controller methods to be returned
+const siteTitle = "BullsEye Sporting Goods";
+const conn = getConnection();
+const controller = {};
+
 //Reads all backorders then displays them with actions available base don permission levels
-  controller.read = (req, res) => {
+controller.read = (req, res) => {
 
-    var siteID = Number(req.user.userInfo.siteID);
-    var positionID = req.user.userInfo.PositionID;
+  var siteID = Number(req.user.userInfo.siteID);
+  var positionID = req.user.userInfo.PositionID;
 
-    if(positionID === 6 || positionID === 4 ||positionID === 99999999 || positionID < 3) {
+  if (positionID === 6 || positionID === 4 || positionID === 99999999 || positionID < 3) {
 
-      var searchQuery = "SELECT * FROM txn t INNER JOIN site s ON t.siteIDTo = s.siteID WHERE txnType = 'Back Order' GROUP BY t.siteIDTo;";
+    var searchQuery = "SELECT * FROM txn WHERE txnType LIKE 'Back Order';";
 
-    } else {
+  } else {
 
-      var searchQuery = "SELECT * FROM txn t INNER JOIN site s ON t.siteIDTo = s.siteID WHERE siteIDTo = " + siteID + " AND txnType = 'Back Order';";
+    var searchQuery = "SELECT * FROM txn t INNER JOIN site s ON t.siteIDTo = s.siteID WHERE siteIDTo = " + siteID + " AND txnType = 'Back Order';";
 
-    }
-    
-    var searchQuery2 = "SELECT * FROM site";
-
-    function doQuery1(){
-      var defered = q.defer();
-      conn.query(searchQuery,defered.makeNodeResolver());
-      return defered.promise;
   }
 
-  function doQuery2(){
-      var defered = q.defer();
-      conn.query(searchQuery2,defered.makeNodeResolver());
-      return defered.promise;
+  var searchQuery2 = "SELECT * FROM site";
+
+  function doQuery1() {
+    var defered = q.defer();
+    conn.query(searchQuery, defered.makeNodeResolver());
+    return defered.promise;
   }
 
-  q.all([doQuery1(),doQuery2()]).then(function(results, err){
+  function doQuery2() {
+    var defered = q.defer();
+    conn.query(searchQuery2, defered.makeNodeResolver());
+    return defered.promise;
+  }
+
+  q.all([doQuery1(), doQuery2()]).then(function (results, err) {
 
 
-     var result = JSON.parse(JSON.stringify(results[0][0]));
-      var result2 = JSON.parse(JSON.stringify(results[1][0]));
+    var result = JSON.parse(JSON.stringify(results[0][0]));
+    var result2 = JSON.parse(JSON.stringify(results[1][0]));
 
-      res.render('pages/index-backorder.ejs', {
-        siteTitle: siteTitle,
-        pageTitle: "Back Orders",
-        items: result,
-        items2: result2,
-        userInfo: req.user.userInfo
+    res.render('pages/index-backorder.ejs', {
+      siteTitle: siteTitle,
+      pageTitle: "Back Orders",
+      items: result,
+      items2: result2,
+      userInfo: req.user.userInfo
     });
 
-    if(err) {
+    if (err) {
 
       res.redirect("/err/site");
-   }
+    }
   });
 
 
@@ -83,40 +83,40 @@ const pool = mysql.createPool({
 
 
 
-  };
+};
 
-  //Directs to page to add a backorder along with information from look up tables after querying the database
-  controller.getAdd = (req, res) => {
+//Directs to page to add a backorder along with information from look up tables after querying the database
+controller.getAdd = (req, res) => {
 
-    var txnID = req.params.txnID;
-    var orderQuery = "SELECT * FROM txnitems ti INNER JOIN item i ON ti.itemID = i.itemID where txnID = " + txnID + ";";
-  
-    conn.query(orderQuery, function(err, results) {
-  
-      if(err) {
-  
-        console.log(err);
-        res.redirect("/err/orders");
-  
-      } else {
+  var txnID = req.params.txnID;
+  var orderQuery = "SELECT * FROM txnitems ti INNER JOIN item i ON ti.itemID = i.itemID where txnID = " + txnID + ";";
 
- 
-        res.render('pages/add-backorder.ejs', {
-          siteTitle: siteTitle,
-          pageTitle: "Add Back Order",
-          items: results,
-          txnID: txnID,
-          userInfo: req.user.userInfo
-        });
-  
-      }
-  
-    })
-  
+  conn.query(orderQuery, function (err, results) {
 
-  };
+    if (err) {
 
-  //Uses what was entered in the page's form to build a query then send to the database an update it
+      console.log(err);
+      res.redirect("/err/orders");
+
+    } else {
+
+
+      res.render('pages/add-backorder.ejs', {
+        siteTitle: siteTitle,
+        pageTitle: "Add Back Order",
+        items: results,
+        txnID: txnID,
+        userInfo: req.user.userInfo
+      });
+
+    }
+
+  })
+
+
+};
+
+//Uses what was entered in the page's form to build a query then send to the database an update it
 //Errors result in a page advising to recheck entry then takes user back to index  
 controller.add = (req, res) => {
 
@@ -124,12 +124,12 @@ controller.add = (req, res) => {
   var itemInfo = req.body.itemInfo;
   var backOrderItemIDs = [];
   var backOrderItemQuantity = [];
- 
-
-  if(itemInfo !== undefined && itemInfo !== null) {
 
 
-    for(var i = 0; i < itemInfo.length-1; i++) {
+  if (itemInfo !== undefined && itemInfo !== null) {
+
+
+    for (var i = 0; i < itemInfo.length - 1; i++) {
 
       var itemParts = itemInfo[i].split(",");
       var itemStatus = itemParts[0];
@@ -143,14 +143,14 @@ controller.add = (req, res) => {
 
     var txnID = req.params.txnID;
     var orderQuery = "SELECT * FROM txnitems ti INNER JOIN item i ON ti.itemID = i.itemID INNER JOIN txn t ON ti.txnID = t.txnID where ti.txnID = " + txnID + ";";
-  
-    conn.query(orderQuery, function(err, results) {
-  
-      if(err) {
-  
+
+    conn.query(orderQuery, function (err, results) {
+
+      if (err) {
+
         console.log(err);
         res.redirect("/err/orders");
-  
+
       } else {
 
         res.render('pages/add-backorder2.ejs', {
@@ -161,22 +161,23 @@ controller.add = (req, res) => {
           items: results,
           txnID: txnID,
           userInfo: req.user.userInfo
-      });
-  
+        });
+
       }
-  
+
     })
-  
+
 
   } else {
     res.redirect('/orders');
   }
-  
-  
+
+
 };
 
 controller.nextAdd = (req, res) => {
 
+  var ordertxnID = req.body.txnID;
   var siteID = req.body.siteID;
   var itemIDs = req.body.itemID;
   var itemQuantity = req.body.itemQuantity;
@@ -198,7 +199,7 @@ controller.nextAdd = (req, res) => {
   }
 
   var insertQuery = "INSERT INTO txn (`siteIDTo`, `siteIDFrom`, `status`, `shipDate`, `txnType`, `barCode`, `createdDate`, `emergencyDelivery`) VALUES (";
-  insertQuery += " " + siteID +", "+ siteID + ", 'Pending Back Order', ";
+  insertQuery += " " + siteID + ", " + 2 + ", 'Pending Back Order', ";
   insertQuery += SqlString(dateFormat(shipDate, "yyyy-mm-dd")) + ", ";
   insertQuery += "'Back Order', ";
   insertQuery += "'111222333444', ";
@@ -216,42 +217,62 @@ controller.nextAdd = (req, res) => {
 
     if (result) {
 
-      console.log(result.insertId);
-
       var txnID = result.insertId;
-      
-      if(itemIDs !== undefined && itemIDs !== null && itemIDs.length > 0) {
+
+      if (itemIDs !== undefined && itemIDs !== null && itemIDs.length > 0) {
 
         for (var i = 0; i < itemIDs.length; i++) {
-      
-          if(itemQuantity[i] !== null && itemQuantity[i] > 0) {
-    
-              var insertQuery = "INSERT INTO `txnitems` (`txnID`, `ItemID`, `quantity`) VALUES (" + txnID + ", " + itemIDs[i] + ", " + itemQuantity[i] + ");";
-      
-               conn.query(insertQuery, function(err, result) {
-      
-          
-                if(err) {
-            
-                  console.log(err);
-                  res.redirect("/err/orders");
-                }
-            
-              })
 
-              
-          } 
-      
-         }
-      
+          if (itemQuantity[i] !== null && itemQuantity[i] > 0) {
+
+            var insertQuery = "INSERT INTO `txnitems` (`txnID`, `ItemID`, `quantity`) VALUES (" + txnID + ", " + itemIDs[i] + ", " + itemQuantity[i] + ");";
+
+            console.log(itemIDs[i]);
+            conn.query(insertQuery, function (err, result) {
+
+
+              if (err) {
+
+                console.log(err);
+                res.redirect("/err/orders");
+              } else {
+
+                for (var j = 0; j < itemIDs.length; j++) {
+
+                  var deleteQuery = "DELETE FROM txnitems WHERE (txnID = " + ordertxnID + ") and (ItemID = " + itemIDs[j] + ");";
+
+                  conn.query(deleteQuery, function (err2, result2) {
+  
+                    if (err2) {
+  
+                      console.log(err2);
+                      res.redirect("/err/orders");
+                    } else {
+                      console.log(result2);
+                    }
+                  })
+
+                }
+
+
+
+              }
+
+            })
+
+
+          }
+
+        }
+
       }
 
-      res.redirect('/orders/submit/backorder/' + txnID);
+      res.redirect('/orders/');
 
     }
 
   });
-  
+
 }
 
 controller.submit = (req, res) => {
@@ -276,9 +297,11 @@ controller.submit = (req, res) => {
   q.all([doQuery1(), doQuery2()]).then(function (results, err) {
 
 
-    
+
     var result = JSON.parse(JSON.stringify(results[0][0]));
     var result2 = JSON.parse(JSON.stringify(results[1][0]));
+
+    console.log(result);
 
 
     res.render('pages/add-backorderSubmit.ejs', {
@@ -307,41 +330,54 @@ controller.fulfill = (req, res) => {
 
   var txnID = req.params.txnID;
 
-    var orderQuery = "SELECT * FROM txnitems ti INNER JOIN item i ON ti.itemID = i.itemID where txnID = " + txnID + ";";
+  var orderQuery = "SELECT * FROM txnitems ti INNER JOIN item i ON ti.itemID = i.itemID where txnID = " + txnID + ";";
+  var statusQuery = "UPDATE txn SET `status` = 'Assembling' WHERE (`txnID` = "+ txnID + ");";
 
-    conn.query(orderQuery, function(err, results) {
+  function doQuery1() {
+    var defered = q.defer();
+    conn.query(orderQuery, defered.makeNodeResolver());
+    return defered.promise;
+  }
 
-      if(err) {
-  
-        console.log(err);
-        res.redirect("/err/orders");
-  
-      } else {
-  
-        res.render('pages/fulfill-backorder.ejs', {
-          siteTitle: siteTitle,
-          pageTitle: "Fulfill Back Order",
-          items: results,
-          txnID: txnID,
-          userInfo: req.user.userInfo
-        });
-  
-      }
-  
-    })
+  function doQuery2() {
+    var defered = q.defer();
+    conn.query(statusQuery, defered.makeNodeResolver());
+    return defered.promise;
+  }
+
+  q.all([doQuery1(), doQuery2()]).then(function (results, err) {
+
+
+    var result = JSON.parse(JSON.stringify(results[0][0]));
+    var result2 = JSON.parse(JSON.stringify(results[1][0]));
+
+    res.render('pages/fulfill-backorder.ejs', {
+      siteTitle: siteTitle,
+      pageTitle: "Fulfill Back Order",
+      items: result,
+      txnID: txnID,
+      userInfo: req.user.userInfo
+    });
+
+    if (err) {
+
+      res.redirect("/err/orders");
+    }
+  });
+
 
 };
 
-controller.fulfillAdd = (req,res) => {
+controller.fulfillAdd = (req, res) => {
 
   var txnID = req.params.txnID;
 
-  var statusQuery = "UPDATE txn SET `status` = 'Assembled' WHERE (`txnID` = "+ txnID + ");";
+  var statusQuery = "UPDATE txn SET `status` = 'Assembled' WHERE (`txnID` = " + txnID + ");";
 
-  conn.query(statusQuery, function(err, results) {
+  conn.query(statusQuery, function (err, results) {
 
-    if(err) {
-     
+    if (err) {
+
       console.log(err);
 
       res.redirect("/err/orders");
@@ -356,6 +392,27 @@ controller.fulfillAdd = (req,res) => {
 
 }
 
+controller.delete = (req, res) => {
 
-   //Exports all methods to be used for routing
-   module.exports = controller;
+  var txnID = req.params.txnID;
+
+  var statusQuery = "UPDATE txn SET `status` = 'Cancelled' WHERE (`txnID` = "+ txnID + ");";
+
+  conn.query(statusQuery, function (err, result) {
+
+    if (result) {
+      res.redirect("/orders/backorder");
+    }
+
+    if (err) {
+
+      res.redirect("/err/orders");
+    }
+
+  });
+
+};
+
+
+//Exports all methods to be used for routing
+module.exports = controller;

@@ -25,11 +25,11 @@ function itemInput() {
 
             html += '<div class="row">';
 
-            html += ' <input type="hidden" name="itemID' + i + '" value="' + options[i].value + '">';
+            html += ' <input type="hidden" name="itemID[]" value="' + options[i].value + '">';
 
-            html += '<input type="text" class="col-8 form-control" name="itemName' + i + '" value="' + options[i].text + '" readonly></input>';
+            html += '<input type="text" class="col-8 form-control" name="itemName[]" value="' + options[i].text + '" readonly></input>';
 
-            html += '<input type=number class="col-2 form-control" name="itemQuantity' + i + '" placeholder=0 min=0></input></div>'
+            html += '<input type=number class="col-2 form-control" name="itemQuantity[]" placeholder=0 min=0></input></div>'
         }
 
         insertDiv.innerHTML = html;
@@ -51,11 +51,11 @@ function addItem() {
 
         html += '<div class="row">';
 
-        html += ' <input type="hidden" name="itemID' + i + '" value="' + options[i].value + '">';
+        html += ' <input type="hidden" name="itemID[]" value="' + options[i].value + '">';
 
-        html += '<input type="text" class="col-8 form-control" name="itemName' + i + '" value="' + options[i].text + '" readonly></input>';
+        html += '<input type="text" class="col-8 form-control" name="itemName[]" value="' + options[i].text + '" readonly></input>';
 
-        html += '<input type=number class="col-2 form-control" name="itemQuantity' + i + '" value=1 min=0></input></div>';
+        html += '<input type=number class="col-2 form-control" name="itemQuantity[]" value=1 min=0></input></div>';
     }
 
     insertDiv.innerHTML = html;
@@ -78,13 +78,14 @@ function supplierHide() {
     var select = selectDiv.querySelector('.supplierSelect');
 
     var reorderDiv = document.querySelector('.reorderitemsList');
-    var divs = reorderDiv.querySelectorAll('div');
+     var divs = reorderDiv.querySelectorAll('.reorderItem');
+
 
     for(var i = 0; i < divs.length; i++) {
 
-        if(divs[i].className.indexOf("col-10") === -1) {
+       
                 divs[i].style.display = "none";
-        }
+
 
 
     }
@@ -97,24 +98,19 @@ function supplierSelect() {
     var select = selectDiv.querySelector('.supplierSelect');
 
     var reorderDiv = document.querySelector('.reorderitemsList');
-    var divs = reorderDiv.querySelectorAll('div');
+     var divs = reorderDiv.querySelectorAll('.reorderItem');
+     var subDivs = reorderDiv.querySelectorAll('div');
 
+   for(var i = 0; i < divs.length; i++) {
 
-    for(var i = 0; i < divs.length; i++) {
+        for(var j = 0; j < subDivs.length; j++) {
 
-        if(divs[i].className.indexOf("col-10") === -1) {
-
-
-            if(divs[i].className.indexOf(select.value) > -1) {
-
+            if(subDivs[j].innerText.includes(select.value)) {
                 divs[i].style.display = "";
             } else {
                 divs[i].style.display = "none";
             }
-
         }
-
-
 
     }
 }

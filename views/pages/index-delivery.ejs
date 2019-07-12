@@ -5,6 +5,7 @@
 <div class="row">
 
   <% include ../partials/menuDashboard %>
+  <script src='/js/filterDel.js' ></script>
   <div class="col-sm-9 col-md-9">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -12,15 +13,92 @@
       </div>
       <div class="panel-body">
 
-        <div class="filter">
           <div class="col s12">
-              <a href="/delivery/group" class="btn btn-success btn-lg">Group Deliveries</a>
+            <%  if ( userInfo.PositionID === 4) { %>
+            <p><a href="/delivery/group" class="btn btn-success btn-lg">Group Deliveries</a></p>
+            <% } %>
+          </div>
+          <div class="col s12 filter">
+ 
+              <h4>Search by ID</h4>
+              <p> <input type="text" class="form-control idInput" maxlength=11 pattern="/d" placeholder="Search by ID"></p>
 
-            </div>
-        </div>
+          <h4>Search by Vehicle Type</h4>
+          <p><select name="vehicleInput" class="form-control vehicleInput" placeholder="Search by vehicle Type">
+              <option value="all">All Types</option>
+                  <% for(var i = 0; i < item2.length; i++) { %>
+                      <option value="<%= item2[i].vehicleType %>"><%= item2[i].vehicleType %></option>
+                      <% } %>
+            </select>
+          </p>
+
+          <h4>Search by Distance Cost</h4>
+          <p> <input type="number" class="form-control distanceInput" placeholder="Search by Distance Cost" min=0></p>
+             
+      </div>
+  </div>
+  <br>
         <br>
+        <div class="col s12">
+          <% if (item.length > 0) { %>
+          <table class="table">
+            <thread>
+              <tr>
+                <th style="text-align: center;">Delivery ID</th>
+                <th>Distance Cost</th>
+                <th>Vehicle type</th>
+                <th>Created Date</th>
+                <th>Ship Date</th>
+                <th>Emergency Delivery</th>
+                <th>Notes</th>
+                <% if(userInfo.PositionID !== 5) { %>
+                <th solspan="2" style="width: 20%; text-align: center;">Actions</th>
+                <% } %>
+              </tr>
+            </thread>
+            <% console.log(item.length) %>
+            <tbody>
+              <% for(var i = 0; i < item.length; i++) { %>
+              <tr>
+                <td style="width: 1%; text-align: center;"><%= item[i].deliveryID %></td>
+                <td><%= item[i].distanceCost %></td>
+                <td><%= item[i].vehicleType %></td>
+                <td>
+                  <%= item[i].createdDate %>
+                </td>
+                <td>
+                  <%= item[i].shipDate %>
+                </td>
+                <td>
 
-        
+                  <%if (item[i].emergencyDelivery === 1) { %>
+                  Yes
+                  <% } else if (item[i].emergencyDelivery === 0) { %>
+                  No
+                  <% } else {%>
+                  N/A
+                  <% } %>
+                </td>
+                <td><%= item[i].notes %></td>
+                <% if(userInfo.PositionID !== 5) { %>
+
+                  <% if(userInfo.PositionID === 4) { %>
+                    <td solspan="2" style="width: 20%; text-align: center;">
+                      <a href="/delivery/process/<%= item[i].deliveryID %>" class="btn btn-success">Process</a>
+                    </td>
+                  <% } %>
+
+                <% } %>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+
+          <%} else { %>
+          <p><strong>There are no records available.</strong></p>
+          <% } %>
+        </div>
+
 
 
       </div>

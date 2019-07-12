@@ -66,16 +66,25 @@
                     <%= items[i].txnID %>
                   </td>
                   <td>
-                    <%= items[i].name %>
+                      <%= siteName ="" %>
+                    <% for (var j = 0; j < items2.length; j++) { %>
+                    
+                      <% if( items[i].siteIDTo === items2[j].siteID) { %>
+                      
+                        <%= siteName = items2[j].name %>
+                        <% break %>
+                      <%} %>
+
+                    <%}%>
                   </td>
                   
                   <td>
-                      <%= siteName ="" %>
+                      <%= siteName2 ="" %>
                     <% for (var j = 0; j < items2.length; j++) { %>
                     
                       <% if( items[i].siteIDFrom === items2[j].siteID) { %>
                       
-                        <%= siteName = items2[j].name %>
+                        <%= siteName2 = items2[j].name %>
                         <% break %>
                       <%} %>
 
@@ -124,7 +133,7 @@
                      <% if(items[i].txnType === "Store Order") { %>
 
                       <a href="/orders/receive/<%= items[i].txnID %>" class="btn btn-success">Receive</a>
-
+                      
                       <% } %>
 
                       <a href="/orders/delete/<%= items[i].txnID %>" class="btn btn-danger">Cancel</a>
@@ -136,14 +145,17 @@
                       <% } else if (items[i].status === "In Transit" && userInfo.PositionID === 3) { %>
 
                         <a href="/orders/receiveStore/<%= items[i].txnID %>" class="btn btn-success">Receive</a>
+                        <a href="/orders/delete/<%= items[i].txnID %>" class="btn btn-danger">Cancel</a>
 
                       <% } else if (items[i].status === "Assembling" && userInfo.PositionID === 6) { %>
 
                         <a href="/orders/fulfill/<%= items[i].txnID %>" class="btn btn-success">Fulfill</a>
+                        <a href="/orders/delete/<%= items[i].txnID %>" class="btn btn-danger">Cancel</a>
 
-                        <% } else if (items[i].status === "Submitted" && items[i].txnType === "Supplier Order") { %>
+                        <% } else if (items[i].status === "In Transit" && items[i].txnType === "Supplier Order") { %>
 
                           <a href="/orders/receive/supplier/<%= items[i].txnID %>" class="btn btn-success">Receive</a>
+                          <a href="/orders/delete/<%= items[i].txnID %>" class="btn btn-danger">Cancel</a>
                      
                     <% } else {%>
                     <a href="/orders/update/<%= items[i].txnID %>" class="btn btn-success disabled">Edit</a>

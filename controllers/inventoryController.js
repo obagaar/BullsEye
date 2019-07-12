@@ -148,8 +148,6 @@ const pool = mysql.createPool({
 //The queries populate drop down menus used to edit
   controller.updateInfo = (req, res) => {
 
-    console.log(req.params);
-
     var searchQuery = "SELECT * FROM INVENTORY WHERE itemID = " + SqlString(req.params.itemID) + " AND siteID = " + SqlString(req.params.siteID) + ";" ;
     var searchQuery2 = "SELECT * FROM SUPPLIER;";
 

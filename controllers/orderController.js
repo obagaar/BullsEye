@@ -33,19 +33,9 @@ controller.read = (req, res) => {
   var positionID = req.user.userInfo.PositionID;
 
 
-  if (positionID === 4 || positionID === 99999999 || positionID < 3) {
 
     var searchQuery = "SELECT * FROM txn WHERE txnType = 'Store Order' OR txnType = 'Supplier Order';";
 
-  } else if (positionID === 6) {
-
-    var searchQuery = "SELECT * FROM txn t INNER JOIN site s ON t.siteIDTo = s.siteID WHERE siteIDFrom = 2 OR siteIDFrom = 1 AND t.txnType = 'Store Order' OR t.txnType = 'Supplier Order';";
-
-  } else {
-
-    var searchQuery = "SELECT * FROM txn t INNER JOIN site s ON t.siteIDTo = s.siteID WHERE siteIDTo = " + siteID + " OR siteIDFrom = "+ siteID + " AND t.txnType = 'Store Order';";
-
-  }
 
   var searchQuery2 = "SELECT * FROM site";
 
@@ -740,7 +730,7 @@ if(err) {
   res.redirect("/err/orders");
 } else {
 
-res.redirect("/orders/receive/supplier/" + txnID);
+res.redirect("/orders/receiveStore/" + txnID);
 
 }
 

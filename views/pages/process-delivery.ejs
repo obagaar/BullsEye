@@ -1,0 +1,113 @@
+<!-- Page to add items. Uses header and footer partials -->
+
+<% include ../partials/header %>
+
+<div class="container">
+        <div class="row">
+          <div class="card">
+            <div class="card-body">
+              <form action="/delivery/process/<%= deliveryID %>" method="POST" class= "col-12">
+                
+                <div class="form-group row">
+                        <div class="col-12">
+                          <h3>Process Delivery</h3>
+                </div>
+
+                <div class="col-12">
+                    <h5>Associated Orders</h5>
+
+                      <table class="table orderInfoTable">
+                        <thread>
+                          <tr>
+                            <th style="text-align: center;">ID</th>
+                            <th>Site To</th>
+                            <th>Site From</th>
+                            <th>Status</th>
+                            <th>Ship Date</th>
+                            <th>Type</th>
+                            <th>Bar Code</th>
+                            <th>Created Date</th>
+                            <th>Delivery ID</th>
+                            <th>Emergency Delivery</th>
+                          </tr>
+                        </thread>
+                        <tbody>
+                          <% for(var i = 0; i < items.length; i++) { %>
+                          <tr>
+                            <td style="width: 1%; text-align: center;">
+                              <%= items[i].txnID %>
+                              <input type='hidden' name='txnIDs[]' value='<%= items[i].txnID %>'>
+                            </td>                            
+                            <td>
+                                <%= siteName ="" %>
+                                <% for (var j = 0; j < items2.length; j++) { %>
+                                
+                                  <% if( items[i].siteIDTo === items2[j].siteID) { %>
+                                  
+                                    <%= siteName = items2[j].name %>
+                                    <% break %>
+                                  <%} %>
+            
+                                <%}%>
+                            </td>
+                            <td>
+                                <%= siteName2 ="" %>
+                                <% for (var k = 0; k < items2.length; k++) { %>
+                                
+                                  <% if( items[i].siteIDFrom === items2[k].siteID) { %>
+                                  
+                                    <%= siteName2 = items2[k].name %>
+                                    <% break %>
+                                  <%} %>
+            
+                                <%}%>
+                            </td>
+                            <td>
+                              <%= items[i].status %>
+                            </td>
+                            <td>
+                              <%= items[i].shipDate %>
+                            </td>
+                            <td>
+                              <%= items[i].txnType %>
+                            </td>
+                            <td>
+                              <%= items[i].barCode %>
+                            </td>
+                            <td>
+                              <%= items[i].createdDate %>
+                            </td>
+                            <td>
+                              <%= items[i].deliveryID %>
+                            </td>
+                            <td>
+          
+                              <%if (items[i].emergencyDelivery === 1) { %>
+                              Yes
+                              <% } else if (items[i].emergencyDelivery === 0) { %>
+                              No
+                              <% } else {%>
+                              N/A
+                              <% } %>
+                            </td>
+                          </tr>
+                          <% } %>
+                        </tbody>
+                      </table>
+          </div>
+
+                <div class="row">
+ 
+                        <button type="submit" class="btn btn-primary">
+                          Submit
+                        </button> 
+        
+                        <button class="btn btn-danger"><a href="/delivery" class="btn btn-danger">Cancel</a></button> 
+                    </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<% include ../partials/footer %>

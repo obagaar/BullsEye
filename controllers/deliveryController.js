@@ -30,11 +30,45 @@ const controller = {};
 
 controller.read = (req, res) => {
 
-    res.render('pages/index-delivery.ejs', {
-        siteTitle: siteTitle,
-        pageTitle: "Deliveries",
-        userInfo: req.user.userInfo
+    var readQuery = "SELECT *, D.deliveryID as deliveryID FROM DELIVERY D INNER JOIN TXN T WHERE D.deliveryID = T.deliveryID GROUP BY D.deliveryID";
+    var vehicleQuery = "SELECT * FROM vehicle";
+
+    function doQuery1() {
+        var defered = q.defer();
+        conn.query(readQuery, defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    function doQuery2() {
+        var defered = q.defer();
+        conn.query(vehicleQuery, defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    q.all([doQuery1(), doQuery2()]).then(function (results, err) {
+
+
+        var result = JSON.parse(JSON.stringify(results[0][0]));
+        var result2 = JSON.parse(JSON.stringify(results[1][0]));
+
+        if (err) {
+
+            console.log(err);
+
+            res.redirect("/orders");
+        } else {
+
+            res.render('pages/index-delivery.ejs', {
+                siteTitle: siteTitle,
+                pageTitle: "Deliveries",
+                item: result,
+                item2: result2,
+                userInfo: req.user.userInfo
+            });
+        }
+
     });
+
 }
 
 controller.group = (req, res) => {
@@ -158,6 +192,13 @@ controller.groupNext2 = (req, res) => {
 
 controller.groupNext3 = (req, res) => {
 
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2
+      })
+      
+
  var txnIDs = req.body.txnIDs;
  var deliveryWeight = req.body.deliveryWeight;
  var vehicle = req.body.vehicleSelect;
@@ -191,7 +232,7 @@ controller.groupNext3 = (req, res) => {
 
                             if(result2[0].cost !== null) {
 
-                                totalCost = deliveryDistance * result2[0].cost;
+                                totalCost = formatter.format((deliveryDistance * result2[0].cost) * 2);
 
                                 res.render('pages/group-deliveryNext3.ejs', {
                                     siteTitle: siteTitle,
@@ -270,8 +311,6 @@ var deliveryQuery = "INSERT INTO delivery (distanceCost, vehicleType) VALUES ("+
 
 controller.groupNext5 = (req, res) => {
 
-    console.log(req.body);
-
     var deliveryID = req.body.deliveryID;
     var txnIDs = req.body.txnIDs;
 
@@ -296,5 +335,80 @@ controller.groupNext5 = (req, res) => {
 
 
 }
+
+controller.process = (req, res) => {
+
+var deliveryID = req.params.deliveryID;
+
+var ordersQuery = "SELECT * FROM txn WHERE deliveryID = " + deliveryID + " and NOT txnType = 'Sale';";
+var sitesQuery = "SELECT * FROM site;";
+
+    function doQuery1() {
+        var defered = q.defer();
+        conn.query(ordersQuery, defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    function doQuery2() {
+        var defered = q.defer();
+        conn.query(sitesQuery, defered.makeNodeResolver());
+        return defered.promise;
+    }
+
+    q.all([doQuery1(), doQuery2()]).then(function (results, err) {
+
+
+        var result = JSON.parse(JSON.stringify(results[0][0]));
+        var result2 = JSON.parse(JSON.stringify(results[1][0]));
+
+        if (err) {
+
+            console.log(err);
+
+            res.redirect("/delivery");
+        } else {
+
+            res.render('pages/process-delivery.ejs', {
+                siteTitle: siteTitle,
+                pageTitle: "Process Delivery",
+                deliveryID: deliveryID,
+                items: result,
+                items2: result2,
+                userInfo: req.user.userInfo
+        
+            });
+        }
+
+    });
+
+
+}
+
+controller.processInfo = (req, res) => {
+
+   var txnIds = req.body.txnIDs;
+   var deliveryID = req.params.deliveryID;
+
+   if(txnIds.length > 0) {
+
+    for(var i = 0; i < txnIds.length; i++) {
+
+        updateQuery = "UPDATE txn SET siteIDFrom = '1', status = 'In Transit', shipDate = curdate() WHERE (txnID = "+ txnIds[i] + ");";
+
+        conn.query(updateQuery, function(err, result) {
+
+            if(err){console.log(err);}
+
+            if(result){console.log(result)}
+        })
+
+    }
+
+   }
+
+   res.redirect('/delivery');
+
+}
+
 //Exports all methods to be used for routing
 module.exports = controller;

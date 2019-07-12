@@ -73,8 +73,11 @@
                         <input type="hidden"  name="itemBackorderQuantity[]" value="<%= items[i].quantity %>"></input>
                         <input type="hidden"  name="itemBackorderThreshold[]" value="<%= items[i].reorderThreshold %>"></input>
                         <input type="hidden"  name="itemBackorderSupplier[]" value="<%= items[i].supplierName %>"></input>
-                        <li class="list-group-item"><%= items[i].itemName %></li><span class="alert alert-primary" >Supplier: <%= items[i].supplierName %></span>
-                        <span class="alert alert-dark">Current Quantity: <%= items[i].quantity %></span> <br>
+                        <input type="hidden"  name="itemBackorderCurInvt[]" value="<%= items[i].invtQuantity %>"></input>
+                        Order Number: <%=items[i].txnID %>
+                        <li class="list-group-item">
+                          <%= items[i].itemName %></li><span class="alert alert-primary" >Supplier: <%= items[i].supplierName %></span>
+                        <span class="alert alert-dark">Back Order Amount Quantity: <%= items[i].quantity %></span> <br>
                         <% } %>
 
                     </ul>

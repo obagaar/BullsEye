@@ -54,6 +54,7 @@
                                                     <th>Item Location</th>
                                                     <th>Reorder Threshold</th>
                                                     <th>Max Reorder Warning</th>
+                                                    <th solspan="2" style="width: 20%; text-align: center;">Actions</th>
                                                 </tr>
                                             </thread>
                                             <tbody>
@@ -75,6 +76,8 @@
                                                     <td><%= item[i].itemLocation %></td>
                                                     <td><%= item[i].reorderThreshold %></td>
                                                     <td><%= item[i].maxReorderWarning %></td>
+                                                    <td solspan="2" style="width: 20%; text-align: center;">
+                                                        <a href="/inventory/correct/<%= item[i].itemID %>/<%= item[i].siteID%>" class="btn btn-success">Correct</a></td>
                                                 </tr>
                                                 <% } %>
                                             </tbody>

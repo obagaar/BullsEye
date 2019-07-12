@@ -39,27 +39,11 @@
                 <div class="col-10">
                     <label for="siteIDToDisplay" class="col-10 col-form-label">Ordering From</label>
                     <input type="hidden" name="siteIDTo" value="<%= items2[1].siteID %>">
-                    <p><input type="text" class="col-10 form-control" name="siteIDToDisplay" value="<%= items[0].supplierName%>"readonly>                  
+                    <p><input type="text" class="col-10 form-control" name="siteIDToDisplay" value="<%= supplierName%>"readonly>                  
                     </p>
                 </div>
               
-                <div class="col-10">
-                    <label for="itemsToOrder" class="col-10 col-form-label">Items in Order</label>
-                  <% if (items.itemID !== null) { %>
-                    <ul class="col-10 list-group" name="itemsToReerder">
-                      <% for(var i = 0; i < items.length; i++) { %>
-                        <li class="list-group-item"><%= items[i].name %> </li>
-                        <div class="alert alert-dark">Quantity: <%= items[i].quantity %></div>
-                        <% } %>
-    
-                    </ul>
-                  
-                  <% } %>
-    
-                  <br>
-    
-                </div>
-    
+   
                 <div class="col-10">
                     <label for="orderType" class="col-10 col-form-label">Order Type</label>
                      <% if(items[0].emergencyDelivery === 0) { %>

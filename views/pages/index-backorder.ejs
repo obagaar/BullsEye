@@ -2,6 +2,8 @@
 
 <% include ../partials/header %>
 
+<script src='/js/addAlert.js' ></script>
+
 <div class="row">
 
   <% include ../partials/menuDashboard %>
@@ -156,10 +158,7 @@
                                   <td style="width: 1%; text-align: center;">
                                     <%= items[i].txnID %>
                                   </td>
-                                  <td>
-                                    <%= items[i].name %>
-                                  </td>
-                                  
+                                 
                                   <td>
                                       <%= siteName ="" %>
                                     <% for (var j = 0; j < items2.length; j++) { %>
@@ -172,6 +171,18 @@
                 
                                     <%}%>
                                   </td>
+                                  <td>
+                                    <%= siteName2 ="" %>
+                                  <% for (var j = 0; j < items2.length; j++) { %>
+                                  
+                                    <% if( items[i].siteIDFrom === items2[j].siteID) { %>
+                                    
+                                      <%= siteName2 = items2[j].name %>
+                                      <% break %>
+                                    <%} %>
+              
+                                  <%}%>
+                                </td>
                                   <td>
                                     <%= items[i].status %>
                                   </td>
@@ -203,15 +214,15 @@
                                   <% if (userInfo.PositionID === 4 ||userInfo.PositionID === 99999999 || userInfo.PositionID === 6) { %>
                                   <td solspan="2" style="width: 20%; text-align: center;">
                                     <% if( items[i].status === "Submitted" || items[i].status === "In Progress" && userInfo.PositionID === 4) {%>
-                                    <a href="/orders/update/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-success">Edit</a>
-                                    <a href="/orders/delete/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-danger">Delete</a>
-                                      <% } else if(items[i].status === "Assembling") { %>
+                                    <a href="/orders/update/<%= items[i].txnID %>" class="btn btn-success">Edit</a>
+                                    <a href="/orders/delete/backorders/<%= items[i].txnID %>" class="btn btn-danger">Delete</a>
+                                      <% } else if(items[i].status === "Pending Back Order") { %>
 
                                         <a href="/orders/backorders/fulfill/<%= items[i].txnID %>" class="btn btn-success">Fulfill</a>
 
                                     <% } else {%>
-                                    <a href="/orders/update/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-success disabled">Edit</a>
-                                    <a href="/orders/delete/<%= items[i].txnID %>/<%= items[i].siteIDFrom %>" class="btn btn-danger disabled">Delete</a>
+                                    <a href="/orders/update/<%= items[i].txnID %>" class="btn btn-success disabled">Edit</a>
+                                    <a href="/orders/delete/backorders/<%= items[i].txnID %>" class="btn btn-danger">Delete</a>
                                     <% } %>
                                   </td>
                                   <% } %>

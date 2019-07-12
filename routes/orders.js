@@ -17,9 +17,11 @@ router.get('/update/:txnID', authenticationMiddleware(), orderController.updateI
 router.post('/update/:txnID', authenticationMiddleware(), orderController.updateItems);
 router.get('/receive/:txnID', authenticationMiddleware(), orderController.receive);
 router.get('/add/supp', authenticationMiddleware(), supplierorderController.getInfo);
-router.get('/supplier/submit/:txnID', authenticationMiddleware(), supplierorderController.submitInfo);
+router.get('/supplier/submit/:txnID/:supplierName', authenticationMiddleware(), supplierorderController.submitInfo);
 router.post('/nextAdd/supp', authenticationMiddleware(), supplierorderController.nextAdd);
 router.post('/nextAdd2/supp', authenticationMiddleware(), supplierorderController.nextAdd2);
+//router.get('/nextAdd3/supp/:txnID/:supplier/', authenticationMiddleware(), supplierorderController.nextAddNew);
+//router.post('/nextAdd3/supp', authenticationMiddleware(), supplierorderController.nextAdd3);
 router.get('/fulfill/:txnID', authenticationMiddleware(), orderController.fulfill);
 router.post('/fulfill/:txnID', authenticationMiddleware(), orderController.fulfillAdd);
 router.get('/backorders/fulfill/:txnID', authenticationMiddleware(), backorderController.fulfill);
@@ -34,6 +36,7 @@ router.get('/complete/supplier/:txnID', authenticationMiddleware(), supplierorde
 router.get('/receiveStore/:txnID', authenticationMiddleware(), orderController.receiveStore);
 router.get('/scan/:txnID/:itemID/:quantity', authenticationMiddleware(), orderController.scan);
 router.get('/complete/:txnID', authenticationMiddleware(), orderController.complete);
+router.get('/delete/backorders/:txnID', authenticationMiddleware(), backorderController.delete);
 
 //Function to check if user is authenticated and if not redirect to login
 function authenticationMiddleware() {

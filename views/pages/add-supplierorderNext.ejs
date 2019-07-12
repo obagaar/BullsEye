@@ -33,8 +33,10 @@
             <div class="col-10">
               <div class="reorderitemsList col-10">
 
-                <% for(var j = 0; j < reorderItemIds.length; j++) { %>
-                <div class="<%= reorderItemSuppliers[j] %>">
+                <% if(reorderItemIds.length > 0 && backorderItemIds.length > 0) { %>
+                  
+               <% for(var j = 0; j < reorderItemIds.length; j++) { %>
+                <div class="reorderItem">
 
                 <% for(var k = 0; k < backorderItemIds.length; k++) { %>
 
@@ -51,7 +53,8 @@
                   </div>
                   <input type="hidden" name="itemreorderpreviousQuantity[]" value="<%= reorderItemQuantity[j] %>">
                   <div class="col-10 alert alert-dark">Current Quantity:
-                    <%= reorderItemQuantity[j] %>
+                      <input type="hidden" name="itemReorderInvt[]" value="<%= reorderItemQuantity[j] %>">
+                      <%= reorderItemQuantity[j] %>
                   </div>
                   <div class="col-10 alert alert-dark">Current Backorder Quantity:
                     <%= backorderQuantity[k] %>
@@ -70,52 +73,102 @@
 
                     <br><br>
 
-                <% } else { %>
-
-                <input type="hidden" name="itemReorderID[]" value="<%= reorderItemIds[j] %>">
-
-                <input type="text" class="col-10 form-control" name="itemReorderName[]" value="<%= reorderItemNames[j] %>"
-                  readonly></input>
-
-                <div class="col-10 alert alert-primary">Supplier:
-                    <input type="hidden" name="itemReorderSupplier[]" value="<%= reorderItemSuppliers[j] %>">
-                  <%= reorderItemSuppliers[j] %>
+                    <% } %> 
+                    <% } %>
                 </div>
-                <input type="hidden" name="itemreorderpreviousQuantity[]" value="<%= reorderItemQuantity[j] %>">
-                <div class="col-10 alert alert-dark">Current Quantity:
-                  <%= reorderItemQuantity[j] %>
-                </div>
-                <div class="col-10 alert alert-dark">Current Backorder Quantity:
-                  0
-                </div>
-                <div class="col-10 alert alert-dark">Recommended Reorder Amount:
-                  <%= recommendedOrderQuantity = Number((reorderItemThreshold[j] - reorderItemQuantity[j]))%>                  
-                </div>
-                <div class="col-10 alert alert-dark">Reorder Amount:
-                  <%= reorderItemThreshold[j] %>
-                </div>
-                <div class="col-10 alert alert-dark">Max Reorder Amount:
-                  <%= reorderItemMax[j] %>
-                </div>
-                <input type=number class="col-10 form-control" name="itemReorderQuantity[]" min=0 max="<%= reorderItemMax[j] %>"
-                  value="<%= recommendedOrderQuantity %>"></input>
+                    <% } %>
+                    <% } %>
 
-                  <br><br>
-                  <% } %>
+                    <% if (backorderItemIds.length > 0) { %> 
 
-                <% } %>
+                      
 
-              </div>
+                      <% for(var l = 0; l < backorderItemIds.length; l++) { %>
+                        <div class="reorderItem">
+      
+                          <input type="hidden" name="itemReorderID[]" value="<%= backorderItemIds[l] %>">
+        
+                          <input type="text" class="col-10 form-control" name="itemReorderName[]" value="<%= backorderNames[l] %>"
+                            readonly></input>
+        
+                          <div class="col-10 alert alert-primary">Supplier:
+                              <input type="hidden" name="itemReorderSupplier[]" value="<%= backorderSuppliers[l] %>">
+                            <%= backorderSuppliers[l] %>
+                          </div>
+                          <div class="col-10 alert alert-dark">Current Inventory Quantity:
+                              <input type="hidden" name="itemReorderInvt[]" value="<%= itemBackorderCurInvt[l] %>">
+                            <%= itemBackorderCurInvt[l] %>
+                          </div>
+                          <div class="col-10 alert alert-dark">Current Backorder Quantity:
+                            <%= backorderQuantity[l] %>
+                          </div>
+                          <div class="col-10 alert alert-dark">Recommended Reorder Amount:
+                            <%= recommendedOrderQuantity = Number(backorderThreshold[l]) + Number(backorderQuantity[l]) %>                  
+                          </div>
+                          <div class="col-10 alert alert-dark">Auto Reorder Amount:
+                            <%= backorderThreshold[l] %>
+                          </div>
 
-              <% } %>
+                          <input type=number class="col-10 form-control" name="itemReorderQuantity[]" min=0 value="<%= recommendedOrderQuantity %>"></input>
+        
+                            <br><br>
 
+                          </div>
+                            <% } %>
 
+                          
+                            <% } %>
+
+                     
+                            
+
+                            <% if(reorderItemIds.length > 0) { %>
+
+                              <% for(var j = 0; j < reorderItemIds.length; j++) { %>
+
+                                <div class="reorderItem">
+
+                              <input type="hidden" name="itemReorderID[]" value="<%= reorderItemIds[j] %>">
+              
+                              <input type="text" class="col-10 form-control" name="itemReorderName[]" value="<%= reorderItemNames[j] %>"
+                                readonly></input>
+              
+                              <div class="col-10 alert alert-primary">Supplier:
+                                  <input type="hidden" name="itemReorderSupplier[]" value="<%= reorderItemSuppliers[j] %>">
+                                <%= reorderItemSuppliers[j] %>
+                              </div>
+                              <input type="hidden" name="itemreorderpreviousQuantity[]" value="<%= reorderItemQuantity[j] %>">
+                              <div class="col-10 alert alert-dark">Current Quantity:
+                                  <input type="hidden" name="itemReorderInvt[]" value="<%= reorderItemQuantity[j] %>">
+                                <%= reorderItemQuantity[j] %>
+                              </div>
+                              <div class="col-10 alert alert-dark">Current Backorder Quantity:
+                                0
+                              </div>
+                              <div class="col-10 alert alert-dark">Recommended Reorder Amount:
+                                <%= recommendedOrderQuantity = Number((reorderItemThreshold[j] - reorderItemQuantity[j]))%>                  
+                              </div>
+                              <div class="col-10 alert alert-dark">Reorder Amount:
+                                <%= reorderItemThreshold[j] %>
+                              </div>
+                              <div class="col-10 alert alert-dark">Max Reorder Amount:
+                                <%= reorderItemMax[j] %>
+                              </div>
+                              <input type=number class="col-10 form-control" name="itemReorderQuantity[]" min=0 max="<%= reorderItemMax[j] %>"
+                                value="<%= recommendedOrderQuantity %>"></input>
+              
+                                <br><br>
+                                <% } %>
+                              </div>
+              
+                              <% } %>
+              
+                            
+
+                
             </div>
 
 </div>
-
-
-
             <div class="col-10">
               <div class="row">
                   <button class="btn btn-primary">Next</button>
